@@ -9,14 +9,33 @@
 
 AiEsp32RotaryEncoder rotaryEncoder = AiEsp32RotaryEncoder(ROTARY_ENCODER_A_PIN, ROTARY_ENCODER_B_PIN, ROTARY_ENCODER_BUTTON_PIN, ROTARY_ENCODER_VCC_PIN);
 LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display
-int rotaryValor=0;
+
+int rotaryValor=1;
+bool modificar=false;
+int check=0;
+
+//Variables de distancia y velocidad
+int velocidad=0;
+int distancia=0;
 
 
 void rotary_loop() {
 
 	if (rotaryEncoder.currentButtonState() == BUT_RELEASED) {
-		Serial.println("Encoder Click");
-	}
+		
+    check++;
+    switch(check){
+      case 1:
+        modificar=true;
+        Serial.println("Modificando valores");
+        break;
+      case 2:
+        modificar=false;
+        Serial.println("Guardando los valores");
+        check =0;
+        break;
+    }
+  }
 
 	int16_t encoderDelta = rotaryEncoder.encoderChanged();
 	
@@ -28,7 +47,7 @@ void rotary_loop() {
 	
 	if (encoderDelta!=0) {
 		int16_t encoderValue = rotaryEncoder.readEncoder();
-    rotaryValor=encoderValue;		
+    rotaryValor=encoderValue;	
     Serial.print("Value: ");
 		Serial.println(encoderValue);
 	} 
@@ -44,7 +63,7 @@ void setup()
   rotaryEncoder.begin();
 	rotaryEncoder.setup([]{rotaryEncoder.readEncoder_ISR();});
 	//optionally we can set boundaries and if values should cycle or not
-	rotaryEncoder.setBoundaries(1, 3, true); //minValue, maxValue, cycle values (when max go to min and vice versa)
+	rotaryEncoder.setBoundaries(1, 4, true); //minValue, maxValue, cycle values (when max go to min and vice versa)
 
   lcd.init();
   lcd.clear();
@@ -62,28 +81,47 @@ void loop()
 	delay(50);															 
 	if (millis()>20000) rotaryEncoder.enable ();
 
-  lcd.setCursor(0,1);
+ 
+ // bool changeValue=false;
+   //Serial.println(changeValue);
 
+  if(modificar==false){
   switch(rotaryValor){
     case 1:
+        lcd.clear();
         lcd.setCursor(0,0);
-        lcd.print("Distancia");   
+        lcd.print("Vel | ");
+        lcd.setCursor(7,0);
+        lcd.print(velocidad);
+        lcd.setCursor(0,1);
+        lcd.print("Dis | ");
+        lcd.setCursor(7,1);
+        lcd.print(distancia);
         break;
 
     case 2:
+        lcd.clear();
         lcd.setCursor(0,0);
-        lcd.print("Velocidad");   
+        lcd.print("Velocidad"); 
+        if (modificar==true){
+          //changeValue=true;
+          rotaryEncoder.setBoundaries(1, 4, false); 
+          lcd.setCursor(0,1);
+          lcd.print(distancia);
+          rotaryValor=distancia;
+        }
         break;
     case 3:
-        lcd.clear;
-        lcd.setCursor(0,0);
+        lcd.clear();
+        lcd.setCursor(1,0);
         lcd.print("Encender");   
         break;
+    case 4:
+        lcd.clear();
+        lcd.setCursor(1,0);
+        lcd.print("Velocidad");   
+        break;
 
-
-
-
-
-
+  }
   }
 }
