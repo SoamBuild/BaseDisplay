@@ -1,13 +1,6 @@
 #include <LiquidCrystal_I2C.h>
 #include "Arduino.h"
 
-#define ROTARY_ENCODER_A_PIN 32
-#define ROTARY_ENCODER_B_PIN 33
-#define ROTARY_ENCODER_BUTTON_PIN 25
-#define ROTARY_ENCODER_VCC_PIN -1
-int16_t encoderValue;
-
-AiEsp32RotaryEncoder rotaryEncoder = AiEsp32RotaryEncoder(ROTARY_ENCODER_A_PIN, ROTARY_ENCODER_B_PIN, ROTARY_ENCODER_BUTTON_PIN, ROTARY_ENCODER_VCC_PIN);
 LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display
 
 int rotaryValor=1;
@@ -19,47 +12,9 @@ int velocidad=0;
 int distancia=0;
 
 
-void rotary_loop() {
-	if (rotaryEncoder.currentButtonState() == BUT_RELEASED) {
-		
-    check++;
-    switch(check){
-      case 1:
-        modificar=true;
-        Serial.println("Modificando valores");
-        break;
-      case 2:
-        modificar=false;
-        Serial.println("Guardando los valores");
-        check =0;
-        break;
-    }
-  }
-
-	int16_t encoderDelta = rotaryEncoder.encoderChanged();
-	
-	if (encoderDelta == 0) return;
-	
-  if (encoderDelta!=0) {
-		encoderValue= rotaryEncoder.readEncoder();
-    Serial.print("Value: ");
-		Serial.println(encoderValue);
-    if(modificar==false){
-   	rotaryEncoder.setBoundaries(1, 4, false); //minValue, maxValue, cycle values (when max go to min and vice versa)
-    rotaryValor=encoderValue;	
-  }else
-  {
-    rotaryEncoder.setBoundaries(1, 1000, false); 
-  }
-} 
-}
-
 void setup()
 {
   Serial.begin(115200);
-
-  rotaryEncoder.begin();
-	rotaryEncoder.setup([]{rotaryEncoder.readEncoder_ISR();});
 
   lcd.init();
   lcd.clear();
@@ -75,7 +30,8 @@ void loop()
 {
   rotary_loop();
 	delay(50);															 
-	if (millis()>20000) rotaryEncoder.enable ();
+	//if (millis()>20000) rotaryEncoder.enable ();
+  /*
   switch(rotaryValor){
     case 1:
         lcd.clear();
@@ -116,4 +72,8 @@ void loop()
         lcd.print("Encender");   
         break;
   }
+  */
+}
+void rotaryloop(){
+  
 }
