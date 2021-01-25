@@ -2,9 +2,9 @@
 #include "AiEsp32RotaryEncoder.h"
 #include "Arduino.h"
 
-#define ROTARY_ENCODER_A_PIN 32
-#define ROTARY_ENCODER_B_PIN 33
-#define ROTARY_ENCODER_BUTTON_PIN 25
+#define ROTARY_ENCODER_A_PIN 13
+#define ROTARY_ENCODER_B_PIN 27
+#define ROTARY_ENCODER_BUTTON_PIN 32
 #define ROTARY_ENCODER_VCC_PIN -1
 int16_t encoderValue;
 
@@ -76,7 +76,7 @@ void loop()
 {
   rotary_loop();
 	delay(50);															 
-	if (millis()>20000) rotaryEncoder.enable ();
+	if (millis()>40000) rotaryEncoder.enable ();
   switch(rotaryValor){
     case 1:
         lcd.clear();
