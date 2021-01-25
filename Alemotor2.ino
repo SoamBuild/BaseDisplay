@@ -1,5 +1,4 @@
 #include <LiquidCrystal_I2C.h>
-#include "AiEsp32RotaryEncoder.h"
 #include "Arduino.h"
 
 #define ROTARY_ENCODER_A_PIN 32
