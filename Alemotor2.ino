@@ -6,6 +6,11 @@
 LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display
 RotaryEncoder encoder(13, 27);
 
+int lastPos = -1;
+
+
+
+
 int rotaryValor=1;
 bool modificar=false;
 int check=0;
@@ -31,7 +36,11 @@ void setup()
 
 void loop()
 {
-  rotary_loop();
+  //int ROTARYMIN = 1;
+  //int ROTARYMAX = 4;
+  rotary_loop(1,4);
+  
+  //int valor  = limites(newPos,1,4);
 															 
 	//if (millis()>20000) rotaryEncoder.enable ();
   /*
@@ -77,20 +86,25 @@ void loop()
   }
   */
 }
-void rotary_loop(){
-  static int pos = 0;
+void rotary_loop(int ROTARYMIN, int ROTARYMAX){
   encoder.tick();
+  int ROTARYSTEPS = 1;
+  int newPos = encoder.getPosition() * ROTARYSTEPS;
 
-  int newPos = encoder.getPosition();
-  if (pos != newPos) {
-    Serial.println(newPos);
-    pos = newPos;
-  }
-  int btn = digitalRead(32);
-  if (btn == 0 ) {
+  if (newPos < ROTARYMIN) {
+    encoder.setPosition(ROTARYMIN / ROTARYSTEPS);
+    newPos = ROTARYMIN;
 
-    Serial.println("Click");
-    newPos = 0;
-  }
-  
+  } else if (newPos > ROTARYMAX) {
+    encoder.setPosition(ROTARYMAX / ROTARYSTEPS);
+    newPos = ROTARYMAX;
+  } // if
+
+  if (lastPos != newPos) {
+    Serial.print(newPos);
+    Serial.println();
+    lastPos = newPos;
+  } // if
 }
+
+
