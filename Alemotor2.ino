@@ -1,7 +1,10 @@
 #include <LiquidCrystal_I2C.h>
 #include "Arduino.h"
+#include <RotaryEncoder.h>
+
 
 LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display
+RotaryEncoder encoder(13, 27);
 
 int rotaryValor=1;
 bool modificar=false;
@@ -14,8 +17,8 @@ int distancia=0;
 
 void setup()
 {
+  pinMode (32, INPUT_PULLUP); //boton de un esp32
   Serial.begin(115200);
-
   lcd.init();
   lcd.clear();
   lcd.backlight();
@@ -29,7 +32,7 @@ void setup()
 void loop()
 {
   rotary_loop();
-	delay(50);															 
+															 
 	//if (millis()>20000) rotaryEncoder.enable ();
   /*
   switch(rotaryValor){
@@ -74,6 +77,20 @@ void loop()
   }
   */
 }
-void rotaryloop(){
+void rotary_loop(){
+  static int pos = 0;
+  encoder.tick();
+
+  int newPos = encoder.getPosition();
+  if (pos != newPos) {
+    Serial.println(newPos);
+    pos = newPos;
+  }
+  int btn = digitalRead(32);
+  if (btn == 0 ) {
+
+    Serial.println("Click");
+    newPos = 0;
+  }
   
 }
