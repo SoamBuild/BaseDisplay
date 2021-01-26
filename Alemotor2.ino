@@ -29,7 +29,8 @@ void setup()
 }
 void loop()
 {
-  rotary(1,4);
+  if(modificar==false) rotary(1,4);
+  if(modificar==true) rotary(1,100);
   buttonControl();
 }
 void rotary(int ROTARYMIN,int ROTARYMAX){
