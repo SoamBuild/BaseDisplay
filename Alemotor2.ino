@@ -16,6 +16,36 @@ int check=0;
 //Variables de distancia y velocidad
 int velocidad=0;
 int distancia=0;
+
+
+
+void setup()
+{
+  pinMode (32, INPUT_PULLUP); //boton de un esp32
+  Serial.begin(115200);
+  lcd.init();
+  lcd.clear();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("MotorControl  v1");
+  //delay(2000);
+  lcd.clear();
+}
+
+
+void loop()
+{
+  rotary(1,4);
+  	
+
+  
+  
+														 
+
+  
+ 
+  
+}
 void rotary(int ROTARYMIN,int ROTARYMAX){
   
 
@@ -35,35 +65,14 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
   if (lastPos != newPos) {
   Serial.print(newPos);
   Serial.println();
-  rotaryValor=newPos;  
+  menuDisplay(newPos);
+  //rotaryValor=newPos;  
   lastPos = newPos;
   }
 }
+void menuDisplay(int mode){
 
-void setup()
-{
-  pinMode (32, INPUT_PULLUP); //boton de un esp32
-  Serial.begin(115200);
-  lcd.init();
-  lcd.clear();
-  lcd.backlight();
-  lcd.setCursor(0, 0);
-  lcd.print("MotorControl  v1");
-  //delay(2000);
-  lcd.clear();
-}
-
-
-void loop()
-{
- 
-  rotary(1,4);
-  
-  
-		/*												 
-
-  
-  switch(rotaryValor){
+   switch(mode){
     case 1:
         lcd.clear();
         lcd.setCursor(0,0);
@@ -79,15 +88,13 @@ void loop()
         lcd.clear();
         lcd.setCursor(0,0);
         lcd.print("Velocidad");
-        
         if (modificar==true){
           modificar=2;
           //velocidad = encoderValue;
           lcd.setCursor(0,1);
           lcd.print(velocidad);
         }
-        
-        break;
+         break;
     case 3:
         lcd.clear();
         lcd.setCursor(0,0);
@@ -107,7 +114,6 @@ void loop()
         lcd.print("Encender");   
         break;
   }
-  */
 }
 
 
