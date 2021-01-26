@@ -9,9 +9,10 @@ int lastPos = -1;
 int pulsador = 32;
 
 
+
 int rotaryValor=1;
 bool modificar=false;
-int check=0;
+
 
 int velocidad=0;
 int distancia=0;
