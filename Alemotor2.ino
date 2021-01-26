@@ -7,11 +7,9 @@ RotaryEncoder encoder(13, 27);
 #define ROTARYSTEPS 1
 int lastPos = -1;
 int pulsador = 32;
+int check=0;
+bool modificar =false;
 
-
-
-int rotaryValor=1;
-bool modificar=false;
 
 
 int velocidad=0;
@@ -58,7 +56,18 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
   }
   if (digitalRead(pulsador) == HIGH && presionado == 1)
   {
-    Serial.println("chao");
+    check++;
+    switch(check){
+      case 1:
+        modificar=true;
+        Serial.println("Modificando valores");
+        break;
+      case 2:
+        modificar=false;
+        Serial.println("Guardando los valores");
+        check =0;
+        break;
+    }
     presionado = 0;
   }
 }
