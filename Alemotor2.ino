@@ -9,14 +9,36 @@ RotaryEncoder encoder(13, 27);
 #define ROTARYSTEPS 1
 int lastPos = -1;
 
-int rotaryValor;
+int rotaryValor=1;
 bool modificar=false;
 int check=0;
 
 //Variables de distancia y velocidad
 int velocidad=0;
 int distancia=0;
+void rotary(int ROTARYMIN,int ROTARYMAX){
+  
 
+  encoder.tick();
+
+  int newPos= encoder.getPosition() * ROTARYSTEPS;
+
+  if (newPos < ROTARYMIN) {
+    encoder.setPosition(ROTARYMIN / ROTARYSTEPS);
+    newPos = ROTARYMIN;
+
+  } else if (newPos > ROTARYMAX) {
+    encoder.setPosition(ROTARYMAX / ROTARYSTEPS);
+    newPos = ROTARYMAX;
+  } // if
+
+  if (lastPos != newPos) {
+  Serial.print(newPos);
+  Serial.println();
+  rotaryValor=newPos;  
+  lastPos = newPos;
+  }
+}
 
 void setup()
 {
@@ -27,7 +49,7 @@ void setup()
   lcd.backlight();
   lcd.setCursor(0, 0);
   lcd.print("MotorControl  v1");
-  delay(2000);
+  //delay(2000);
   lcd.clear();
 }
 
@@ -38,7 +60,7 @@ void loop()
   rotary(1,4);
   
   
-															 
+		/*												 
 
   
   switch(rotaryValor){
@@ -56,24 +78,28 @@ void loop()
     case 2:
         lcd.clear();
         lcd.setCursor(0,0);
-        lcd.print("Velocidad"); 
+        lcd.print("Velocidad");
+        
         if (modificar==true){
           modificar=2;
           //velocidad = encoderValue;
           lcd.setCursor(0,1);
           lcd.print(velocidad);
         }
+        
         break;
     case 3:
         lcd.clear();
         lcd.setCursor(0,0);
         lcd.print("Distancia"); 
+        
         if (modificar==true){
           modificar=3;
           //distancia = encoderValue;
           lcd.setCursor(0,1);
           lcd.print(distancia);
-        }  
+        }
+        
         break;
     case 4:
         lcd.clear();
@@ -81,32 +107,7 @@ void loop()
         lcd.print("Encender");   
         break;
   }
-  
+  */
 }
-void rotary(int ROTARYMIN,int ROTARYMAX){
-  
 
-  encoder.tick();
-
-  // get the current physical position and calc the logical position
-   int newPos= encoder.getPosition() * ROTARYSTEPS;
-
-  if (newPos < ROTARYMIN) {
-    encoder.setPosition(ROTARYMIN / ROTARYSTEPS);
-    newPos = ROTARYMIN;
-
-  } else if (newPos > ROTARYMAX) {
-    encoder.setPosition(ROTARYMAX / ROTARYSTEPS);
-    newPos = ROTARYMAX;
-  } // if
-
-  if (lastPos != newPos) {
-  Serial.print(newPos);
-    Serial.println();
-  
-    
-   
-    lastPos = newPos;
-  }
-}
 
