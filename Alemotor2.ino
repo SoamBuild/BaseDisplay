@@ -5,10 +5,12 @@
 LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display
 RotaryEncoder encoder(13, 27);
 #define ROTARYSTEPS 1
+int newPos;
 int lastPos = -1;
 int pulsador = 32;
 int check=0;
 bool modificar =false;
+int indexmenu=1;
 
 
 
@@ -29,13 +31,17 @@ void setup()
 }
 void loop()
 {
+  if(modificar==true) {
+    rotary(1,100);
+    cambiarValores(modificar,indexmenu);
+  }
   if(modificar==false) rotary(1,4);
-  if(modificar==true) rotary(1,100);
   buttonControl();
+  
 }
 void rotary(int ROTARYMIN,int ROTARYMAX){
   encoder.tick();
-  int newPos= encoder.getPosition() * ROTARYSTEPS;
+  newPos= encoder.getPosition() * ROTARYSTEPS;
   if (newPos < ROTARYMIN) {
     encoder.setPosition(ROTARYMIN / ROTARYSTEPS);
     newPos = ROTARYMIN;
@@ -44,8 +50,11 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
     newPos = ROTARYMAX;
   } 
   if (lastPos != newPos) {
+  
   Serial.println(newPos);
-  menuDisplay(newPos);
+  if(modificar==false) indexmenu=newPos;
+  Serial.println(newPos);
+  menuDisplay(indexmenu);
   lastPos = newPos;
   }
 
@@ -78,6 +87,7 @@ void buttonControl(){
 
 }
 void menuDisplay(int mode){
+
    switch(mode){
     case 1:
         lcd.clear();
@@ -94,21 +104,11 @@ void menuDisplay(int mode){
         lcd.clear();
         lcd.setCursor(0,0);
         lcd.print("Velocidad");
-        if (modificar==true){
-          modificar=2;
-          lcd.setCursor(0,1);
-          lcd.print(velocidad);
-        }
-         break;
+        break;
     case 3:
         lcd.clear();
         lcd.setCursor(0,0);
         lcd.print("Distancia"); 
-        if (modificar==true){
-          modificar=3;
-          lcd.setCursor(0,1);
-          lcd.print(distancia);
-        }
         break;
     case 4:
         lcd.clear();
@@ -117,5 +117,31 @@ void menuDisplay(int mode){
         break;
   }
 }
+void cambiarValores(bool ok,int index){
 
+  if(ok==true){
+    
+    if (index==2)
+    {
+      lcd.setCursor(15,0);
+      lcd.print("#");
+      velocidad= newPos;
+      lcd.setCursor(0,1);
+      lcd.print(velocidad);
+    }
+    if (index==3)
+    {
+      lcd.setCursor(15,0);
+      lcd.print("#");
+      distancia= newPos;
+      lcd.setCursor(0,1);
+      lcd.print(distancia);
+    }
+    
+    
+  }else{
+    lcd.clear();
+  }
+    
+}
 
