@@ -30,9 +30,9 @@ void setup()
 void loop()
 {
   rotary(1,4);
+  buttonControl();
 }
 void rotary(int ROTARYMIN,int ROTARYMAX){
-  int presionado = 0;
   encoder.tick();
   int newPos= encoder.getPosition() * ROTARYSTEPS;
   if (newPos < ROTARYMIN) {
@@ -47,8 +47,12 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
   menuDisplay(newPos);
   lastPos = newPos;
   }
-  
-  //////////////////Encoder Boton////////////
+
+}
+
+void buttonControl(){
+  int presionado = 0;
+
   if (digitalRead(pulsador) == LOW) 
   {
     presionado = 1; 
@@ -70,6 +74,7 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
     }
     presionado = 0;
   }
+
 }
 void menuDisplay(int mode){
    switch(mode){
