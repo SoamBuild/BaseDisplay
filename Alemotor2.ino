@@ -4,12 +4,10 @@
 
 
 LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display
+
 RotaryEncoder encoder(13, 27);
-
+#define ROTARYSTEPS 1
 int lastPos = -1;
-int encoderValue;
-
-
 
 int rotaryValor;
 bool modificar=false;
@@ -37,7 +35,7 @@ void setup()
 void loop()
 {
  
-  rotary_loop(1,4);
+  rotary(1,4);
   
   
 															 
@@ -61,7 +59,7 @@ void loop()
         lcd.print("Velocidad"); 
         if (modificar==true){
           modificar=2;
-          velocidad = encoderValue;
+          //velocidad = encoderValue;
           lcd.setCursor(0,1);
           lcd.print(velocidad);
         }
@@ -72,7 +70,7 @@ void loop()
         lcd.print("Distancia"); 
         if (modificar==true){
           modificar=3;
-          distancia = encoderValue;
+          //distancia = encoderValue;
           lcd.setCursor(0,1);
           lcd.print(distancia);
         }  
@@ -85,26 +83,30 @@ void loop()
   }
   
 }
-void rotary_loop(int ROTARYMIN, int ROTARYMAX){
+void rotary(int ROTARYMIN,int ROTARYMAX){
+  
+
   encoder.tick();
-  int ROTARYSTEPS = 1;
-  encoderValue = encoder.getPosition() * ROTARYSTEPS;
 
-  if (encoderValue < ROTARYMIN) {
+  // get the current physical position and calc the logical position
+   int newPos= encoder.getPosition() * ROTARYSTEPS;
+
+  if (newPos < ROTARYMIN) {
     encoder.setPosition(ROTARYMIN / ROTARYSTEPS);
-    encoderValue = ROTARYMIN;
+    newPos = ROTARYMIN;
 
-  } else if (encoderValue > ROTARYMAX) {
+  } else if (newPos > ROTARYMAX) {
     encoder.setPosition(ROTARYMAX / ROTARYSTEPS);
-    encoderValue = ROTARYMAX;
+    newPos = ROTARYMAX;
   } // if
 
-  if (lastPos != encoderValue) {
-    rotaryValor = encoderValue;
-    Serial.print(encoderValue);
+  if (lastPos != newPos) {
+  Serial.print(newPos);
     Serial.println();
-    lastPos = encoderValue;
-  } // if
+  
+    
+   
+    lastPos = newPos;
+  }
 }
-
 
