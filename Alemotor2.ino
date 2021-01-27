@@ -12,8 +12,6 @@ int check=0;
 bool modificar =false;
 int indexmenu=1;
 
-
-
 int velocidad=0;
 int distancia=0;
 int lastVel=0;
@@ -26,7 +24,7 @@ void setup()
   lcd.clear();
   lcd.backlight();
   lcd.setCursor(0, 0);
-  lcd.print("MotorControl v1.1");
+  lcd.print("MotorControl 1.1");
   delay(2000);
   lcd.clear();
 }
@@ -53,47 +51,6 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
     newPos = ROTARYMAX;
   } 
   if (lastPos != newPos) {
-  if(modificar==false) indexmenu=newPos;
-  Serial.println(newPos);
-  menuDisplay(indexmenu);
-  lastPos = newPos;
-  }
-
-void setup()
-{
-  pinMode (pulsador, INPUT_PULLUP); //boton de un esp32
-  Serial.begin(115200);
-  lcd.init();
-  lcd.clear();
-  lcd.backlight();
-  lcd.setCursor(0, 0);
-  lcd.print("MotorControl  v1");
-  delay(2000);
-  lcd.clear();
-}
-void loop()
-{
-  if(modificar==true) {
-    rotary(1,100);
-    cambiarValores(modificar,indexmenu);
-  }
-  if(modificar==false) rotary(1,4);
-  buttonControl();
-  
-}
-void rotary(int ROTARYMIN,int ROTARYMAX){
-  encoder.tick();
-  newPos= encoder.getPosition() * ROTARYSTEPS;
-  if (newPos < ROTARYMIN) {
-    encoder.setPosition(ROTARYMIN / ROTARYSTEPS);
-    newPos = ROTARYMIN;
-  } else if (newPos > ROTARYMAX) {
-    encoder.setPosition(ROTARYMAX / ROTARYSTEPS);
-    newPos = ROTARYMAX;
-  } 
-  if (lastPos != newPos) {
-  
-  Serial.println(newPos);
   if(modificar==false) indexmenu=newPos;
   Serial.println(newPos);
   menuDisplay(indexmenu);
@@ -166,33 +123,35 @@ void menuDisplay(int mode){
 void cambiarValores(bool ok,int index){
 
   if(ok==true){
-    
     if (index==2)
     {
-      lcd.setCursor(15,0);
-      lcd.print("#");
-      velocidad= newPos;
+       if (lastVel != newPos) {
+        if(lastVel<newPos)velocidad=velocidad+1;
+        if(lastVel>newPos)velocidad=velocidad-1;
+        lastVel=newPos;
+      }
+      lcd.setCursor(0,1);
+      lcd.cursor();
       lcd.setCursor(0,1);
       lcd.print(velocidad);
     }
     if (index==3)
     {
-      lcd.setCursor(15,0);
-      lcd.print("#");
-      distancia= newPos;
+      if (lastDis != newPos) {
+        if(lastDis<newPos)distancia=distancia+1;
+        if(lastDis>newPos)distancia=distancia-1;
+        lastDis=newPos;
+      }
+      lcd.setCursor(0,1);
+      lcd.cursor();
       lcd.setCursor(0,1);
       lcd.print(distancia);
     }
     
     
-<<<<<<< HEAD
-  }else{
-    lcd.clear();
-=======
   }else {
     lcd.clear();
     lcd.noCursor();
->>>>>>> Dev
   }
     
 }
