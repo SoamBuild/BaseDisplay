@@ -91,6 +91,7 @@ void menuDisplay(int mode){
    switch(mode){
     case 1:
         lcd.clear();
+        lcd.noCursor();
         lcd.setCursor(0,0);
         lcd.print("Vel | ");
         lcd.setCursor(7,0);
@@ -102,16 +103,19 @@ void menuDisplay(int mode){
         break;
     case 2:
         lcd.clear();
+        lcd.noCursor();
         lcd.setCursor(0,0);
         lcd.print("Velocidad");
         break;
     case 3:
         lcd.clear();
+        lcd.noCursor();
         lcd.setCursor(0,0);
         lcd.print("Distancia"); 
         break;
     case 4:
         lcd.clear();
+        lcd.noCursor();
         lcd.setCursor(0,0);
         lcd.print("Encender");   
         break;
@@ -123,16 +127,16 @@ void cambiarValores(bool ok,int index){
     
     if (index==2)
     {
-      lcd.setCursor(15,0);
-      lcd.print("#");
+      lcd.setCursor(0,1);
+      lcd.cursor();
       velocidad= newPos;
       lcd.setCursor(0,1);
       lcd.print(velocidad);
     }
     if (index==3)
     {
-      lcd.setCursor(15,0);
-      lcd.print("#");
+      lcd.setCursor(0,1);
+      lcd.cursor();
       distancia= newPos;
       lcd.setCursor(0,1);
       lcd.print(distancia);
@@ -140,7 +144,10 @@ void cambiarValores(bool ok,int index){
     
     
   }else{
+    //lcd.noBlink();
     lcd.clear();
+    lcd.noCursor();
+
   }
     
 }
