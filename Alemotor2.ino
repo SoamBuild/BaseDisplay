@@ -12,11 +12,10 @@ int check=0;
 bool modificar =false;
 int indexmenu=1;
 
-
-
 int velocidad=0;
 int distancia=0;
-
+int lastVel=0;
+int lastDis=0;
 void setup()
 {
   pinMode (pulsador, INPUT_PULLUP); //boton de un esp32
@@ -31,11 +30,13 @@ void setup()
 }
 void loop()
 {
+  
   if(modificar==true) {
     rotary(1,100);
     cambiarValores(modificar,indexmenu);
   }
   if(modificar==false) rotary(1,4);
+  
   buttonControl();
   
 }
@@ -50,8 +51,6 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
     newPos = ROTARYMAX;
   } 
   if (lastPos != newPos) {
-  
-  Serial.println(newPos);
   if(modificar==false) indexmenu=newPos;
   Serial.println(newPos);
   menuDisplay(indexmenu);
@@ -124,30 +123,35 @@ void menuDisplay(int mode){
 void cambiarValores(bool ok,int index){
 
   if(ok==true){
-    
     if (index==2)
     {
+       if (lastVel != newPos) {
+        if(lastVel<newPos)velocidad=velocidad+1;
+        if(lastVel>newPos)velocidad=velocidad-1;
+        lastVel=newPos;
+      }
       lcd.setCursor(0,1);
       lcd.cursor();
-      velocidad= newPos;
       lcd.setCursor(0,1);
       lcd.print(velocidad);
     }
     if (index==3)
     {
+      if (lastDis != newPos) {
+        if(lastDis<newPos)distancia=distancia+1;
+        if(lastDis>newPos)distancia=distancia-1;
+        lastDis=newPos;
+      }
       lcd.setCursor(0,1);
       lcd.cursor();
-      distancia= newPos;
       lcd.setCursor(0,1);
       lcd.print(distancia);
     }
     
     
-  }else{
-    //lcd.noBlink();
+  }else {
     lcd.clear();
     lcd.noCursor();
-
   }
     
 }
