@@ -24,7 +24,7 @@ void setup()
   lcd.clear();
   lcd.backlight();
   lcd.setCursor(0, 0);
-  lcd.print("MotorControl v1.1");
+  lcd.print("MotorControl 1.1");
   delay(2000);
   lcd.clear();
 }
