@@ -16,6 +16,48 @@ int indexmenu=1;
 
 int velocidad=0;
 int distancia=0;
+int lastVel=0;
+int lastDis=0;
+void setup()
+{
+  pinMode (pulsador, INPUT_PULLUP); //boton de un esp32
+  Serial.begin(115200);
+  lcd.init();
+  lcd.clear();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("MotorControl v1.1");
+  delay(2000);
+  lcd.clear();
+}
+void loop()
+{
+  
+  if(modificar==true) {
+    rotary(1,100);
+    cambiarValores(modificar,indexmenu);
+  }
+  if(modificar==false) rotary(1,4);
+  
+  buttonControl();
+  
+}
+void rotary(int ROTARYMIN,int ROTARYMAX){
+  encoder.tick();
+  newPos= encoder.getPosition() * ROTARYSTEPS;
+  if (newPos < ROTARYMIN) {
+    encoder.setPosition(ROTARYMIN / ROTARYSTEPS);
+    newPos = ROTARYMIN;
+  } else if (newPos > ROTARYMAX) {
+    encoder.setPosition(ROTARYMAX / ROTARYSTEPS);
+    newPos = ROTARYMAX;
+  } 
+  if (lastPos != newPos) {
+  if(modificar==false) indexmenu=newPos;
+  Serial.println(newPos);
+  menuDisplay(indexmenu);
+  lastPos = newPos;
+  }
 
 void setup()
 {
@@ -91,6 +133,7 @@ void menuDisplay(int mode){
    switch(mode){
     case 1:
         lcd.clear();
+        lcd.noCursor();
         lcd.setCursor(0,0);
         lcd.print("Vel | ");
         lcd.setCursor(7,0);
@@ -102,16 +145,19 @@ void menuDisplay(int mode){
         break;
     case 2:
         lcd.clear();
+        lcd.noCursor();
         lcd.setCursor(0,0);
         lcd.print("Velocidad");
         break;
     case 3:
         lcd.clear();
+        lcd.noCursor();
         lcd.setCursor(0,0);
         lcd.print("Distancia"); 
         break;
     case 4:
         lcd.clear();
+        lcd.noCursor();
         lcd.setCursor(0,0);
         lcd.print("Encender");   
         break;
@@ -139,8 +185,14 @@ void cambiarValores(bool ok,int index){
     }
     
     
+<<<<<<< HEAD
   }else{
     lcd.clear();
+=======
+  }else {
+    lcd.clear();
+    lcd.noCursor();
+>>>>>>> Dev
   }
     
 }
