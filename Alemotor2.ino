@@ -1,6 +1,15 @@
 #include <LiquidCrystal_I2C.h>
 #include "Arduino.h"
 #include <RotaryEncoder.h>
+#include <ESPStepperMotorServer.h>
+
+/*
+Para configurar los pines de los motores modificar el archivo config.json ubicado en la memoria esp32
+*/
+ESPStepperMotorServer *stepperMotorServer;
+//Opcional conectar a una red Wifi 2,4ghz
+const char *wifiName= "Huno"; // enter the SSID of the wifi network to connect to
+const char *wifiSecret = "20121804-7DxF"; // enter the password of the the existing wifi network here
 
 LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display
 RotaryEncoder encoder(13, 27);
@@ -16,10 +25,15 @@ int velocidad=0;
 int distancia=0;
 int lastVel=0;
 int lastDis=0;
+
 void setup()
 {
+   Serial.begin(115200);//Importante para mover los motores via Serial
+  //Rest Activada | servidor activado | comunicacion serial activada
+  
+  
+ 
   pinMode (pulsador, INPUT_PULLUP); //boton de un esp32
-  Serial.begin(115200);
   lcd.init();
   lcd.clear();
   lcd.backlight();
@@ -27,6 +41,15 @@ void setup()
   lcd.print("MotorControl 1.1");
   delay(2000);
   lcd.clear();
+  
+  stepperMotorServer = new ESPStepperMotorServer(ESPServerWebserverEnabled | ESPServerSerialEnabled, ESPServerLogLevel_INFO);
+  
+  stepperMotorServer->setWifiCredentials(wifiName, wifiSecret);
+  stepperMotorServer->setWifiMode(ESPServerWifiModeClient); //start the server as a wifi client (DHCP client of an existing wifi network)
+
+  stepperMotorServer->start();
+  
+
 }
 void loop()
 {
