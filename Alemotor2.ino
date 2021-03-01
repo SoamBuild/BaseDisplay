@@ -42,10 +42,10 @@ void setup()
   delay(2000);
   lcd.clear();
   
-  stepperMotorServer = new ESPStepperMotorServer(ESPServerWebserverEnabled | ESPServerSerialEnabled, ESPServerLogLevel_INFO);
+  stepperMotorServer = new ESPStepperMotorServer(ESPServerSerialEnabled);
   
-  stepperMotorServer->setWifiCredentials(wifiName, wifiSecret);
-  stepperMotorServer->setWifiMode(ESPServerWifiModeClient); //start the server as a wifi client (DHCP client of an existing wifi network)
+  //stepperMotorServer->setWifiCredentials(wifiName, wifiSecret);
+  //stepperMotorServer->setWifiMode(ESPServerWifiModeClient); //start the server as a wifi client (DHCP client of an existing wifi network)
 
   stepperMotorServer->start();
   
@@ -168,7 +168,8 @@ void cambiarValores(bool ok,int index){
       lcd.setCursor(0,1);
       lcd.cursor();
       lcd.setCursor(0,1);
-      lcd.print(distancia);
+      //String valuelcd= distancia + "mm"
+      lcd.print(String(distancia)+"mm");
     }
     
     
