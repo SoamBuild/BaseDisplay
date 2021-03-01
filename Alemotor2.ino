@@ -1,7 +1,17 @@
 #include <LiquidCrystal_I2C.h>
 #include "Arduino.h"
 #include <RotaryEncoder.h>
+#include <ESP_FlexyStepper.h>
 
+//Pines de conexion stepper Motor
+const int MOTOR_STEP_PIN = 25;
+const int MOTOR_DIRECTION_PIN = 26;
+
+//Objeto FlexyStepper
+ESP_FlexyStepper stepper;
+
+//SCL 22
+//SDA 21
 LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display
 RotaryEncoder encoder(13, 27);
 #define ROTARYSTEPS 1
@@ -16,10 +26,13 @@ int velocidad=0;
 int distancia=0;
 int lastVel=0;
 int lastDis=0;
+
 void setup()
 {
-  pinMode (pulsador, INPUT_PULLUP); //boton de un esp32
   Serial.begin(115200);
+  stepper.connectToPins(MOTOR_STEP_PIN, MOTOR_DIRECTION_PIN);
+
+  pinMode (pulsador, INPUT_PULLUP); //boton de un esp32
   lcd.init();
   lcd.clear();
   lcd.backlight();
@@ -30,7 +43,7 @@ void setup()
 }
 void loop()
 {
-  
+ // Serial.println(stepper.motionComplete());
   if(modificar==true) {
     rotary(1,100);
     cambiarValores(modificar,indexmenu);
@@ -94,11 +107,11 @@ void menuDisplay(int mode){
         lcd.setCursor(0,0);
         lcd.print("Vel | ");
         lcd.setCursor(7,0);
-        lcd.print(velocidad);
+        lcd.print(String(velocidad)+" mm/s");
         lcd.setCursor(0,1);
         lcd.print("Dis | ");
         lcd.setCursor(7,1);
-        lcd.print(distancia);
+        lcd.print(String(distancia)+" mm");
         break;
     case 2:
         lcd.clear();
@@ -133,7 +146,7 @@ void cambiarValores(bool ok,int index){
       lcd.setCursor(0,1);
       lcd.cursor();
       lcd.setCursor(0,1);
-      lcd.print(velocidad);
+      lcd.print(String(velocidad)+" mm/s");
     }
     if (index==3)
     {
@@ -145,11 +158,38 @@ void cambiarValores(bool ok,int index){
       lcd.setCursor(0,1);
       lcd.cursor();
       lcd.setCursor(0,1);
-      lcd.print(distancia);
+      lcd.print(String(distancia)+" mm");
     }
-    
-    
-  }else {
+     if (index==4)
+    {
+      if(velocidad==0 || distancia==0){
+
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("Error");
+        lcd.setCursor(0,1);
+        lcd.print("valores = 0");
+        delay(2000);
+        menuDisplay(1);
+        modificar=false;
+
+      }
+      else{
+      lcd.setCursor(0,1);
+      lcd.print("Moviendo");
+      Serial.println("Moviendo");
+      stepper.setSpeedInMillimetersPerSecond(velocidad);
+      stepper.moveRelativeInMillimeters(distancia);
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.println("   Completado   ");
+      delay(1000);
+      menuDisplay(1);
+      modificar=false;
+      }
+    } 
+  }else 
+  {
     lcd.clear();
     lcd.noCursor();
   }
