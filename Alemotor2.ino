@@ -42,6 +42,7 @@ void setup()
   lcd.clear();
   lcd.backlight();
   homi();
+  lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("MotorControl 1.1");
   delay(2000);
@@ -140,11 +141,21 @@ void menuDisplay(int mode){
   }
 }
 void homi() {
+  lcd.setCursor(0,0);
+  lcd.print("AutoHome");  
   if (stepper.moveToHomeInMillimeters(-1, 30, 380, LIMIT_SWITCH_PIN) == true)
   {
     Serial.println("HOMING OK");
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("AutoHome OK");  
+    delay(1000);
   }
   else {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("AutoHome Error"); 
+    Serial.println("Error"); 
     while (true) {
       digitalWrite(DEBUG_LED, HIGH);
       delay(50);
