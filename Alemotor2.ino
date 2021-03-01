@@ -1,16 +1,17 @@
 #include <LiquidCrystal_I2C.h>
 #include "Arduino.h"
 #include <RotaryEncoder.h>
-#include <ESPStepperMotorServer.h>
+#include <ESP_FlexyStepper.h>
 
-/*
-Para configurar los pines de los motores modificar el archivo config.json ubicado en la memoria esp32
-*/
-ESPStepperMotorServer *stepperMotorServer;
-//Opcional conectar a una red Wifi 2,4ghz
-const char *wifiName= "Huno"; // enter the SSID of the wifi network to connect to
-const char *wifiSecret = "20121804-7DxF"; // enter the password of the the existing wifi network here
+//Pines de conexion stepper Motor
+const int MOTOR_STEP_PIN = 27;
+const int MOTOR_DIRECTION_PIN = 26;
 
+//Objeto FlexyStepper
+ESP_FlexyStepper stepper;
+
+//SCL 22
+//SDA 21
 LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display
 RotaryEncoder encoder(13, 27);
 #define ROTARYSTEPS 1
@@ -28,11 +29,8 @@ int lastDis=0;
 
 void setup()
 {
-   Serial.begin(115200);//Importante para mover los motores via Serial
-  //Rest Activada | servidor activado | comunicacion serial activada
-  
-  
- 
+  Serial.begin(115200);
+  stepper.connectToPins(MOTOR_STEP_PIN, MOTOR_DIRECTION_PIN);
   pinMode (pulsador, INPUT_PULLUP); //boton de un esp32
   lcd.init();
   lcd.clear();
@@ -41,15 +39,6 @@ void setup()
   lcd.print("MotorControl 1.1");
   delay(2000);
   lcd.clear();
-  
-  stepperMotorServer = new ESPStepperMotorServer(ESPServerSerialEnabled);
-  
-  //stepperMotorServer->setWifiCredentials(wifiName, wifiSecret);
-  //stepperMotorServer->setWifiMode(ESPServerWifiModeClient); //start the server as a wifi client (DHCP client of an existing wifi network)
-
-  stepperMotorServer->start();
-  
-
 }
 void loop()
 {
@@ -156,7 +145,7 @@ void cambiarValores(bool ok,int index){
       lcd.setCursor(0,1);
       lcd.cursor();
       lcd.setCursor(0,1);
-      lcd.print(velocidad);
+      lcd.print(String(velocidad)+" mm/s");
     }
     if (index==3)
     {
@@ -168,8 +157,7 @@ void cambiarValores(bool ok,int index){
       lcd.setCursor(0,1);
       lcd.cursor();
       lcd.setCursor(0,1);
-      //String valuelcd= distancia + "mm"
-      lcd.print(String(distancia)+"mm");
+      lcd.print(String(distancia)+" mm");
     }
     
     
