@@ -6,6 +6,9 @@
 //Pines de conexion stepper Motor
 const int MOTOR_STEP_PIN = 25;
 const int MOTOR_DIRECTION_PIN = 26;
+const int LIMIT_SWITCH_PIN = 33; 
+const int DEBUG_LED = 23;
+
 
 //Objeto FlexyStepper
 ESP_FlexyStepper stepper;
@@ -13,11 +16,12 @@ ESP_FlexyStepper stepper;
 //SCL 22
 //SDA 21
 LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display
+
 RotaryEncoder encoder(13, 27);
 #define ROTARYSTEPS 1
 int newPos;
 int lastPos = -1;
-int pulsador = 32;
+const int pulsador = 32;
 int check=0;
 bool modificar =false;
 int indexmenu=1;
@@ -31,11 +35,13 @@ void setup()
 {
   Serial.begin(115200);
   stepper.connectToPins(MOTOR_STEP_PIN, MOTOR_DIRECTION_PIN);
-
+  pinMode(DEBUG_LED,OUTPUT);
+  pinMode(LIMIT_SWITCH_PIN, INPUT_PULLUP);
   pinMode (pulsador, INPUT_PULLUP); //boton de un esp32
   lcd.init();
   lcd.clear();
   lcd.backlight();
+  homi();
   lcd.setCursor(0, 0);
   lcd.print("MotorControl 1.1");
   delay(2000);
@@ -131,6 +137,22 @@ void menuDisplay(int mode){
         lcd.setCursor(0,0);
         lcd.print("Encender");   
         break;
+  }
+}
+void homi() {
+  if (stepper.moveToHomeInMillimeters(-1, 30, 380, LIMIT_SWITCH_PIN) == true)
+  {
+    Serial.println("HOMING OK");
+  }
+  else {
+    while (true) {
+      digitalWrite(DEBUG_LED, HIGH);
+      delay(50);
+      digitalWrite(DEBUG_LED, LOW);
+      delay(50);
+    }
+    Serial.println("Error");
+
   }
 }
 void cambiarValores(bool ok,int index){
