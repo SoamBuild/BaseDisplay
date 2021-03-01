@@ -107,11 +107,11 @@ void menuDisplay(int mode){
         lcd.setCursor(0,0);
         lcd.print("Vel | ");
         lcd.setCursor(7,0);
-        lcd.print(velocidad);
+        lcd.print(String(velocidad)+" mm/s");
         lcd.setCursor(0,1);
         lcd.print("Dis | ");
         lcd.setCursor(7,1);
-        lcd.print(distancia);
+        lcd.print(String(distancia)+" mm");
         break;
     case 2:
         lcd.clear();
@@ -162,20 +162,31 @@ void cambiarValores(bool ok,int index){
     }
      if (index==4)
     {
+      if(velocidad==0 || distancia==0){
+
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("Error");
+        lcd.setCursor(0,1);
+        lcd.print("valores = 0");
+        delay(2000);
+        menuDisplay(1);
+        modificar=false;
+
+      }
+      else{
       lcd.setCursor(0,1);
       lcd.print("Moviendo");
       Serial.println("Moviendo");
       stepper.setSpeedInMillimetersPerSecond(velocidad);
       stepper.moveRelativeInMillimeters(distancia);
       lcd.clear();
-      lcd.setCursor(0,1);
+      lcd.setCursor(0,0);
       lcd.println("   Completado   ");
       delay(1000);
       menuDisplay(1);
       modificar=false;
-      //lcd.clear();
-      
-      //Serial.println("False");
+      }
     } 
   }else 
   {
