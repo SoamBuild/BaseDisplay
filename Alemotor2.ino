@@ -4,7 +4,7 @@
 #include <ESP_FlexyStepper.h>
 
 //Pines de conexion stepper Motor
-const int MOTOR_STEP_PIN = 27;
+const int MOTOR_STEP_PIN = 25;
 const int MOTOR_DIRECTION_PIN = 26;
 
 //Objeto FlexyStepper
@@ -31,6 +31,7 @@ void setup()
 {
   Serial.begin(115200);
   stepper.connectToPins(MOTOR_STEP_PIN, MOTOR_DIRECTION_PIN);
+
   pinMode (pulsador, INPUT_PULLUP); //boton de un esp32
   lcd.init();
   lcd.clear();
@@ -42,7 +43,7 @@ void setup()
 }
 void loop()
 {
-  
+ // Serial.println(stepper.motionComplete());
   if(modificar==true) {
     rotary(1,100);
     cambiarValores(modificar,indexmenu);
@@ -159,9 +160,25 @@ void cambiarValores(bool ok,int index){
       lcd.setCursor(0,1);
       lcd.print(String(distancia)+" mm");
     }
-    
-    
-  }else {
+     if (index==4)
+    {
+      lcd.setCursor(0,1);
+      lcd.print("Moviendo");
+      Serial.println("Moviendo");
+      stepper.setSpeedInMillimetersPerSecond(velocidad);
+      stepper.moveRelativeInMillimeters(distancia);
+      lcd.clear();
+      lcd.setCursor(0,1);
+      lcd.println("   Completado   ");
+      delay(1000);
+      menuDisplay(1);
+      modificar=false;
+      //lcd.clear();
+      
+      //Serial.println("False");
+    } 
+  }else 
+  {
     lcd.clear();
     lcd.noCursor();
   }
