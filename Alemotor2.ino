@@ -26,6 +26,8 @@ int check=0;
 bool modificar =false;
 int indexmenu=1;
 
+bool task=true; //No loop motores
+
 int velocidad=0;
 int distancia=0;
 int lastVel=0;
@@ -55,9 +57,10 @@ void loop()
     rotary(1,100);
     cambiarValores(modificar,indexmenu);
   }
-  if(modificar==false) rotary(1,5);
+  if(modificar==false) rotary(1,7);
   
   buttonControl();
+ // Serial.println("State "+ String(digitalRead(pulsador)));
   
 }
 void rotary(int ROTARYMIN,int ROTARYMAX){
@@ -72,7 +75,7 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
   } 
   if (lastPos != newPos) {
   if(modificar==false) indexmenu=newPos;
-  Serial.println(newPos);
+  //Serial.println(newPos);
   menuDisplay(indexmenu);
   lastPos = newPos;
   }
@@ -80,29 +83,42 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
 }
 
 void buttonControl(){
-  int presionado = 0;
+   // Serial.println("valor boton"+String(presionado));
 
+  int presionado = 0;
   if (digitalRead(pulsador) == LOW) 
   {
+    
     presionado = 1; 
     delay(50);
+   // Serial.println(digitalRead(pulsador));
+Serial.println("1_press: "+ String(presionado)+ "/ STATE:"+ String(digitalRead(pulsador))+ "/ CHECK: "+ String(check));    //Serial.println("state2");
   }
-  if (digitalRead(pulsador) == HIGH && presionado == 1)
+  if (digitalRead(pulsador) == HIGH && presionado == 1 &&indexmenu>=3)
   {
+    //Serial.println("state3");
     check++;
     switch(check){
       case 1:
+      //Serial.println("state4");
         modificar=true;
         Serial.println("Modificando valores");
+        Serial.println("2_press: "+ String(presionado)+ "/ STATE:"+ String(digitalRead(pulsador))+ "/ CHECK: "+ String(check));
+
         break;
       case 2:
+        Serial.println("state5");
         modificar=false;
         Serial.println("Guardando los valores");
+       // lcd.clear();
         check =0;
+        Serial.println("3_press: "+ String(presionado)+ "/ STATE:"+ String(digitalRead(pulsador))+ "/ CHECK: "+ String(check));
         break;
     }
+    //Serial.println("state6");
     presionado = 0;
   }
+   // Serial.println(digitalRead(pulsador));
 
 }
 void menuDisplay(int mode){
@@ -150,33 +166,47 @@ void menuDisplay(int mode){
         lcd.setCursor(0,0);
         lcd.print("Encender");   
         break;
+    case 6:
+        lcd.clear();
+        lcd.noCursor();
+        lcd.setCursor(0,0);
+        lcd.print("Home");   
+        break;
+    case 7:
+        lcd.clear();
+        lcd.noCursor();
+        lcd.setCursor(0,0);
+        lcd.print("Reset valores");   
+        break;
   }
 }
 void homi() {
   lcd.setCursor(0,0);
-  lcd.print("AutoHome");  
+  lcd.print("AutoHome"); 
+  
   if (stepper.moveToHomeInMillimeters(-1, 30, 380, LIMIT_SWITCH_PIN) == true)
-  {
-    Serial.println("HOMING OK");
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("AutoHome OK");  
-    delay(1000);
-  }
-  else {
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("AutoHome Error"); 
-    Serial.println("Error"); 
-    while (true) {
+    {
+      Serial.println("HOMING OK");
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("AutoHome OK");  
+      delay(1000);
+    }
+    else {
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("AutoHome Error"); 
+      Serial.println("Error"); 
+      while (true) {
       digitalWrite(DEBUG_LED, HIGH);
       delay(50);
       digitalWrite(DEBUG_LED, LOW);
       delay(50);
     }
+    
     Serial.println("Error");
-
   }
+  
 }
 void cambiarValores(bool ok,int index){
 
@@ -217,9 +247,10 @@ void cambiarValores(bool ok,int index){
         delay(2000);
         menuDisplay(1);
         modificar=false;
-
       }
       else{
+      
+      
       lcd.setCursor(0,1);
       lcd.print("Moviendo");
       Serial.println("Moviendo");
@@ -229,14 +260,52 @@ void cambiarValores(bool ok,int index){
       lcd.setCursor(0,0);
       lcd.println("   Completado   ");
       delay(1000);
-      menuDisplay(1);
+      check=0;
       modificar=false;
+      lcd.clear();
+      menuDisplay(1);
+      }
+    } 
+    if (index==6)
+    {
+     homi(); 
+      check=0;
+      modificar=false;
+      lcd.clear();
+      menuDisplay(1);
+
+    }
+     if (index==7)
+    {
+      if(velocidad==0 || distancia==0){
+
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("Error");
+        lcd.setCursor(0,1);
+        lcd.print("valores = 0");
+        delay(2000);
+        menuDisplay(1);
+        modificar=false;
+      }
+      else{
+      velocidad=0;
+      distancia=0;
+      lcd.setCursor(0,1);
+      lcd.print("Valores en 0");
+      delay(1000);
+      check=0;
+      modificar=false;
+      lcd.clear();
+      menuDisplay(1);
       }
     } 
   }else 
   {
     lcd.clear();
     lcd.noCursor();
+    //menuDisplay(1);
+    //newPos=1;
   }
     
 }
