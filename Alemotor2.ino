@@ -55,7 +55,7 @@ void loop()
     rotary(1,100);
     cambiarValores(modificar,indexmenu);
   }
-  if(modificar==false) rotary(1,4);
+  if(modificar==false) rotary(1,5);
   
   buttonControl();
   
@@ -113,26 +113,38 @@ void menuDisplay(int mode){
         lcd.noCursor();
         lcd.setCursor(0,0);
         lcd.print("Vel | ");
-        lcd.setCursor(7,0);
+        lcd.setCursor(6,0);
         lcd.print(String(velocidad)+" mm/s");
         lcd.setCursor(0,1);
         lcd.print("Dis | ");
-        lcd.setCursor(7,1);
+        lcd.setCursor(6,1);
         lcd.print(String(distancia)+" mm");
         break;
     case 2:
         lcd.clear();
         lcd.noCursor();
         lcd.setCursor(0,0);
-        lcd.print("Velocidad");
+        lcd.print("PosM1 | ");
+        lcd.setCursor(8,0);
+        lcd.print(String(stepper.getCurrentPositionInMillimeters())+" mm");
+        lcd.setCursor(0,1);
+        lcd.print("PosM2 | ");
+        lcd.setCursor(8,1);
+        lcd.print(String(stepper.getCurrentPositionInMillimeters())+" mm");
         break;
     case 3:
         lcd.clear();
         lcd.noCursor();
         lcd.setCursor(0,0);
-        lcd.print("Distancia"); 
+        lcd.print("Velocidad");
         break;
     case 4:
+        lcd.clear();
+        lcd.noCursor();
+        lcd.setCursor(0,0);
+        lcd.print("Distancia"); 
+        break;
+    case 5:
         lcd.clear();
         lcd.noCursor();
         lcd.setCursor(0,0);
@@ -169,7 +181,7 @@ void homi() {
 void cambiarValores(bool ok,int index){
 
   if(ok==true){
-    if (index==2)
+    if (index==3)
     {
        if (lastVel != newPos) {
         if(lastVel<newPos)velocidad=velocidad+1;
@@ -181,7 +193,7 @@ void cambiarValores(bool ok,int index){
       lcd.setCursor(0,1);
       lcd.print(String(velocidad)+" mm/s");
     }
-    if (index==3)
+    if (index==4)
     {
       if (lastDis != newPos) {
         if(lastDis<newPos)distancia=distancia+1;
@@ -193,7 +205,7 @@ void cambiarValores(bool ok,int index){
       lcd.setCursor(0,1);
       lcd.print(String(distancia)+" mm");
     }
-     if (index==4)
+     if (index==5)
     {
       if(velocidad==0 || distancia==0){
 
