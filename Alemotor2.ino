@@ -9,6 +9,9 @@ const int MOTOR_DIRECTION_PIN = 26;
 const int LIMIT_SWITCH_PIN = 33; 
 const int DEBUG_LED = 23;
 
+int lastContador;
+int contador;
+int lastindex;
 
 //Objeto FlexyStepper
 ESP_FlexyStepper stepper;
@@ -73,6 +76,8 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
     encoder.setPosition(ROTARYMAX / ROTARYSTEPS);
     newPos = ROTARYMAX;
   } 
+
+
   if (lastPos != newPos) {
   if(modificar==false) indexmenu=newPos;
   //Serial.println(newPos);
@@ -213,11 +218,14 @@ void cambiarValores(bool ok,int index){
   if(ok==true){
     if (index==3)
     {
+      velocidad=newPos;
+      /*
        if (lastVel != newPos) {
         if(lastVel<newPos)velocidad=velocidad+1;
         if(lastVel>newPos)velocidad=velocidad-1;
         lastVel=newPos;
       }
+      */
       lcd.setCursor(0,1);
       lcd.cursor();
       lcd.setCursor(0,1);
@@ -225,11 +233,14 @@ void cambiarValores(bool ok,int index){
     }
     if (index==4)
     {
+      distancia=newPos;
+      /*
       if (lastDis != newPos) {
         if(lastDis<newPos)distancia=distancia+1;
         if(lastDis>newPos)distancia=distancia-1;
         lastDis=newPos;
       }
+      */
       lcd.setCursor(0,1);
       lcd.cursor();
       lcd.setCursor(0,1);
@@ -255,7 +266,7 @@ void cambiarValores(bool ok,int index){
       lcd.print("Moviendo");
       Serial.println("Moviendo");
       stepper.setSpeedInMillimetersPerSecond(velocidad);
-      stepper.moveRelativeInMillimeters(distancia);
+      stepper.moveToPositionInMillimeters(distancia);
       lcd.clear();
       lcd.setCursor(0,0);
       lcd.println("   Completado   ");
