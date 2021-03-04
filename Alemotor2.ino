@@ -59,7 +59,7 @@ void setup()
   lcd.backlight();
   homi_X();
   delay(1000);
-  lcd.clear();
+ // lcd.clear();
   homi_Y();
   lcd.clear();
   lcd.setCursor(0, 0);
@@ -88,8 +88,6 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
     encoder.setPosition(ROTARYMAX / ROTARYSTEPS);
     newPos = ROTARYMAX;
   } 
-
-
   if (lastPos != newPos) {
   if(modificar==false) indexmenu=newPos;
   menuDisplay(indexmenu);
@@ -97,13 +95,10 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
   }
 
 }
-
 void buttonControl(){
-
   int presionado = 0;
   if (digitalRead(pulsador) == LOW) 
   {
-    
     presionado = 1; 
     delay(50);
 Serial.println("1_press: "+ String(presionado)+ "/ STATE:"+ String(digitalRead(pulsador))+ "/ CHECK: "+ String(check));    //Serial.println("state2");
@@ -214,6 +209,7 @@ void menuDisplay(int mode){
   }
 }
 void homi_X() {
+  lcd.clear();
   Serial.println("AutoHomeX");
   lcd.setCursor(0,0);
   lcd.print("AutoHome X"); 
@@ -242,6 +238,7 @@ void homi_X() {
   
 }
 void homi_Y() {
+  lcd.clear();
   Serial.println("AutoHomeY");
   lcd.setCursor(0,0);
   lcd.print("AutoHome Y"); 
@@ -302,8 +299,6 @@ void cambiarValores(bool ok,int index){
         modificar=false;
       }
       else{
-      
-      
       lcd.setCursor(0,1);
       lcd.print("Moviendo");
       Serial.println("Moviendo");
@@ -319,9 +314,11 @@ void cambiarValores(bool ok,int index){
       menuDisplay(1);
       }
     } 
-    if (index==6)
+    if (index==8)
     {
      homi_X(); 
+     delay(1000);
+     homi_Y();
       check=0;
       modificar=false;
       lcd.clear();
