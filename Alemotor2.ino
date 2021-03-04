@@ -355,7 +355,7 @@ void cambiarValores(bool ok,int index){
     } 
     if (index==10)
     {
-      
+     //reiniciar todos los datos.
       velocidad_X=0;
       distancia_X=0;
       velocidad_Y=0;
@@ -372,10 +372,6 @@ void cambiarValores(bool ok,int index){
   else{
     lcd.clear();
     lcd.noCursor();
-    //menuDisplay(1);
-    //newPos=1;
   }
-    
-
 }
 
