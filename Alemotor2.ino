@@ -7,6 +7,12 @@
 const int MOTOR_STEP_PIN = 25;
 const int MOTOR_DIRECTION_PIN = 26;
 const int LIMIT_SWITCH_PIN = 33; 
+
+
+const int MOTOR_Y_STEP_PIN = 2;
+const int MOTOR_Y_DIRECTION_PIN = 4;
+const int LIMIT_SWITCH_PIN_Y = 14;
+
 const int DEBUG_LED = 23;
 
 int lastContador;
@@ -15,6 +21,7 @@ int lastindex;
 
 //Objeto FlexyStepper
 ESP_FlexyStepper stepper;
+ESP_FlexyStepper stepper_Y;
 
 //SCL 22
 //SDA 21
@@ -40,13 +47,18 @@ void setup()
 {
   Serial.begin(115200);
   stepper.connectToPins(MOTOR_STEP_PIN, MOTOR_DIRECTION_PIN);
+  stepper_Y.connectToPins(MOTOR_Y_STEP_PIN, MOTOR_Y_DIRECTION_PIN);
+
   pinMode(DEBUG_LED,OUTPUT);
   pinMode(LIMIT_SWITCH_PIN, INPUT_PULLUP);
   pinMode (pulsador, INPUT_PULLUP); //boton de un esp32
   lcd.init();
   lcd.clear();
   lcd.backlight();
-  homi();
+  homi_X();
+  delay(1000);
+  lcd.clear();
+  homi_Y();
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("MotorControl 1.1");
@@ -63,8 +75,6 @@ void loop()
   if(modificar==false) rotary(1,10);
   
   buttonControl();
- // Serial.println("State "+ String(digitalRead(pulsador)));
-  
 }
 void rotary(int ROTARYMIN,int ROTARYMAX){
   encoder.tick();
@@ -96,7 +106,7 @@ void buttonControl(){
     delay(50);
 Serial.println("1_press: "+ String(presionado)+ "/ STATE:"+ String(digitalRead(pulsador))+ "/ CHECK: "+ String(check));    //Serial.println("state2");
   }
-  if (digitalRead(pulsador) == HIGH && presionado == 1 &&indexmenu>=3)
+  if (digitalRead(pulsador) == HIGH && presionado == 1)
   {
     check++;
     switch(check){
@@ -201,22 +211,23 @@ void menuDisplay(int mode){
         break;
   }
 }
-void homi() {
+void homi_X() {
+  Serial.println("AutoHomeX");
   lcd.setCursor(0,0);
-  lcd.print("AutoHome"); 
+  lcd.print("AutoHome X"); 
   
   if (stepper.moveToHomeInMillimeters(-1, 30, 380, LIMIT_SWITCH_PIN) == true)
     {
-      Serial.println("HOMING OK");
+      Serial.println("HOMING X OK");
       lcd.clear();
       lcd.setCursor(0,0);
-      lcd.print("AutoHome OK");  
+      lcd.print("AutoHome X OK");  
       delay(1000);
     }
     else {
       lcd.clear();
       lcd.setCursor(0,0);
-      lcd.print("AutoHome Error"); 
+      lcd.print("AutoHome X Error"); 
       Serial.println("Error"); 
       while (true) {
       digitalWrite(DEBUG_LED, HIGH);
@@ -224,39 +235,52 @@ void homi() {
       digitalWrite(DEBUG_LED, LOW);
       delay(50);
     }
-    
-    Serial.println("Error");
+    Serial.println("Error eje X");
+  }
+  
+}
+void homi_Y() {
+  Serial.println("AutoHomeY");
+  lcd.setCursor(0,0);
+  lcd.print("AutoHome Y"); 
+  
+  if (stepper_Y.moveToHomeInMillimeters(-1, 30, 380, LIMIT_SWITCH_PIN_Y) == true)
+    {
+      Serial.println("HOMING Y OK");
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("AutoHome Y OK");  
+      delay(1000);
+    }
+    else {
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("AutoHome Y Error"); 
+      Serial.println("Error"); 
+      while (true) {
+      digitalWrite(DEBUG_LED, HIGH);
+      delay(50);
+      digitalWrite(DEBUG_LED, LOW);
+      delay(50);
+    }
+    Serial.println("Error eje Y");
   }
   
 }
 void cambiarValores(bool ok,int index){
 
   if(ok==true){
-    if (index==3)
+    if (index==2)
     {
       velocidad=newPos;
-      /*
-       if (lastVel != newPos) {
-        if(lastVel<newPos)velocidad=velocidad+1;
-        if(lastVel>newPos)velocidad=velocidad-1;
-        lastVel=newPos;
-      }
-      */
       lcd.setCursor(0,1);
       lcd.cursor();
       lcd.setCursor(0,1);
       lcd.print(String(velocidad)+" mm/s");
     }
-    if (index==4)
+    if (index==3)
     {
       distancia=newPos;
-      /*
-      if (lastDis != newPos) {
-        if(lastDis<newPos)distancia=distancia+1;
-        if(lastDis>newPos)distancia=distancia-1;
-        lastDis=newPos;
-      }
-      */
       lcd.setCursor(0,1);
       lcd.cursor();
       lcd.setCursor(0,1);
@@ -295,7 +319,7 @@ void cambiarValores(bool ok,int index){
     } 
     if (index==6)
     {
-     homi(); 
+     homi_X(); 
       check=0;
       modificar=false;
       lcd.clear();
