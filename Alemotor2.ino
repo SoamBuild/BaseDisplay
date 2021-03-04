@@ -60,7 +60,7 @@ void loop()
     rotary(1,100);
     cambiarValores(modificar,indexmenu);
   }
-  if(modificar==false) rotary(1,7);
+  if(modificar==false) rotary(1,10);
   
   buttonControl();
  // Serial.println("State "+ String(digitalRead(pulsador)));
@@ -80,7 +80,6 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
 
   if (lastPos != newPos) {
   if(modificar==false) indexmenu=newPos;
-  //Serial.println(newPos);
   menuDisplay(indexmenu);
   lastPos = newPos;
   }
@@ -88,7 +87,6 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
 }
 
 void buttonControl(){
-   // Serial.println("valor boton"+String(presionado));
 
   int presionado = 0;
   if (digitalRead(pulsador) == LOW) 
@@ -96,16 +94,13 @@ void buttonControl(){
     
     presionado = 1; 
     delay(50);
-   // Serial.println(digitalRead(pulsador));
 Serial.println("1_press: "+ String(presionado)+ "/ STATE:"+ String(digitalRead(pulsador))+ "/ CHECK: "+ String(check));    //Serial.println("state2");
   }
   if (digitalRead(pulsador) == HIGH && presionado == 1 &&indexmenu>=3)
   {
-    //Serial.println("state3");
     check++;
     switch(check){
       case 1:
-      //Serial.println("state4");
         modificar=true;
         Serial.println("Modificando valores");
         Serial.println("2_press: "+ String(presionado)+ "/ STATE:"+ String(digitalRead(pulsador))+ "/ CHECK: "+ String(check));
@@ -115,15 +110,12 @@ Serial.println("1_press: "+ String(presionado)+ "/ STATE:"+ String(digitalRead(p
         Serial.println("state5");
         modificar=false;
         Serial.println("Guardando los valores");
-       // lcd.clear();
         check =0;
         Serial.println("3_press: "+ String(presionado)+ "/ STATE:"+ String(digitalRead(pulsador))+ "/ CHECK: "+ String(check));
         break;
     }
-    //Serial.println("state6");
     presionado = 0;
   }
-   // Serial.println(digitalRead(pulsador));
 
 }
 void menuDisplay(int mode){
@@ -133,15 +125,51 @@ void menuDisplay(int mode){
         lcd.clear();
         lcd.noCursor();
         lcd.setCursor(0,0);
-        lcd.print("Vel | ");
+        lcd.print("VelM1");
         lcd.setCursor(6,0);
         lcd.print(String(velocidad)+" mm/s");
         lcd.setCursor(0,1);
-        lcd.print("Dis | ");
+        lcd.print("DisM1");
         lcd.setCursor(6,1);
         lcd.print(String(distancia)+" mm");
         break;
     case 2:
+        lcd.clear();
+        lcd.noCursor();
+        lcd.setCursor(0,0);
+        lcd.print("Velocidad M1");
+        break;
+    case 3:
+        lcd.clear();
+        lcd.noCursor();
+        lcd.setCursor(0,0);
+        lcd.print("Distancia M1"); 
+        break;
+    case 4:
+        lcd.clear();
+        lcd.noCursor();
+        lcd.setCursor(0,0);
+        lcd.print("VelM2");
+        lcd.setCursor(6,0);
+        lcd.print(String(velocidad)+" mm/s");
+        lcd.setCursor(0,1);
+        lcd.print("DisM2");
+        lcd.setCursor(6,1);
+        lcd.print(String(distancia)+" mm");
+        break;
+    case 5:
+        lcd.clear();
+        lcd.noCursor();
+        lcd.setCursor(0,0);
+        lcd.print("Velocidad M2");
+        break;
+    case 6:
+        lcd.clear();
+        lcd.noCursor();
+        lcd.setCursor(0,0);
+        lcd.print("Distancia M2"); 
+        break;
+    case 7:
         lcd.clear();
         lcd.noCursor();
         lcd.setCursor(0,0);
@@ -153,31 +181,19 @@ void menuDisplay(int mode){
         lcd.setCursor(8,1);
         lcd.print(String(stepper.getCurrentPositionInMillimeters())+" mm");
         break;
-    case 3:
-        lcd.clear();
-        lcd.noCursor();
-        lcd.setCursor(0,0);
-        lcd.print("Velocidad");
-        break;
-    case 4:
-        lcd.clear();
-        lcd.noCursor();
-        lcd.setCursor(0,0);
-        lcd.print("Distancia"); 
-        break;
-    case 5:
-        lcd.clear();
-        lcd.noCursor();
-        lcd.setCursor(0,0);
-        lcd.print("Encender");   
-        break;
-    case 6:
+    case 8:
         lcd.clear();
         lcd.noCursor();
         lcd.setCursor(0,0);
         lcd.print("Home");   
         break;
-    case 7:
+    case 9:
+        lcd.clear();
+        lcd.noCursor();
+        lcd.setCursor(0,0);
+        lcd.print("Encender");   
+        break;
+    case 10:
         lcd.clear();
         lcd.noCursor();
         lcd.setCursor(0,0);
