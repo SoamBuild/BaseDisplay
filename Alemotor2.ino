@@ -305,8 +305,20 @@ void cambiarValores(bool ok,int index){
       lcd.setCursor(0,1);
       lcd.print(String(distancia_Y)+" mm");
     }
-     if (index==9)
+    if (index==8)
     {
+      //Autohome de ambos ejes 
+      homi_X(); 
+      delay(1000);
+      homi_Y();
+      check=0;
+      modificar=false;
+      lcd.clear();
+      menuDisplay(1);
+    }
+    if (index==9)
+    {
+      //Check si hay datos para moverse.
       if(velocidad_X==0 || distancia_X==0){
 
         lcd.clear();
@@ -319,11 +331,18 @@ void cambiarValores(bool ok,int index){
         modificar=false;
       }
       else{
+      //Se mueven ambos motores.
+      stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
+      stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
       lcd.setCursor(0,1);
       lcd.print("Moviendo");
       Serial.println("Moviendo");
-      stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
-      stepper_X.moveToPositionInMillimeters(distancia_X);
+      stepper_X.setTargetPositionInMillimeters(distancia_X);
+      stepper_Y.setTargetPositionInMillimeters(distancia_Y);
+      while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete())){
+        stepper_X.processMovement();
+        stepper_Y.processMovement();
+      }
       lcd.clear();
       lcd.setCursor(0,0);
       lcd.println("   Completado   ");
@@ -334,18 +353,7 @@ void cambiarValores(bool ok,int index){
       menuDisplay(1);
       }
     } 
-    if (index==8)
-    {
-     homi_X(); 
-     delay(1000);
-     homi_Y();
-      check=0;
-      modificar=false;
-      lcd.clear();
-      menuDisplay(1);
-
-    }
-     if (index==7)
+        /*if (index==7)
     {
       if(velocidad_X==0 || distancia_X==0){
 
@@ -370,6 +378,7 @@ void cambiarValores(bool ok,int index){
       menuDisplay(1);
       }
     } 
+    */
   }else 
   {
     lcd.clear();
@@ -378,5 +387,6 @@ void cambiarValores(bool ok,int index){
     //newPos=1;
   }
     
+
 }
 
