@@ -132,11 +132,11 @@ void menuDisplay(int mode){
         lcd.clear();
         lcd.noCursor();
         lcd.setCursor(0,0);
-        lcd.print("VelM1");
+        lcd.print("Vel_X");
         lcd.setCursor(6,0);
         lcd.print(String(velocidad_X)+" mm/s");
         lcd.setCursor(0,1);
-        lcd.print("DisM1");
+        lcd.print("Dis_X");
         lcd.setCursor(6,1);
         lcd.print(String(distancia_X)+" mm");
         break;
@@ -144,23 +144,23 @@ void menuDisplay(int mode){
         lcd.clear();
         lcd.noCursor();
         lcd.setCursor(0,0);
-        lcd.print("Velocidad M1");
+        lcd.print("Velocidad X");
         break;
     case 3:
         lcd.clear();
         lcd.noCursor();
         lcd.setCursor(0,0);
-        lcd.print("Distancia M1"); 
+        lcd.print("Distancia X"); 
         break;
     case 4:
         lcd.clear();
         lcd.noCursor();
         lcd.setCursor(0,0);
-        lcd.print("VelM2");
+        lcd.print("Vel_Y");
         lcd.setCursor(6,0);
         lcd.print(String(velocidad_Y)+" mm/s");
         lcd.setCursor(0,1);
-        lcd.print("DisM2");
+        lcd.print("Dis_Y");
         lcd.setCursor(6,1);
         lcd.print(String(distancia_Y)+" mm");
         break;
@@ -168,13 +168,13 @@ void menuDisplay(int mode){
         lcd.clear();
         lcd.noCursor();
         lcd.setCursor(0,0);
-        lcd.print("Velocidad M2");
+        lcd.print("Velocidad Y");
         break;
     case 6:
         lcd.clear();
         lcd.noCursor();
         lcd.setCursor(0,0);
-        lcd.print("Distancia M2"); 
+        lcd.print("Distancia Y"); 
         break;
     case 7:
         lcd.clear();
@@ -271,6 +271,7 @@ void cambiarValores(bool ok,int index){
   if(ok==true){
     if (index==2)
     {
+      //Modificador Velocidad motorX
       velocidad_X=newPos;
       lcd.setCursor(0,1);
       lcd.cursor();
@@ -279,13 +280,32 @@ void cambiarValores(bool ok,int index){
     }
     if (index==3)
     {
-      distancia_Y=newPos;
+      //Modificador distancia motorX
+      distancia_X=newPos;
       lcd.setCursor(0,1);
       lcd.cursor();
       lcd.setCursor(0,1);
       lcd.print(String(distancia_X)+" mm");
     }
-     if (index==5)
+    if (index==5)
+    {
+      //Modificador Velocidad motorY
+      velocidad_Y=newPos;
+      lcd.setCursor(0,1);
+      lcd.cursor();
+      lcd.setCursor(0,1);
+      lcd.print(String(velocidad_Y)+" mm/s");
+    }
+    if (index==6)
+    {
+      //Modificador distancia motorY
+      distancia_Y=newPos;
+      lcd.setCursor(0,1);
+      lcd.cursor();
+      lcd.setCursor(0,1);
+      lcd.print(String(distancia_Y)+" mm");
+    }
+     if (index==9)
     {
       if(velocidad_X==0 || distancia_X==0){
 
