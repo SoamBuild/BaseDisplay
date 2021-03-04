@@ -353,22 +353,13 @@ void cambiarValores(bool ok,int index){
       menuDisplay(1);
       }
     } 
-        /*if (index==7)
+    if (index==10)
     {
-      if(velocidad_X==0 || distancia_X==0){
-
-        lcd.clear();
-        lcd.setCursor(0,0);
-        lcd.print("Error");
-        lcd.setCursor(0,1);
-        lcd.print("valores = 0");
-        delay(2000);
-        menuDisplay(1);
-        modificar=false;
-      }
-      else{
+      
       velocidad_X=0;
       distancia_X=0;
+      velocidad_Y=0;
+      distancia_Y=0;
       lcd.setCursor(0,1);
       lcd.print("Valores en 0");
       delay(1000);
@@ -376,11 +367,9 @@ void cambiarValores(bool ok,int index){
       modificar=false;
       lcd.clear();
       menuDisplay(1);
-      }
     } 
-    */
-  }else 
-  {
+  }
+  else{
     lcd.clear();
     lcd.noCursor();
     //menuDisplay(1);
