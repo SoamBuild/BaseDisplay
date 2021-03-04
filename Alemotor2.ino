@@ -4,14 +4,14 @@
 #include <ESP_FlexyStepper.h>
 
 //Pines de conexion stepper Motor
-const int MOTOR_STEP_PIN = 25;
-const int MOTOR_DIRECTION_PIN = 26;
-const int LIMIT_SWITCH_PIN = 33; 
+const int MOTOR_X_STEP_PIN = 25;
+const int MOTOR_X_DIRECTION_PIN = 26;
+const int LIMIT_X_SWITCH_PIN = 33; 
 
 
 const int MOTOR_Y_STEP_PIN = 2;
 const int MOTOR_Y_DIRECTION_PIN = 4;
-const int LIMIT_SWITCH_PIN_Y = 14;
+const int LIMIT_Y_SWITCH_PIN = 14;
 
 const int DEBUG_LED = 23;
 
@@ -20,7 +20,7 @@ int contador;
 int lastindex;
 
 //Objeto FlexyStepper
-ESP_FlexyStepper stepper;
+ESP_FlexyStepper stepper_X;
 ESP_FlexyStepper stepper_Y;
 
 //SCL 22
@@ -38,19 +38,21 @@ int indexmenu=1;
 
 bool task=true; //No loop motores
 
-int velocidad=0;
-int distancia=0;
+int velocidad_X=0;
+int distancia_X=0;
+int velocidad_Y=0;
+int distancia_Y=0;
 int lastVel=0;
 int lastDis=0;
 
 void setup()
 {
   Serial.begin(115200);
-  stepper.connectToPins(MOTOR_STEP_PIN, MOTOR_DIRECTION_PIN);
+  stepper_X.connectToPins(MOTOR_X_STEP_PIN, MOTOR_X_DIRECTION_PIN);
   stepper_Y.connectToPins(MOTOR_Y_STEP_PIN, MOTOR_Y_DIRECTION_PIN);
-
+  pinMode(LIMIT_X_SWITCH_PIN, INPUT_PULLUP);
+  pinMode(LIMIT_Y_SWITCH_PIN, INPUT_PULLUP);
   pinMode(DEBUG_LED,OUTPUT);
-  pinMode(LIMIT_SWITCH_PIN, INPUT_PULLUP);
   pinMode (pulsador, INPUT_PULLUP); //boton de un esp32
   lcd.init();
   lcd.clear();
@@ -137,11 +139,11 @@ void menuDisplay(int mode){
         lcd.setCursor(0,0);
         lcd.print("VelM1");
         lcd.setCursor(6,0);
-        lcd.print(String(velocidad)+" mm/s");
+        lcd.print(String(velocidad_X)+" mm/s");
         lcd.setCursor(0,1);
         lcd.print("DisM1");
         lcd.setCursor(6,1);
-        lcd.print(String(distancia)+" mm");
+        lcd.print(String(distancia_X)+" mm");
         break;
     case 2:
         lcd.clear();
@@ -161,11 +163,11 @@ void menuDisplay(int mode){
         lcd.setCursor(0,0);
         lcd.print("VelM2");
         lcd.setCursor(6,0);
-        lcd.print(String(velocidad)+" mm/s");
+        lcd.print(String(velocidad_Y)+" mm/s");
         lcd.setCursor(0,1);
         lcd.print("DisM2");
         lcd.setCursor(6,1);
-        lcd.print(String(distancia)+" mm");
+        lcd.print(String(distancia_Y)+" mm");
         break;
     case 5:
         lcd.clear();
@@ -185,11 +187,11 @@ void menuDisplay(int mode){
         lcd.setCursor(0,0);
         lcd.print("PosM1 | ");
         lcd.setCursor(8,0);
-        lcd.print(String(stepper.getCurrentPositionInMillimeters())+" mm");
+        lcd.print(String(stepper_X.getCurrentPositionInMillimeters())+" mm");
         lcd.setCursor(0,1);
         lcd.print("PosM2 | ");
         lcd.setCursor(8,1);
-        lcd.print(String(stepper.getCurrentPositionInMillimeters())+" mm");
+        lcd.print(String(stepper_Y.getCurrentPositionInMillimeters())+" mm");
         break;
     case 8:
         lcd.clear();
@@ -216,7 +218,7 @@ void homi_X() {
   lcd.setCursor(0,0);
   lcd.print("AutoHome X"); 
   
-  if (stepper.moveToHomeInMillimeters(-1, 30, 380, LIMIT_SWITCH_PIN) == true)
+  if (stepper_X.moveToHomeInMillimeters(-1, 30, 380, LIMIT_X_SWITCH_PIN) == true)
     {
       Serial.println("HOMING X OK");
       lcd.clear();
@@ -244,7 +246,7 @@ void homi_Y() {
   lcd.setCursor(0,0);
   lcd.print("AutoHome Y"); 
   
-  if (stepper_Y.moveToHomeInMillimeters(-1, 30, 380, LIMIT_SWITCH_PIN_Y) == true)
+  if (stepper_Y.moveToHomeInMillimeters(-1, 30, 380, LIMIT_Y_SWITCH_PIN) == true)
     {
       Serial.println("HOMING Y OK");
       lcd.clear();
@@ -272,23 +274,23 @@ void cambiarValores(bool ok,int index){
   if(ok==true){
     if (index==2)
     {
-      velocidad=newPos;
+      velocidad_X=newPos;
       lcd.setCursor(0,1);
       lcd.cursor();
       lcd.setCursor(0,1);
-      lcd.print(String(velocidad)+" mm/s");
+      lcd.print(String(velocidad_X)+" mm/s");
     }
     if (index==3)
     {
-      distancia=newPos;
+      distancia_Y=newPos;
       lcd.setCursor(0,1);
       lcd.cursor();
       lcd.setCursor(0,1);
-      lcd.print(String(distancia)+" mm");
+      lcd.print(String(distancia_X)+" mm");
     }
      if (index==5)
     {
-      if(velocidad==0 || distancia==0){
+      if(velocidad_X==0 || distancia_X==0){
 
         lcd.clear();
         lcd.setCursor(0,0);
@@ -305,8 +307,8 @@ void cambiarValores(bool ok,int index){
       lcd.setCursor(0,1);
       lcd.print("Moviendo");
       Serial.println("Moviendo");
-      stepper.setSpeedInMillimetersPerSecond(velocidad);
-      stepper.moveToPositionInMillimeters(distancia);
+      stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
+      stepper_X.moveToPositionInMillimeters(distancia_X);
       lcd.clear();
       lcd.setCursor(0,0);
       lcd.println("   Completado   ");
@@ -328,7 +330,7 @@ void cambiarValores(bool ok,int index){
     }
      if (index==7)
     {
-      if(velocidad==0 || distancia==0){
+      if(velocidad_X==0 || distancia_X==0){
 
         lcd.clear();
         lcd.setCursor(0,0);
@@ -340,8 +342,8 @@ void cambiarValores(bool ok,int index){
         modificar=false;
       }
       else{
-      velocidad=0;
-      distancia=0;
+      velocidad_X=0;
+      distancia_X=0;
       lcd.setCursor(0,1);
       lcd.print("Valores en 0");
       delay(1000);
