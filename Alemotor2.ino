@@ -1,23 +1,29 @@
+/*
+*Codigo de mesa vibratoria para conocer el funcionamiento de las funciones y del menu
+*revisar readme.md ubicado en la rama main
+*los pines del sistema se encuentran detallados en pin32.md en la rama main
+*/
+
+
 #include <LiquidCrystal_I2C.h>
 #include "Arduino.h"
 #include <RotaryEncoder.h>
 #include <ESP_FlexyStepper.h>
 
 //Pines de conexion stepper Motor
-const int MOTOR_X_STEP_PIN = 25;
-const int MOTOR_X_DIRECTION_PIN = 26;
-const int LIMIT_X_SWITCH_PIN = 33; 
+const int MOTOR_X_STEP_PIN = 16;
+const int MOTOR_X_DIRECTION_PIN = 17;
+const int MOTOR_X_ENABLE = 18;
+const int LIMIT_X_SWITCH_PIN = 4; 
 
 
-const int MOTOR_Y_STEP_PIN = 2;
-const int MOTOR_Y_DIRECTION_PIN = 4;
-const int LIMIT_Y_SWITCH_PIN = 14;
+
+const int MOTOR_Y_STEP_PIN = 33;
+const int MOTOR_Y_DIRECTION_PIN = 25;
+const int MOTOR_Y_ENABLE = 26;
+const int LIMIT_Y_SWITCH_PIN = 19;
 
 const int DEBUG_LED = 23;
-
-int lastContador;
-int contador;
-int lastindex;
 
 //Objeto FlexyStepper
 ESP_FlexyStepper stepper_X;
@@ -27,23 +33,28 @@ ESP_FlexyStepper stepper_Y;
 //SDA 21
 LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display
 
-RotaryEncoder encoder(13, 27);
+//Configuracion de rotaryEncoder
+const int ENCODER_CLK = 13;
+const int ENCODER_DT = 27;
+const int ENCODER_SW = 32;
+
+RotaryEncoder encoder(ENCODER_CLK, ENCODER_DT);
 #define ROTARYSTEPS 1
 int newPos;
 int lastPos = -1;
-const int pulsador = 32;
+//const int pulsador = 32;
+
+//Debounce encodervariable
 int check=0;
+
+//Navegacion de menu
 bool modificar =false;
 int indexmenu=1;
-
-bool task=true; //No loop motores
-
+//Variables de velocidad y distancia de eje (X,Y)
 int velocidad_X=0;
 int distancia_X=0;
 int velocidad_Y=0;
 int distancia_Y=0;
-int lastVel=0;
-int lastDis=0;
 
 void setup()
 {
@@ -53,7 +64,7 @@ void setup()
   pinMode(LIMIT_X_SWITCH_PIN, INPUT_PULLUP);
   pinMode(LIMIT_Y_SWITCH_PIN, INPUT_PULLUP);
   pinMode(DEBUG_LED,OUTPUT);
-  pinMode (pulsador, INPUT_PULLUP); //boton de un esp32
+  pinMode (ENCODER_SW, INPUT_PULLUP); //boton de un esp32
   lcd.init();
   lcd.clear();
   lcd.backlight();
@@ -69,7 +80,6 @@ void setup()
 }
 void loop()
 {
- // Serial.println(stepper.motionComplete());
   if(modificar==true) {
     rotary(1,100);
     cambiarValores(modificar,indexmenu);
@@ -89,36 +99,34 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
     newPos = ROTARYMAX;
   } 
   if (lastPos != newPos) {
-  if(modificar==false) indexmenu=newPos;
-  menuDisplay(indexmenu);
+  if(modificar==false){
+    indexmenu=newPos;
+    menuDisplay(indexmenu);
+  } //indexmenu=newPos;
+ // menuDisplay(indexmenu);
   lastPos = newPos;
   }
 
 }
 void buttonControl(){
   int presionado = 0;
-  if (digitalRead(pulsador) == LOW) 
+  if (digitalRead(ENCODER_SW) == LOW) 
   {
     presionado = 1; 
     delay(50);
-Serial.println("1_press: "+ String(presionado)+ "/ STATE:"+ String(digitalRead(pulsador))+ "/ CHECK: "+ String(check));    //Serial.println("state2");
   }
-  if (digitalRead(pulsador) == HIGH && presionado == 1)
+  if (digitalRead(ENCODER_SW) == HIGH && presionado == 1)
   {
     check++;
     switch(check){
       case 1:
         modificar=true;
         Serial.println("Modificando valores");
-        Serial.println("2_press: "+ String(presionado)+ "/ STATE:"+ String(digitalRead(pulsador))+ "/ CHECK: "+ String(check));
-
         break;
       case 2:
-        Serial.println("state5");
         modificar=false;
         Serial.println("Guardando los valores");
         check =0;
-        Serial.println("3_press: "+ String(presionado)+ "/ STATE:"+ String(digitalRead(pulsador))+ "/ CHECK: "+ String(check));
         break;
     }
     presionado = 0;
