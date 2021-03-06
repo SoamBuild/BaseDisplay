@@ -1,26 +1,15 @@
-<h1>Librerias utilizadas</h1>
+# Librerias utilizadas
 
-* [AiEsp32RotaryEncoder](https://github.com/igorantolic/ai-esp32-rotary-encoder)
-* [LiquidCrystal_I2C](https://github.com/fdebrabander/Arduino-LiquidCrystal-I2C-library)
+* [LiquidCrystal-I2C-Library](https://github.com/fdebrabander/Arduino-LiquidCrystal-I2C-library)
+* [EspFlexyStepper](https://github.com/pkerspe/ESP-FlexyStepper)
+* [RotaryEncoder](https://github.com/mathertel/RotaryEncoder)
 
-<h1>Codigo</h1>
+La libreria de los motores stepper es "EspFlexyStepper", Pero adicionalmente se busco documentacion y funciones en la libreria original de [FlexyStepper](https://github.com/Stan-Reifel/FlexyStepper).
 
-Este pequeño bloque se repite en casi la todos los switch, y con esas variables y lineas logro modificar los valores y guardarlos.
+# Placa y gpio utilizados
 
-```C++
-   	if (modificar==true){
-          modificar=2;
-          velocidad = encoderValue;
-          lcd.setCursor(0,1);
-          lcd.print(velocidad);
-        }
-```
+La informacion sobre la placa y los pines se encuentra en el archivo [Pin32](https://github.com/SoamBuild/BaseDisplay/blob/main/Pin32.md).
 
-<h2>Switch</h2>
+# Codigo
 
-Respecto a los switch...
-
-* <h3>Case1 = para ver los dos valores desde el principio cuando estan en 0 y cuando los cambias, vuelve a esta pantalla para que revises los valores</h3> 
-* <h3>Case2 = Modificar la velocidad y su variable</h3> 
-* <h3>Case1 = Modificar la distancia y su variable</h3> 
-* <h3>Case3 = iniciar la rutina de movimiento, aca deberia ir el codigo de movimiento de los motores.</h3> 
+el archivo .ino no tiene comentarios en detalle, estas explicaciones sobre el codigo se encuentran en el archivo [Codigo_Docu](https://github.com/SoamBuild/BaseDisplay/blob/main/Codigo_Docu.md).
