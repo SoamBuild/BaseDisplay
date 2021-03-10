@@ -50,6 +50,11 @@ int check=0;
 //Navegacion de menu
 bool modificar =false;
 int indexmenu=1;
+//Navegacion de submenu
+bool submenu=false;
+bool submenu_count=false;
+int indexmenu2;
+bool submenu_modificar=false;
 //Variables de velocidad y distancia de eje (X,Y)
 int velocidad_X=0;
 int distancia_X=0;
@@ -84,9 +89,16 @@ void loop()
     rotary(1,100);
     cambiarValores(modificar,indexmenu);
   }
-  if(modificar==false) rotary(1,10);
+  if(modificar==false&&submenu==false) rotary(1,10);
+  if(submenu_count==true)rotary(1,3);
+  
+  if(submenu_modificar==true) {
+    rotary(1,100);
+    sub_cambiarValores(submenu_modificar,indexmenu2);
+  }
   
   buttonControl();
+  //Serial.println(modificar);
 }
 void rotary(int ROTARYMIN,int ROTARYMAX){
   encoder.tick();
@@ -99,11 +111,15 @@ void rotary(int ROTARYMIN,int ROTARYMAX){
     newPos = ROTARYMAX;
   } 
   if (lastPos != newPos) {
-  if(modificar==false){
+  if(modificar==false&&submenu==false){
     indexmenu=newPos;
     menuDisplay(indexmenu);
-  } //indexmenu=newPos;
- // menuDisplay(indexmenu);
+  } 
+  if(submenu_count==true){
+    indexmenu2=newPos;
+    submenu_display(indexmenu2);
+
+  }
   lastPos = newPos;
   }
 
@@ -115,7 +131,7 @@ void buttonControl(){
     presionado = 1; 
     delay(50);
   }
-  if (digitalRead(ENCODER_SW) == HIGH && presionado == 1)
+  if (digitalRead(ENCODER_SW) == HIGH && presionado == 1 && submenu==false)
   {
     check++;
     switch(check){
@@ -127,6 +143,26 @@ void buttonControl(){
         modificar=false;
         Serial.println("Guardando los valores");
         check =0;
+        break;
+    }
+    presionado = 0;
+  }
+   if (digitalRead(ENCODER_SW) == HIGH && presionado == 1 && submenu==true)
+  {
+    check++;
+    switch(check){
+      case 1:
+        submenu_count=false;
+        submenu_modificar=true;
+        Serial.println("Sub menu ");
+        lcd.clear();
+        break;
+      case 2:
+        submenu_count=true;
+        submenu_modificar=false;;
+        Serial.println("No Submenu");
+        check =0;
+        //lcd.clear();
         break;
     }
     presionado = 0;
@@ -326,6 +362,13 @@ void cambiarValores(bool ok,int index){
     }
     if (index==9)
     {
+      modificar=false;
+      submenu_count=true;
+      submenu=true;
+      check=0;
+      modificar=false;
+      lcd.clear();
+      /*
       //Check si hay datos para moverse.
       if(velocidad_X==0 || distancia_X==0){
 
@@ -360,7 +403,9 @@ void cambiarValores(bool ok,int index){
       lcd.clear();
       menuDisplay(1);
       }
+      */
     } 
+    
     if (index==10)
     {
      //reiniciar todos los datos.
@@ -382,4 +427,81 @@ void cambiarValores(bool ok,int index){
     lcd.noCursor();
   }
 }
+void submenu_display(int sub_mode){
+   switch(sub_mode){
+    case 1:
+        lcd.clear();
+        lcd.noCursor();
+        lcd.setCursor(0,0);
+        lcd.print("Probar Rutina");
+        lcd.setCursor(0,1);
+        lcd.print("1/3");
+        break;
+    case 2:
+        lcd.clear();
+        lcd.noCursor();
+        lcd.setCursor(0,0);
+        lcd.print("Rutina Ciclo");
+        lcd.setCursor(0,1);
+        lcd.print("2/3");
+        break;
+    case 3:
+        lcd.clear();
+        lcd.noCursor();
+        lcd.setCursor(0,0);
+        lcd.print("Volver");
+         lcd.setCursor(0,1);
+        lcd.print("3/3");
+        break;
+}
+}
+void sub_cambiarValores(bool sub_ok,int sub_index){
 
+  if(sub_ok==true){
+
+    if(sub_index==1){
+      //lcd.clear();
+      //lcd.setCursor(0,0);
+      //lcd.print("holaaaaa");
+
+       if(velocidad_X==0 || distancia_X==0){
+
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("Error");
+        lcd.setCursor(0,1);
+        lcd.print("valores = 0");
+        delay(2000);
+        menuDisplay(1);
+        modificar=false;
+      }
+      else{
+      //Se mueven ambos motores.
+      stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
+      stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
+      lcd.setCursor(0,1);
+      lcd.print("Moviendo");
+      Serial.println("Moviendo");
+      stepper_X.setTargetPositionInMillimeters(distancia_X);
+      stepper_Y.setTargetPositionInMillimeters(distancia_Y);
+      while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete())){
+        stepper_X.processMovement();
+        stepper_Y.processMovement();
+      }
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.println("   Completado   ");
+      delay(1000);
+      check=0;
+      //modificar=false;
+      lcd.clear();
+      submenu_count=true;
+      submenu_modificar=false;
+      
+      sub_menuDisplay(2);
+      }
+    }
+  }
+
+ 
+}
