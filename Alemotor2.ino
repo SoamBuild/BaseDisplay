@@ -57,10 +57,10 @@ int indexmenu2;
 bool submenu_modificar = false;
 bool rutina_Task = false;
 //Variables de velocidad y distancia de eje (X,Y)
-int velocidad_X = 10;
-int distancia_X = 10;
-int velocidad_Y = 10;
-int distancia_Y = 10;
+int velocidad_X = 50;
+int distancia_X = 50;
+int velocidad_Y = 50;
+int distancia_Y = 50;
 
 void IRAM_ATTR ISR() {
 
@@ -83,6 +83,7 @@ void IRAM_ATTR ISR() {
 }
 void setup()
 {
+  
   Serial.begin(115200);
   stepper_X.connectToPins(MOTOR_X_STEP_PIN, MOTOR_X_DIRECTION_PIN);
   pinMode(MOTOR_X_ENABLE,OUTPUT);
@@ -90,6 +91,12 @@ void setup()
   stepper_Y.connectToPins(MOTOR_Y_STEP_PIN, MOTOR_Y_DIRECTION_PIN);
   pinMode(MOTOR_Y_ENABLE,OUTPUT);
   digitalWrite(MOTOR_Y_ENABLE,HIGH);
+  stepper_X.setStepsPerMillimeter(3.3* 1);    // 1x microstepping
+  stepper_Y.setStepsPerMillimeter(3.3 * 1);    // 1x microstepping
+
+  
+
+
 
   pinMode(LIMIT_X_SWITCH_PIN, INPUT_PULLUP);
   pinMode(LIMIT_Y_SWITCH_PIN, INPUT_PULLUP);
@@ -286,7 +293,7 @@ void homi_X() {
   lcd.setCursor(0, 0);
   lcd.print("AutoHome X");
 
-  if (stepper_X.moveToHomeInMillimeters(-1, 30, 380, LIMIT_X_SWITCH_PIN) == true)
+  if (stepper_X.moveToHomeInMillimeters(-1, 100, 380, LIMIT_X_SWITCH_PIN) == true)
   {
     Serial.println("HOMING X OK");
     lcd.clear();
@@ -319,7 +326,7 @@ void homi_Y() {
   lcd.setCursor(0, 0);
   lcd.print("AutoHome Y");
 
-  if (stepper_Y.moveToHomeInMillimeters(-1, 30, 380, LIMIT_Y_SWITCH_PIN) == true)
+  if (stepper_Y.moveToHomeInMillimeters(-1, 100, 380, LIMIT_Y_SWITCH_PIN) == true)
   {
     Serial.println("HOMING Y OK");
     lcd.clear();
@@ -535,8 +542,9 @@ void Rutina_move() {
       stepper_X.processMovement();
       stepper_Y.processMovement();
     }
-    stepper_Y.setTargetPositionInMillimeters(-distancia_X);
-    stepper_X.setTargetPositionInMillimeters(-distancia_Y);
+    stepper_Y.setTargetPositionInMillimeters(0);
+    stepper_X.setTargetPositionInMillimeters(0);
+
     while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete()))
     {
       //Rutina_button();
