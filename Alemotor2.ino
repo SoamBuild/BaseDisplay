@@ -65,9 +65,18 @@ int distancia_Y = 10;
 void IRAM_ATTR ISR() {
 
   if (rutina_Task == true) {
+    
+   // finaltask();
     rutina_Task = false;
+    submenu_count = true;
+    submenu_modificar = false;
     stepper_X.emergencyStop();
     stepper_Y.emergencyStop();
+    digitalWrite(MOTOR_X_ENABLE,HIGH);
+    digitalWrite(MOTOR_Y_ENABLE,HIGH);
+   
+
+    
   } else {
     Serial.println("No rutina");
   }
@@ -76,13 +85,18 @@ void setup()
 {
   Serial.begin(115200);
   stepper_X.connectToPins(MOTOR_X_STEP_PIN, MOTOR_X_DIRECTION_PIN);
+  pinMode(MOTOR_X_ENABLE,OUTPUT);
+  digitalWrite(MOTOR_X_ENABLE,HIGH);
   stepper_Y.connectToPins(MOTOR_Y_STEP_PIN, MOTOR_Y_DIRECTION_PIN);
+  pinMode(MOTOR_Y_ENABLE,OUTPUT);
+  digitalWrite(MOTOR_Y_ENABLE,HIGH);
+
   pinMode(LIMIT_X_SWITCH_PIN, INPUT_PULLUP);
   pinMode(LIMIT_Y_SWITCH_PIN, INPUT_PULLUP);
   pinMode(DEBUG_LED, OUTPUT);
   pinMode (ENCODER_SW, INPUT_PULLUP); //boton de un esp32
   //Interrupcion no funcional
-  // attachInterrupt(ENCODER_SW, ISR, HIGH);
+  attachInterrupt(ENCODER_SW, ISR, HIGH);
   lcd.init();
   lcd.clear();
   lcd.backlight();
@@ -265,6 +279,8 @@ void menuDisplay(int mode) {
   }
 }
 void homi_X() {
+
+  digitalWrite(MOTOR_X_ENABLE,LOW);
   lcd.clear();
   Serial.println("AutoHomeX");
   lcd.setCursor(0, 0);
@@ -277,6 +293,8 @@ void homi_X() {
     lcd.setCursor(0, 0);
     lcd.print("AutoHome X OK");
     delay(1000);
+    digitalWrite(MOTOR_X_ENABLE,HIGH);
+
   }
   else {
     lcd.clear();
@@ -294,6 +312,8 @@ void homi_X() {
 
 }
 void homi_Y() {
+  digitalWrite(MOTOR_Y_ENABLE,LOW);
+
   lcd.clear();
   Serial.println("AutoHomeY");
   lcd.setCursor(0, 0);
@@ -306,6 +326,8 @@ void homi_Y() {
     lcd.setCursor(0, 0);
     lcd.print("AutoHome Y OK");
     delay(1000);
+    digitalWrite(MOTOR_Y_ENABLE,HIGH);
+
   }
   else {
     lcd.clear();
@@ -328,7 +350,7 @@ void cambiarValores(bool ok, int index) {
     if (index == 2)
     {
       //Modificador Velocidad motorX
-      velocidad_X = newPos;
+      velocidad_X = newPos*10;
       lcd.setCursor(0, 1);
       lcd.cursor();
       lcd.setCursor(0, 1);
@@ -337,7 +359,7 @@ void cambiarValores(bool ok, int index) {
     if (index == 3)
     {
       //Modificador distancia motorX
-      distancia_X = newPos;
+      distancia_X = newPos*10;
       lcd.setCursor(0, 1);
       lcd.cursor();
       lcd.setCursor(0, 1);
@@ -346,7 +368,7 @@ void cambiarValores(bool ok, int index) {
     if (index == 5)
     {
       //Modificador Velocidad motorY
-      velocidad_Y = newPos;
+      velocidad_Y = newPos*10;
       lcd.setCursor(0, 1);
       lcd.cursor();
       lcd.setCursor(0, 1);
@@ -355,7 +377,7 @@ void cambiarValores(bool ok, int index) {
     if (index == 6)
     {
       //Modificador distancia motorY
-      distancia_Y = newPos;
+      distancia_Y = newPos*10;
       lcd.setCursor(0, 1);
       lcd.cursor();
       lcd.setCursor(0, 1);
@@ -434,25 +456,14 @@ void sub_cambiarValores(bool sub_ok, int sub_index) {
 
   if (sub_ok == true) {
 
-    if (sub_index == 1) {
-      if (velocidad_X == 0 || distancia_X == 0) {
-
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("Error");
-        lcd.setCursor(0, 1);
-        lcd.print("valores = 0");
-        delay(2000);
-        modificar = false;
-      }
-      else {
+    if (sub_index == 1) {      
         Test_rutina();
-      }
     }
     if (sub_index == 2) {
 
       rutina_Task = true;
-
+    digitalWrite(MOTOR_X_ENABLE,LOW);
+    digitalWrite(MOTOR_Y_ENABLE,LOW);
       Rutina_move();
 
     }
@@ -472,6 +483,8 @@ void sub_cambiarValores(bool sub_ok, int sub_index) {
   }
 }
 void Test_rutina() {
+  digitalWrite(MOTOR_X_ENABLE,LOW);
+  digitalWrite(MOTOR_Y_ENABLE,LOW);
   stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
   stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
   lcd.setCursor(0, 1);
@@ -489,12 +502,17 @@ void Test_rutina() {
   delay(1000);
   check = 0;
   lcd.clear();
+  digitalWrite(MOTOR_X_ENABLE,HIGH);
+  digitalWrite(MOTOR_Y_ENABLE,HIGH);
   submenu_count = true;
   submenu_modificar = false;
   submenu_display(indexmenu2);
 }
 void Rutina_move() {
   if (rutina_Task == true) {
+
+    
+
     lcd.setCursor(0, 1);
     lcd.print("Rutina Loop");
     lcd.setCursor(0, 0);
@@ -513,7 +531,7 @@ void Rutina_move() {
     stepper_X.setTargetPositionInMillimeters(distancia_Y);
     while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete()))
     {
-      Rutina_button();
+      //Rutina_button();
       stepper_X.processMovement();
       stepper_Y.processMovement();
     }
@@ -521,12 +539,16 @@ void Rutina_move() {
     stepper_X.setTargetPositionInMillimeters(-distancia_Y);
     while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete()))
     {
-      Rutina_button();
+      //Rutina_button();
       stepper_X.processMovement();
       stepper_Y.processMovement();
     }
+  }else{
+  //  lcd.clear();
+  //.  submenu_display(indexmenu2);
   }
 }
+/*
 void Rutina_button() {
   int presionado = 0;
   if (digitalRead(ENCODER_SW) == LOW)
@@ -542,4 +564,10 @@ void Rutina_button() {
     lcd.clear();
     submenu_display(indexmenu2);
   }
+}
+*/
+void finaltask(){
+ 
+   lcd.clear();
+   submenu_display(indexmenu2);
 }
