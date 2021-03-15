@@ -9,6 +9,7 @@
 #include "Arduino.h"
 #include <RotaryEncoder.h>
 #include <ESP_FlexyStepper.h>
+#include <EasyButton.h>
 
 //Pines de conexion stepper Motor
 const int MOTOR_X_STEP_PIN = 16;
@@ -39,6 +40,8 @@ const int ENCODER_DT = 27;
 const int ENCODER_SW = 32;
 
 RotaryEncoder encoder(ENCODER_CLK, ENCODER_DT);
+EasyButton button(ENCODER_SW);
+
 #define ROTARYSTEPS 1
 int newPos;
 int lastPos = -1;
@@ -80,6 +83,21 @@ void IRAM_ATTR ISR() {
     Serial.println("No rutina");
   }
 }
+void onPressed()
+{
+  if (indexmenu >3 && submenu == false)
+  {
+    check++;
+    switch (check) {
+      case 1:
+        in_menu_1();
+        break;
+      case 2:
+        out_menu_1();
+        break;
+    }
+  }
+}
 void setup()
 {
   
@@ -95,7 +113,9 @@ void setup()
   pinMode(LIMIT_X_SWITCH_PIN, INPUT_PULLUP);
   pinMode(LIMIT_Y_SWITCH_PIN, INPUT_PULLUP);
   pinMode(DEBUG_LED, OUTPUT);
-  pinMode (ENCODER_SW, INPUT_PULLUP); //boton de un esp32
+  button.begin();
+  button.onPressed(onPressed);
+ // pinMode (ENCODER_SW, INPUT_PULLUP); //boton de un esp32
   //Interrupcion no funcional
   attachInterrupt(ENCODER_SW, ISR, HIGH);
   lcd.init();
@@ -124,7 +144,8 @@ void loop()
     sub_cambiarValores(submenu_modificar, indexmenu2);
   }
 
-  if (rutina_Task == false) buttonControl();
+  //if (rutina_Task == false) buttonControl();
+  button.read();
 
 }
 void rotary(int ROTARYMIN, int ROTARYMAX) {
@@ -350,7 +371,7 @@ void homi_Y() {
 void cambiarValores(bool ok, int index) {
 
   if (ok == true) {
-    if (index == 2)
+    if (index == 4)
     {
       //Modificador Velocidad motorX
       velocidad_X = newPos*10;
@@ -359,7 +380,7 @@ void cambiarValores(bool ok, int index) {
       lcd.setCursor(0, 1);
       lcd.print(String(velocidad_X) + " mm/s");
     }
-    if (index == 3)
+    if (index == 5)
     {
       //Modificador distancia motorX
       distancia_X = newPos*10;
@@ -368,7 +389,7 @@ void cambiarValores(bool ok, int index) {
       lcd.setCursor(0, 1);
       lcd.print(String(distancia_X) + " mm");
     }
-    if (index == 5)
+    if (index == 6)
     {
       //Modificador Velocidad motorY
       velocidad_Y = newPos*10;
@@ -377,7 +398,7 @@ void cambiarValores(bool ok, int index) {
       lcd.setCursor(0, 1);
       lcd.print(String(velocidad_Y) + " mm/s");
     }
-    if (index == 6)
+    if (index == 7)
     {
       //Modificador distancia motorY
       distancia_Y = newPos*10;
@@ -422,10 +443,7 @@ void cambiarValores(bool ok, int index) {
       menuDisplay(1);
     }
   }
-  else {
-    lcd.clear();
-    lcd.noCursor();
-  }
+  
 }
 void submenu_display(int sub_mode) {
   switch (sub_mode) {
@@ -549,16 +567,17 @@ void Rutina_move() {
     }
   }
 }
-
+//IN && OUT Menu(Value,Home,Reset)
 void in_menu_1(){
   modificar = true;
   Serial.println("Modificando valores Menu 1");
 }
 void out_menu_1(){
+  lcd.clear();
+  menuDisplay(indexmenu);
   modificar = false;
   Serial.println("Guardando los valores");
   check = 0;
-
 }
 
 //RUTINA ALTERNATIVA A ISR.
