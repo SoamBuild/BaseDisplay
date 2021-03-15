@@ -66,7 +66,6 @@ void IRAM_ATTR ISR() {
 
   if (rutina_Task == true) {
     
-   // finaltask();
     rutina_Task = false;
     submenu_count = true;
     submenu_modificar = false;
@@ -107,9 +106,9 @@ void setup()
   lcd.init();
   lcd.clear();
   lcd.backlight();
-  homi_X();
+  //homi_X();
   delay(1000);
-  homi_Y();
+  //homi_Y();
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("MotorControl 1.2");
@@ -551,9 +550,6 @@ void Rutina_move() {
       stepper_X.processMovement();
       stepper_Y.processMovement();
     }
-  }else{
-  //  lcd.clear();
-  //.  submenu_display(indexmenu2);
   }
 }
 /*
@@ -574,8 +570,3 @@ void Rutina_button() {
   }
 }
 */
-void finaltask(){
- 
-   lcd.clear();
-   submenu_display(indexmenu2);
-}
