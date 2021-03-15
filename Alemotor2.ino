@@ -92,11 +92,6 @@ void setup()
   digitalWrite(MOTOR_Y_ENABLE,HIGH);
   stepper_X.setStepsPerMillimeter(3.3* 1);    // 1x microstepping
   stepper_Y.setStepsPerMillimeter(3.3 * 1);    // 1x microstepping
-
-  
-
-
-
   pinMode(LIMIT_X_SWITCH_PIN, INPUT_PULLUP);
   pinMode(LIMIT_Y_SWITCH_PIN, INPUT_PULLUP);
   pinMode(DEBUG_LED, OUTPUT);
@@ -163,18 +158,20 @@ void buttonControl() {
     presionado = 1;
     delay(50);
   }
-  if (digitalRead(ENCODER_SW) == HIGH && presionado == 1 && submenu == false)
+  if (digitalRead(ENCODER_SW) == HIGH && presionado == 1 && indexmenu >3 && submenu == false)
   {
     check++;
     switch (check) {
       case 1:
-        modificar = true;
-        Serial.println("Modificando valores");
+        in_menu_1();
+        // modificar = true;
+        // Serial.println("Modificando valores");
         break;
       case 2:
-        modificar = false;
-        Serial.println("Guardando los valores");
-        check = 0;
+        out_menu_1();
+        // modificar = false;
+        // Serial.println("Guardando los valores");
+        // check = 0;
         break;
     }
     presionado = 0;
@@ -220,18 +217,6 @@ void menuDisplay(int mode) {
       lcd.clear();
       lcd.noCursor();
       lcd.setCursor(0, 0);
-      lcd.print("Velocidad X");
-      break;
-    case 3:
-      lcd.clear();
-      lcd.noCursor();
-      lcd.setCursor(0, 0);
-      lcd.print("Distancia X");
-      break;
-    case 4:
-      lcd.clear();
-      lcd.noCursor();
-      lcd.setCursor(0, 0);
       lcd.print("Vel_Y");
       lcd.setCursor(6, 0);
       lcd.print(String(velocidad_Y) + " mm/s");
@@ -240,19 +225,7 @@ void menuDisplay(int mode) {
       lcd.setCursor(6, 1);
       lcd.print(String(distancia_Y) + " mm");
       break;
-    case 5:
-      lcd.clear();
-      lcd.noCursor();
-      lcd.setCursor(0, 0);
-      lcd.print("Velocidad Y");
-      break;
-    case 6:
-      lcd.clear();
-      lcd.noCursor();
-      lcd.setCursor(0, 0);
-      lcd.print("Distancia Y");
-      break;
-    case 7:
+    case 3:
       lcd.clear();
       lcd.noCursor();
       lcd.setCursor(0, 0);
@@ -263,6 +236,30 @@ void menuDisplay(int mode) {
       lcd.print("PosM2 | ");
       lcd.setCursor(8, 1);
       lcd.print(String(stepper_Y.getCurrentPositionInMillimeters()) + " mm");
+      break;
+    case 4:
+      lcd.clear();
+      lcd.noCursor();
+      lcd.setCursor(0, 0);
+      lcd.print("Velocidad X");
+      break;
+    case 5:
+      lcd.clear();
+      lcd.noCursor();
+      lcd.setCursor(0, 0);
+      lcd.print("Distancia X");
+      break;
+    case 6:
+      lcd.clear();
+      lcd.noCursor();
+      lcd.setCursor(0, 0);
+      lcd.print("Velocidad Y");
+      break;
+    case 7:
+      lcd.clear();
+      lcd.noCursor();
+      lcd.setCursor(0, 0);
+      lcd.print("Distancia Y");
       break;
     case 8:
       lcd.clear();
@@ -402,12 +399,12 @@ void cambiarValores(bool ok, int index) {
     }
     if (index == 9)
     {
-      modificar = false;
-      submenu_count = true;
-      submenu = true;
-      check = 0;
       // modificar = false;
-      lcd.clear();
+      // submenu_count = true;
+      // submenu = true;
+      // check = 0;
+      // // modificar = false;
+      // lcd.clear();
     }
     if (index == 10)
     {
@@ -552,6 +549,19 @@ void Rutina_move() {
     }
   }
 }
+
+void in_menu_1(){
+  modificar = true;
+  Serial.println("Modificando valores Menu 1");
+}
+void out_menu_1(){
+  modificar = false;
+  Serial.println("Guardando los valores");
+  check = 0;
+
+}
+
+//RUTINA ALTERNATIVA A ISR.
 /*
 void Rutina_button() {
   int presionado = 0;
