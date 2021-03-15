@@ -76,6 +76,8 @@ void IRAM_ATTR ISR() {
     stepper_Y.emergencyStop();
     digitalWrite(MOTOR_X_ENABLE, HIGH);
     digitalWrite(MOTOR_Y_ENABLE, HIGH);
+   // detachInterrupt(ENCODER_SW);
+
 
 
 
@@ -116,6 +118,17 @@ void onPressed()
       }
     */
   }
+  if (rutina_Task == true){
+    Serial.println("Salir Rutina");
+    rutina_Task = false;
+    out_Menu_2_modificar();
+    stepper_X.emergencyStop();
+    stepper_Y.emergencyStop();
+    digitalWrite(MOTOR_X_ENABLE, HIGH);
+    digitalWrite(MOTOR_Y_ENABLE, HIGH);
+   // detachInterrupt(ENCODER_SW);
+
+  }
 }
 void setup()
 {
@@ -134,9 +147,6 @@ void setup()
   pinMode(DEBUG_LED, OUTPUT);
   button.begin();
   button.onPressed(onPressed);
-  // pinMode (ENCODER_SW, INPUT_PULLUP); //boton de un esp32
-  //Interrupcion no funcional
-  // attachInterrupt(ENCODER_SW, ISR, HIGH);
   lcd.init();
   lcd.clear();
   lcd.backlight();
@@ -163,8 +173,8 @@ void loop()
     sub_cambiarValores(submenu_modificar, indexmenu2);
   }
 
-  //if (rutina_Task == false) buttonControl();
-  button.read();
+  if (rutina_Task == false) button.read();
+
 
 }
 void rotary(int ROTARYMIN, int ROTARYMAX) {
@@ -501,12 +511,11 @@ void sub_cambiarValores(bool sub_ok, int sub_index) {
       Test_rutina();
     }
     if (sub_index == 2) {
-
+      //attachInterrupt(ENCODER_SW, ISR, HIGH);
       rutina_Task = true;
       digitalWrite(MOTOR_X_ENABLE, LOW);
       digitalWrite(MOTOR_Y_ENABLE, LOW);
       Rutina_move();
-
     }
     if (sub_index == 3) {
       out_Menu_2();
@@ -576,7 +585,7 @@ void Rutina_move() {
     stepper_X.setTargetPositionInMillimeters(distancia_Y);
     while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete()))
     {
-      //Rutina_button();
+      button.read();
       stepper_X.processMovement();
       stepper_Y.processMovement();
     }
@@ -585,7 +594,7 @@ void Rutina_move() {
 
     while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete()))
     {
-      //Rutina_button();
+      button.read();
       stepper_X.processMovement();
       stepper_Y.processMovement();
     }
@@ -615,7 +624,7 @@ void in_menu_2() {
 void out_Menu_2() {
   Serial.println("OUT_SUBMENU");
   modificar = false;
-  check=0;
+  check = 0;
   submenu = false;
   submenu_count = false;
   submenu_modificar = false;
