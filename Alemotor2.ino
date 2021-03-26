@@ -60,10 +60,10 @@ int indexmenu2;
 bool submenu_modificar = false;
 bool rutina_Task = false;
 //Variables de velocidad y distancia de eje (X,Y)
-int velocidad_X = 50;
-int distancia_X = 50;
-int velocidad_Y = 50;
-int distancia_Y = 50;
+int velocidad_X = 1500;
+int distancia_X = 25;
+int velocidad_Y = 1500;
+int distancia_Y = 25;
 
 void IRAM_ATTR ISR() {
 
@@ -570,16 +570,16 @@ void Rutina_move() {
     lcd.setCursor(0, 1);
     lcd.print("Rutina Loop");
     lcd.setCursor(0, 0);
-    lcd.print("Click  Salir");
+    lcd.print("Click Salir");
     Serial.println("Rutina Click");
     stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
     stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
 
-    stepper_X.setDecelerationInMillimetersPerSecondPerSecond(velocidad_X * 2);
-    stepper_Y.setDecelerationInMillimetersPerSecondPerSecond(velocidad_Y * 2);
+    stepper_X.setDecelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
+    stepper_Y.setDecelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
 
-    stepper_X.setAccelerationInMillimetersPerSecondPerSecond(velocidad_X * 2);
-    stepper_Y.setAccelerationInMillimetersPerSecondPerSecond(velocidad_Y * 2);
+    stepper_X.setAccelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
+    stepper_Y.setAccelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
 
     stepper_Y.setTargetPositionInMillimeters(distancia_X);
     stepper_X.setTargetPositionInMillimeters(distancia_Y);
