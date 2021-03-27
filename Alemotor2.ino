@@ -66,10 +66,10 @@ int indexmenu3;
 bool submulti_modificar=false;
 int multiplicador= 1;
 //Variables de velocidad y distancia de eje (X,Y)
-int velocidad_X = 1500;
-int distancia_X = 25;
-int velocidad_Y = 1500;
-int distancia_Y = 25;
+int velocidad_X = 100;
+int distancia_X = 100;
+int velocidad_Y = 100;
+int distancia_Y = 100;
 
 
 void onPressed()
@@ -130,7 +130,7 @@ void setup()
   //homi_Y();
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("MotorControl 1.2");
+  lcd.print("MotorControl 1.3");
   delay(2000);
   lcd.clear();
 }
@@ -144,10 +144,10 @@ void loop()
     cambiarValores(modificar, indexmenu);
   }
 
-  if (submenu_count == true)rotary(1, 3);
+  if (submenu_count == true)rotary(1, 5);
 
   if (submenu_modificar == true) {
-    rotary(1, 100);
+    //rotary(1, 100);
     sub_cambiarValores(submenu_modificar, indexmenu2);
   }
 
@@ -187,6 +187,7 @@ void rotary(int ROTARYMIN, int ROTARYMAX) {
 
 }
 
+//Pantallas de menu principal
 void menuDisplay(int mode) {
 
   switch (mode) {
@@ -253,9 +254,10 @@ void menuDisplay(int mode) {
     case 8:
       lcd.clear();
       lcd.noCursor();
-      lcd.setCursor(0, 0);
-      lcd.print("Home");
+      lcd.setCursor(0,0);
+      lcd.print("Multiplicador");
       break;
+    
     case 9:
       lcd.clear();
       lcd.noCursor();
@@ -271,83 +273,21 @@ void menuDisplay(int mode) {
     case 11:
       lcd.clear();
       lcd.noCursor();
-      lcd.setCursor(0,0);
-      lcd.print("Multiplicador");
+      lcd.setCursor(0, 0);
+      lcd.print("Home");
+      break;
+    
   }
 }
-void homi_X() {
 
-  digitalWrite(MOTOR_X_ENABLE, LOW);
-  lcd.clear();
-  Serial.println("AutoHomeX");
-  lcd.setCursor(0, 0);
-  lcd.print("AutoHome X");
-
-  if (stepper_X.moveToHomeInMillimeters(-1, 100, 380, LIMIT_X_SWITCH_PIN) == true)
-  {
-    Serial.println("HOMING X OK");
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("AutoHome X OK");
-    delay(1000);
-    digitalWrite(MOTOR_X_ENABLE, HIGH);
-
-  }
-  else {
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("AutoHome X Error");
-    Serial.println("Error");
-    while (true) {
-      digitalWrite(DEBUG_LED, HIGH);
-      delay(50);
-      digitalWrite(DEBUG_LED, LOW);
-      delay(50);
-    }
-    Serial.println("Error eje X");
-  }
-
-}
-void homi_Y() {
-  digitalWrite(MOTOR_Y_ENABLE, LOW);
-
-  lcd.clear();
-  Serial.println("AutoHomeY");
-  lcd.setCursor(0, 0);
-  lcd.print("AutoHome Y");
-
-  if (stepper_Y.moveToHomeInMillimeters(-1, 100, 380, LIMIT_Y_SWITCH_PIN) == true)
-  {
-    Serial.println("HOMING Y OK");
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("AutoHome Y OK");
-    delay(1000);
-    digitalWrite(MOTOR_Y_ENABLE, HIGH);
-
-  }
-  else {
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("AutoHome Y Error");
-    Serial.println("Error");
-    while (true) {
-      digitalWrite(DEBUG_LED, HIGH);
-      delay(50);
-      digitalWrite(DEBUG_LED, LOW);
-      delay(50);
-    }
-    Serial.println("Error eje Y");
-  }
-
-}
+//Acciones menu principal
 void cambiarValores(bool ok, int index) {
 
   if (ok == true) {
     if (index == 4)
     {
       //Modificador Velocidad motorX
-      velocidad_X = newPos * 10;
+      velocidad_X = newPos * multiplicador;
       lcd.setCursor(0, 1);
       lcd.cursor();
       lcd.setCursor(0, 1);
@@ -356,7 +296,7 @@ void cambiarValores(bool ok, int index) {
     if (index == 5)
     {
       //Modificador distancia motorX
-      distancia_X = newPos * 10;
+      distancia_X = newPos * multiplicador;
       lcd.setCursor(0, 1);
       lcd.cursor();
       lcd.setCursor(0, 1);
@@ -365,7 +305,7 @@ void cambiarValores(bool ok, int index) {
     if (index == 6)
     {
       //Modificador Velocidad motorY
-      velocidad_Y = newPos * 10;
+      velocidad_Y = newPos * multiplicador;
       lcd.setCursor(0, 1);
       lcd.cursor();
       lcd.setCursor(0, 1);
@@ -374,32 +314,19 @@ void cambiarValores(bool ok, int index) {
     if (index == 7)
     {
       //Modificador distancia motorY
-      distancia_Y = newPos * 10;
+      distancia_Y = newPos * multiplicador;
       lcd.setCursor(0, 1);
       lcd.cursor();
       lcd.setCursor(0, 1);
       lcd.print(String(distancia_Y) + " mm");
     }
-    if (index == 8)
-    {
-      //Autohome de ambos ejes
-      homi_X();
-      delay(1000);
-      homi_Y();
-      check = 0;
-      modificar = false;
-      lcd.clear();
-      menuDisplay(1);
+     if(index == 8){
+      in_Menu2_in_multiplicador();
     }
+    
     if (index == 9)
     {
       in_menu_2();
-      // modificar = false;
-      // submenu_count = true;
-      // submenu = true;
-      // check = 0;
-      // // modificar = false;
-      // lcd.clear();
     }
     if (index == 10)
     {
@@ -416,11 +343,21 @@ void cambiarValores(bool ok, int index) {
       lcd.clear();
       menuDisplay(1);
     }
-    if(index == 11){
-      in_Menu2_in_multiplicador();
+    if (index == 11)
+    {
+      //Autohome de ambos ejes
+      homi_X();
+      delay(1000);
+      homi_Y();
+      check = 0;
+      modificar = false;
+      lcd.clear();
+      menuDisplay(1);
     }
+   
   }
 
+//pantallas para submenu encender
 }
 void submenu_display(int sub_mode) {
   switch (sub_mode) {
@@ -430,7 +367,7 @@ void submenu_display(int sub_mode) {
       lcd.setCursor(0, 0);
       lcd.print("Probar Rutina");
       lcd.setCursor(0, 1);
-      lcd.print("1/3");
+      lcd.print("1/5");
       break;
     case 2:
       lcd.clear();
@@ -438,18 +375,36 @@ void submenu_display(int sub_mode) {
       lcd.setCursor(0, 0);
       lcd.print("Rutina Ciclo");
       lcd.setCursor(0, 1);
-      lcd.print("2/3");
+      lcd.print("2/5");
       break;
     case 3:
       lcd.clear();
       lcd.noCursor();
       lcd.setCursor(0, 0);
+      lcd.print("Rutina en X");
+      lcd.setCursor(0, 1);
+      lcd.print("3/5");
+      break;
+    case 4:
+      lcd.clear();
+      lcd.noCursor();
+      lcd.setCursor(0, 0);
+      lcd.print("Rutina en Y");
+      lcd.setCursor(0, 1);
+      lcd.print("4/5");
+      break;
+    case 5:
+      lcd.clear();
+      lcd.noCursor();
+      lcd.setCursor(0, 0);
       lcd.print("Volver");
       lcd.setCursor(0, 1);
-      lcd.print("3/3");
+      lcd.print("5/5");
       break;
   }
 }
+
+//acciones para sub menu encender
 void sub_cambiarValores(bool sub_ok, int sub_index) {
 
   if (sub_ok == true) {
@@ -458,16 +413,27 @@ void sub_cambiarValores(bool sub_ok, int sub_index) {
       Test_rutina();
     }
     if (sub_index == 2) {
-       rutina_Task = true;
+      rutina_Task = true;
       digitalWrite(MOTOR_X_ENABLE, LOW);
       digitalWrite(MOTOR_Y_ENABLE, LOW);
       Rutina_move();
     }
     if (sub_index == 3) {
+      rutina_Task = true;
+      digitalWrite(MOTOR_X_ENABLE, LOW);
+      Rutina_move_X();
+    }
+      if (sub_index == 4) {
+      rutina_Task = true;
+      digitalWrite(MOTOR_Y_ENABLE, LOW);
+      Rutina_move_Y();
+    }
+    if (sub_index == 5) {
       out_Menu_2();
     }
   }
 }
+//pantallas de submenu para multiplicador
 void sub_menu_multiplicador(int display){
   switch (display) {
     case 1:
@@ -502,81 +468,34 @@ void sub_menu_multiplicador(int display){
       lcd.setCursor(0, 1);
       lcd.print("4/4");
       break;
-}}
-
+}
+}
+//acciones para multiplicador
 void menu_multiplicador_modificar(bool state,int estado){
   if(state ==true){
     if(estado == 1){
       multiplicador = 5;
       lcd.setCursor(0, 1);
       lcd.print("Multi X5");
-      out_menu2_multiplicador();
-      
-      
+      out_menu2_multiplicador();      
     }
-  }
-}
-
-void Test_rutina() {
-  digitalWrite(MOTOR_X_ENABLE, LOW);
-  digitalWrite(MOTOR_Y_ENABLE, LOW);
-  stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
-  stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
-  lcd.setCursor(0, 1);
-  lcd.print("Movimiento test");
-  Serial.println("Movimiento test");
-  stepper_X.setTargetPositionInMillimeters(distancia_X);
-  stepper_Y.setTargetPositionInMillimeters(distancia_Y);
-  while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete())) {
-    stepper_X.processMovement();
-    stepper_Y.processMovement();
-  }
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.println("   Completado   ");
-  delay(1000);
-  check = 0;
-  lcd.clear();
-  digitalWrite(MOTOR_X_ENABLE, HIGH);
-  digitalWrite(MOTOR_Y_ENABLE, HIGH);
-  out_Menu_2_modificar();
-
-  //  submenu_count = true;
-  //  submenu_modificar = false;
-  //  submenu_display(indexmenu2);
-}
-void Rutina_move() {
-  if (rutina_Task == true) {
-    lcd.setCursor(0, 1);
-    lcd.print("Rutina Loop");
-    lcd.setCursor(0, 0);
-    lcd.print("Click Salir");
-    Serial.println("Rutina Click");
-    stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
-    stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
-
-    stepper_X.setDecelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
-    stepper_Y.setDecelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
-
-    stepper_X.setAccelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
-    stepper_Y.setAccelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
-
-    stepper_Y.setTargetPositionInMillimeters(distancia_X);
-    stepper_X.setTargetPositionInMillimeters(distancia_Y);
-    while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete()))
-    {
-      button.read();
-      stepper_X.processMovement();
-      stepper_Y.processMovement();
+    if(estado == 2){
+      multiplicador = 50;
+      lcd.setCursor(0, 1);
+      lcd.print("Multi X50");
+      out_menu2_multiplicador();      
     }
-    stepper_Y.setTargetPositionInMillimeters(0);
-    stepper_X.setTargetPositionInMillimeters(0);
-
-    while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete()))
-    {
-      button.read();
-      stepper_X.processMovement();
-      stepper_Y.processMovement();
+     if(estado == 3){
+      multiplicador = 100;
+      lcd.setCursor(0, 1);
+      lcd.print("Multi X100");
+      out_menu2_multiplicador();      
+    }
+    if(estado == 4){
+      multiplicador = 200;
+      lcd.setCursor(0, 1);
+      lcd.print("Multi X200");
+      out_menu2_multiplicador();      
     }
   }
 }
@@ -602,6 +521,7 @@ void in_menu_2() {
   //activo el contador de menu 2
   submenu_count = true;
 }
+
 void out_Menu_2() {
   Serial.println("OUT_SUBMENU");
   modificar = false;
@@ -654,3 +574,190 @@ void out_menu2_multiplicador(){
   delay(1000);
   menuDisplay(1);
   }
+
+  //Movimiento de prueba
+void Test_rutina() {
+  digitalWrite(MOTOR_X_ENABLE, LOW);
+  digitalWrite(MOTOR_Y_ENABLE, LOW);
+  stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
+  stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
+  lcd.setCursor(0, 1);
+  lcd.print("Movimiento test");
+  Serial.println("Movimiento test");
+  stepper_X.setTargetPositionInMillimeters(distancia_X);
+  stepper_Y.setTargetPositionInMillimeters(distancia_Y);
+  while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete())) {
+    stepper_X.processMovement();
+    stepper_Y.processMovement();
+  }
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.println("   Completado   ");
+  delay(1000);
+  check = 0;
+  lcd.clear();
+  digitalWrite(MOTOR_X_ENABLE, HIGH);
+  digitalWrite(MOTOR_Y_ENABLE, HIGH);
+  out_Menu_2_modificar();
+}
+
+//movimiento en loop
+void Rutina_move() {
+  if (rutina_Task == true) {
+    lcd.setCursor(0, 1);
+    lcd.print("Rutina Loop");
+    lcd.setCursor(0, 0);
+    lcd.print("Click Salir");
+    Serial.println("Rutina Click");
+    stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
+    stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
+
+    stepper_X.setDecelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
+    stepper_Y.setDecelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
+
+    stepper_X.setAccelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
+    stepper_Y.setAccelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
+
+    stepper_Y.setTargetPositionInMillimeters(distancia_Y);
+    stepper_X.setTargetPositionInMillimeters(distancia_X);
+    while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete()))
+    {
+      button.read();
+      stepper_X.processMovement();
+      stepper_Y.processMovement();
+    }
+    stepper_Y.setTargetPositionInMillimeters(0);
+    stepper_X.setTargetPositionInMillimeters(0);
+
+    while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete()))
+    {
+      button.read();
+      stepper_X.processMovement();
+      stepper_Y.processMovement();
+    }
+  }
+}
+void Rutina_move_X() {
+  if (rutina_Task == true) {
+    lcd.setCursor(0, 1);
+    lcd.print("Rutina en  X");
+    lcd.setCursor(0, 0);
+    lcd.print("Click Salir");
+    Serial.println("Rutina Click");
+    stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
+
+    stepper_X.setDecelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
+
+    stepper_X.setAccelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
+
+    stepper_X.setTargetPositionInMillimeters(distancia_X);
+    while (!stepper_X.motionComplete()) 
+    {
+      button.read();
+      stepper_X.processMovement();
+     
+    }
+    stepper_X.setTargetPositionInMillimeters(0);
+
+    while (!stepper_X.motionComplete()) 
+    {
+      button.read();
+      stepper_X.processMovement();
+    }
+  }
+}
+void Rutina_move_Y() {
+  if (rutina_Task == true) {
+    lcd.setCursor(0, 1);
+    lcd.print("Rutina en  Y");
+    lcd.setCursor(0, 0);
+    lcd.print("Click Salir");
+    Serial.println("Rutina Click");
+    stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
+    stepper_Y.setDecelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
+    stepper_Y.setAccelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
+    stepper_Y.setTargetPositionInMillimeters(distancia_Y);
+    while (!stepper_Y.motionComplete()) 
+    {
+      button.read();
+      stepper_Y.processMovement();
+     
+    }
+    stepper_Y.setTargetPositionInMillimeters(0);
+    while (!stepper_Y.motionComplete()) 
+    {
+      button.read();
+      stepper_Y.processMovement();
+    }
+  }
+}
+
+//AutoHome X
+void homi_X() {
+
+  digitalWrite(MOTOR_X_ENABLE, LOW);
+  lcd.clear();
+  Serial.println("AutoHomeX");
+  lcd.setCursor(0, 0);
+  lcd.print("AutoHome X");
+
+  if (stepper_X.moveToHomeInMillimeters(-1, 100, 380, LIMIT_X_SWITCH_PIN) == true)
+  {
+    Serial.println("HOMING X OK");
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("AutoHome X OK");
+    delay(1000);
+    digitalWrite(MOTOR_X_ENABLE, HIGH);
+
+  }
+  else {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("AutoHome X Error");
+    Serial.println("Error");
+    while (true) {
+      digitalWrite(DEBUG_LED, HIGH);
+      delay(50);
+      digitalWrite(DEBUG_LED, LOW);
+      delay(50);
+    }
+    Serial.println("Error eje X");
+  }
+
+}
+
+//AutoHome Y
+void homi_Y() {
+  digitalWrite(MOTOR_Y_ENABLE, LOW);
+
+  lcd.clear();
+  Serial.println("AutoHomeY");
+  lcd.setCursor(0, 0);
+  lcd.print("AutoHome Y");
+
+  if (stepper_Y.moveToHomeInMillimeters(-1, 100, 380, LIMIT_Y_SWITCH_PIN) == true)
+  {
+    Serial.println("HOMING Y OK");
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("AutoHome Y OK");
+    delay(1000);
+    digitalWrite(MOTOR_Y_ENABLE, HIGH);
+
+  }
+  else {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("AutoHome Y Error");
+    Serial.println("Error");
+    while (true) {
+      digitalWrite(DEBUG_LED, HIGH);
+      delay(50);
+      digitalWrite(DEBUG_LED, LOW);
+      delay(50);
+    }
+    Serial.println("Error eje Y");
+  }
+
+}
