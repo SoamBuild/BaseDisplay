@@ -53,38 +53,25 @@ int check = 0;
 //Navegacion de menu
 bool modificar = false;
 int indexmenu = 1;
-//Navegacion de submenu
+//Navegacion de submenu_Encender
 bool submenu = false;
 bool submenu_count = false;
 int indexmenu2;
 bool submenu_modificar = false;
 bool rutina_Task = false;
+//Navegacion de submenu_multiplicador
+bool submulti=false;
+bool submulti_count = false;
+int indexmenu3;
+bool submulti_modificar=false;
+int multiplicador= 1;
 //Variables de velocidad y distancia de eje (X,Y)
 int velocidad_X = 1500;
 int distancia_X = 25;
 int velocidad_Y = 1500;
 int distancia_Y = 25;
 
-void IRAM_ATTR ISR() {
 
-  if (rutina_Task == true) {
-
-    rutina_Task = false;
-    submenu_count = true;
-    submenu_modificar = false;
-    stepper_X.emergencyStop();
-    stepper_Y.emergencyStop();
-    digitalWrite(MOTOR_X_ENABLE, HIGH);
-    digitalWrite(MOTOR_Y_ENABLE, HIGH);
-   // detachInterrupt(ENCODER_SW);
-
-
-
-
-  } else {
-    Serial.println("No rutina");
-  }
-}
 void onPressed()
 {
   if (indexmenu > 3 && submenu == false)
@@ -102,21 +89,6 @@ void onPressed()
   if (submenu == true)
   {
     in_Menu_2_Modificar();
-    /*
-      check++;
-      switch (check) {
-      case 1:
-        in_Menu_2_Modificar();
-        break;
-      case 2:
-        submenu_count = true;
-        submenu_modificar = false;
-        Serial.println("No Submenu");
-        check = 0;
-        //lcd.clear();
-        break;
-      }
-    */
   }
   if (rutina_Task == true){
     Serial.println("Salir Rutina");
@@ -126,9 +98,12 @@ void onPressed()
     stepper_Y.emergencyStop();
     digitalWrite(MOTOR_X_ENABLE, HIGH);
     digitalWrite(MOTOR_Y_ENABLE, HIGH);
-   // detachInterrupt(ENCODER_SW);
-
   }
+   if (submulti == true)
+  {
+    menu_multiplicar();
+  }
+  
 }
 void setup()
 {
@@ -161,11 +136,14 @@ void setup()
 }
 void loop()
 {
+
+  if (modificar == false && submenu == false) rotary(1, 11);
+
   if (modificar == true) {
     rotary(1, 100);
     cambiarValores(modificar, indexmenu);
   }
-  if (modificar == false && submenu == false) rotary(1, 10);
+
   if (submenu_count == true)rotary(1, 3);
 
   if (submenu_modificar == true) {
@@ -175,7 +153,11 @@ void loop()
 
   if (rutina_Task == false) button.read();
 
+  if(submulti_count==true)rotary(1,4);
 
+  if(submulti_modificar==true){
+    menu_multiplicador_modificar(submulti_modificar,indexmenu3);
+  }
 }
 void rotary(int ROTARYMIN, int ROTARYMAX) {
   encoder.tick();
@@ -195,59 +177,16 @@ void rotary(int ROTARYMIN, int ROTARYMAX) {
     if (submenu_count == true) {
       indexmenu2 = newPos;
       submenu_display(indexmenu2);
-
+    }
+    if(submulti_count==true){
+      indexmenu3 = newPos;
+      sub_menu_multiplicador(indexmenu3);
     }
     lastPos = newPos;
   }
 
 }
-void buttonControl() {
-  int presionado = 0;
-  if (digitalRead(ENCODER_SW) == LOW)
-  {
-    presionado = 1;
-    delay(50);
-  }
-  if (digitalRead(ENCODER_SW) == HIGH && presionado == 1 && indexmenu > 3 && submenu == false)
-  {
-    check++;
-    switch (check) {
-      case 1:
-        in_menu_1();
-        // modificar = true;
-        // Serial.println("Modificando valores");
-        break;
-      case 2:
-        out_menu_1();
-        // modificar = false;
-        // Serial.println("Guardando los valores");
-        // check = 0;
-        break;
-    }
-    presionado = 0;
-  }
-  if (submenu == true)
-  {
-    check++;
-    switch (check) {
-      case 1:
-        submenu_count = false;
-        submenu_modificar = true;
-        Serial.println("Sub menu ");
-        // lcd.clear();
-        break;
-      case 2:
-        submenu_count = true;
-        submenu_modificar = false;;
-        Serial.println("No Submenu");
-        check = 0;
-        //lcd.clear();
-        break;
-    }
-    presionado = 0;
-  }
 
-}
 void menuDisplay(int mode) {
 
   switch (mode) {
@@ -329,6 +268,11 @@ void menuDisplay(int mode) {
       lcd.setCursor(0, 0);
       lcd.print("Reset valores");
       break;
+    case 11:
+      lcd.clear();
+      lcd.noCursor();
+      lcd.setCursor(0,0);
+      lcd.print("Multiplicador");
   }
 }
 void homi_X() {
@@ -472,6 +416,9 @@ void cambiarValores(bool ok, int index) {
       lcd.clear();
       menuDisplay(1);
     }
+    if(index == 11){
+      in_Menu2_in_multiplicador();
+    }
   }
 
 }
@@ -511,29 +458,65 @@ void sub_cambiarValores(bool sub_ok, int sub_index) {
       Test_rutina();
     }
     if (sub_index == 2) {
-      //attachInterrupt(ENCODER_SW, ISR, HIGH);
-      rutina_Task = true;
+       rutina_Task = true;
       digitalWrite(MOTOR_X_ENABLE, LOW);
       digitalWrite(MOTOR_Y_ENABLE, LOW);
       Rutina_move();
     }
     if (sub_index == 3) {
       out_Menu_2();
-      /*
-            submenu_modificar = false;
-            submenu_count = false;
-            submenu = false;
-            lcd.clear();
-            lcd.setCursor(0, 0);
-            lcd.print("Volviendo");
-            modificar = false;
-            delay(1000);
-            menuDisplay(1);
-            Serial.println("newPos");
-      */
     }
   }
 }
+void sub_menu_multiplicador(int display){
+  switch (display) {
+    case 1:
+      lcd.clear();
+      lcd.noCursor();
+      lcd.setCursor(0, 0);
+      lcd.print("X5");
+      lcd.setCursor(0, 1);
+      lcd.print("1/4");
+      break;
+    case 2:
+      lcd.clear();
+      lcd.noCursor();
+      lcd.setCursor(0, 0);
+      lcd.print("X50");
+      lcd.setCursor(0, 1);
+      lcd.print("2/4");
+      break;
+  case 3:
+      lcd.clear();
+      lcd.noCursor();
+      lcd.setCursor(0, 0);
+      lcd.print("X100");
+      lcd.setCursor(0, 1);
+      lcd.print("3/4");
+      break;
+  case 4:
+      lcd.clear();
+      lcd.noCursor();
+      lcd.setCursor(0, 0);
+      lcd.print("X200");
+      lcd.setCursor(0, 1);
+      lcd.print("4/4");
+      break;
+}}
+
+void menu_multiplicador_modificar(bool state,int estado){
+  if(state ==true){
+    if(estado == 1){
+      multiplicador = 5;
+      lcd.setCursor(0, 1);
+      lcd.print("Multi X5");
+      out_menu2_multiplicador();
+      
+      
+    }
+  }
+}
+
 void Test_rutina() {
   digitalWrite(MOTOR_X_ENABLE, LOW);
   digitalWrite(MOTOR_Y_ENABLE, LOW);
@@ -564,9 +547,6 @@ void Test_rutina() {
 }
 void Rutina_move() {
   if (rutina_Task == true) {
-
-
-
     lcd.setCursor(0, 1);
     lcd.print("Rutina Loop");
     lcd.setCursor(0, 0);
@@ -612,6 +592,7 @@ void out_menu_1() {
   Serial.println("Guardando los valores");
   check = 0;
 }
+
 //IN && OUT submenu (PROBAR,ENCENDER,VOLVER)
 void in_menu_2() {
   Serial.println("IN_SUBMENU");
@@ -633,17 +614,6 @@ void out_Menu_2() {
   lcd.print("Volviendo");
   delay(1000);
   menuDisplay(1);
-  /*  submenu_modificar = false;
-        submenu_count = false;
-        submenu = false;
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("Volviendo");
-        modificar = false;
-        delay(1000);
-        menuDisplay(1);
-        Serial.println("newPos");
-  */
 }
 void in_Menu_2_Modificar() {
   Serial.println("Entrando en rutina submenu");
@@ -661,23 +631,26 @@ void out_Menu_2_modificar() {
   lcd.clear();
   submenu_display(indexmenu2);
 }
-
-//RUTINA ALTERNATIVA A ISR.
-/*
-  void Rutina_button() {
-  int presionado = 0;
-  if (digitalRead(ENCODER_SW) == LOW)
-  {
-    presionado = 1;
-    delay(50);
-    rutina_Task = false;
-    submenu_count = true;
-    submenu_modificar = false;
-    lcd.clear();
-    lcd.setCursor(1, 0);
-    lcd.print("Saliendo");
-    lcd.clear();
-    submenu_display(indexmenu2);
+void in_Menu2_in_multiplicador(){
+  modificar=false;
+  submulti_count=true;
+  submulti=true;
+}
+void menu_multiplicar(){
+  //submulti=false;
+  submulti_count = false;
+  submulti_modificar=true;
+}
+void out_menu2_multiplicador(){
+  modificar=false;
+  check=0;
+  submulti_count=false;
+  submulti=false;
+  submulti_modificar=false;
+  delay(1000);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Volviendo");
+  delay(1000);
+  menuDisplay(1);
   }
-  }
-*/
