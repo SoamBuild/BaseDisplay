@@ -3,6 +3,7 @@
 * [LiquidCrystal-I2C-Library](https://github.com/fdebrabander/Arduino-LiquidCrystal-I2C-library)
 * [EspFlexyStepper](https://github.com/pkerspe/ESP-FlexyStepper)
 * [RotaryEncoder](https://github.com/mathertel/RotaryEncoder)
+* [EasyButton](https://github.com/evert-arias/EasyButton)
 
 La libreria de los motores stepper es "EspFlexyStepper", Pero adicionalmente se busco documentacion y funciones en la libreria original de [FlexyStepper](https://github.com/Stan-Reifel/FlexyStepper).
 

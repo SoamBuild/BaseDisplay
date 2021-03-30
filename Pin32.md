@@ -15,7 +15,7 @@
 
 ### Motor eje Y
 
-* STEP = 33
+* STEP = 23 (En algunas placas viene señalado 33)
 * DIR = 25
 * ENABLE = 26
 * FIN DE CARRERA = 19
