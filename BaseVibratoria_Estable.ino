@@ -2,6 +2,10 @@
   Codigo de mesa vibratoria para conocer el funcionamiento de las funciones y del menu
   revisar readme.md ubicado en la rama main
   los pines del sistema se encuentran detallados en pin32.md en la rama main
+  
+  *****************************
+  CODIGO PARA PANTALLA 16X2 I2C
+  *****************************
 */
 //Librerias
 #include <LiquidCrystal_I2C.h>
