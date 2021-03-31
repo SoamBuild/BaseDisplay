@@ -74,7 +74,7 @@ int distancia_Y = 100;
 
 void onPressed()
 {
-  if (indexmenu > 3 && submenu == false)
+  if (indexmenu > 1 && submenu == false)
   {
     check++;
     switch (check) {
@@ -99,7 +99,7 @@ void onPressed()
     digitalWrite(MOTOR_X_ENABLE, HIGH);
     digitalWrite(MOTOR_Y_ENABLE, HIGH);
   }
-   if (submulti == true)
+   if (submulti == true&& indexmenu == 6)
   {
     menu_multiplicar();
   }
@@ -137,7 +137,7 @@ void setup()
 void loop()
 {
 
-  if (modificar == false && submenu == false) rotary(1, 11);
+  if (modificar == false && submenu == false) rotary(1, 9);
 
   if (modificar == true) {
     rotary(1, 100);
@@ -191,7 +191,7 @@ void rotary(int ROTARYMIN, int ROTARYMAX) {
 void menuDisplay(int mode) {
 
   switch (mode) {
-    case 1:
+    case 25:
       lcd.clear();
       lcd.noCursor();
       lcd.setCursor(0, 0);
@@ -203,7 +203,7 @@ void menuDisplay(int mode) {
       lcd.setCursor(6, 1);
       lcd.print(String(distancia_X) + " mm");
       break;
-    case 2:
+    case 30:
       lcd.clear();
       lcd.noCursor();
       lcd.setCursor(0, 0);
@@ -215,19 +215,23 @@ void menuDisplay(int mode) {
       lcd.setCursor(6, 1);
       lcd.print(String(distancia_Y) + " mm");
       break;
-    case 3:
+    case 1:
       lcd.clear();
-      lcd.noCursor();
+      lcd.setCursor(17, 0);
+      lcd.print("1/9");
       lcd.setCursor(0, 0);
-      lcd.print("PosM1 | ");
-      lcd.setCursor(8, 0);
-      lcd.print(String(stepper_X.getCurrentPositionInMillimeters()) + " mm");
+      lcd.print("Posiciones");
+      lcd.noCursor();
       lcd.setCursor(0, 1);
-      lcd.print("PosM2 | ");
+      lcd.print("PosM1 | ");
       lcd.setCursor(8, 1);
+      lcd.print(String(stepper_X.getCurrentPositionInMillimeters()) + " mm");
+      lcd.setCursor(0, 2);
+      lcd.print("PosM2 | ");
+      lcd.setCursor(8, 2);
       lcd.print(String(stepper_Y.getCurrentPositionInMillimeters()) + " mm");
       break;
-    case 4:
+    case 2:
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("2/9");
@@ -237,40 +241,47 @@ void menuDisplay(int mode) {
       lcd.setCursor(0, 1);
       lcd.print("Vel_X "+ String(velocidad_X) + " mm/s");
       break;
-    case 5:
+    case 3:
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("3/9");
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Distancia X");
+      lcd.setCursor(0,1);
+      lcd.print("Dis_Y "+String(distancia_X) + " mm");
       break;
-    case 6:
+    case 4:
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("4/9");
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Velocidad Y");
+      lcd.setCursor(0, 1);
+      lcd.print("Vel_X "+ String(velocidad_Y) + " mm/s");
       break;
-    case 7:
+    case 5:
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("5/9");
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Distancia Y");
+      lcd.setCursor(0,1);
+      lcd.print("Dis_Y "+ String(distancia_Y) + " mm");
       break;
-    case 8:
+    case 6:
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("6/9");
       lcd.noCursor();
       lcd.setCursor(0,0);
       lcd.print("Multiplicador");
+      lcd.setCursor(0,1);
+      lcd.print("Valor_ X"+String(multiplicador));
       break;
-    
-    case 9:
+    case 7:
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("7/9");
@@ -278,7 +289,7 @@ void menuDisplay(int mode) {
       lcd.setCursor(0, 0);
       lcd.print("Encender");
       break;
-    case 10:
+    case 8:
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("8/9");
@@ -286,7 +297,7 @@ void menuDisplay(int mode) {
       lcd.setCursor(0, 0);
       lcd.print("Reset valores");
       break;
-    case 11:
+    case 9:
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("9/9");
@@ -302,58 +313,66 @@ void menuDisplay(int mode) {
 void cambiarValores(bool ok, int index) {
 
   if (ok == true) {
-    if (index == 4)
+    if (index == 2)
     {
       //Modificador Velocidad motorX
       velocidad_X = newPos * multiplicador;
-      lcd.setCursor(0, 1);
-      lcd.cursor();
-      lcd.setCursor(0, 1);
-      lcd.print(String(velocidad_X) + " mm/s");
+      lcd.setCursor(0, 2);
+      lcd.print("Nuevo valor *"+String(multiplicador));
+      lcd.setCursor(0, 3);
+      lcd.print(velocidad_X );
+      lcd.setCursor(5,3);
+      lcd.print("mm/s");
     }
-    if (index == 5)
+    if (index == 3)
     {
       //Modificador distancia motorX
       distancia_X = newPos * multiplicador;
-      lcd.setCursor(0, 1);
-      lcd.cursor();
-      lcd.setCursor(0, 1);
-      lcd.print(String(distancia_X) + " mm");
+      lcd.setCursor(0, 2);
+      lcd.print("Nuevo valor *"+String(multiplicador));
+      lcd.setCursor(0, 3);
+      lcd.print(distancia_X );
+      lcd.setCursor(5,3);
+      lcd.print("mm");
     }
-    if (index == 6)
+    if (index == 4)
     {
       //Modificador Velocidad motorY
       velocidad_Y = newPos * multiplicador;
-      lcd.setCursor(0, 1);
-      lcd.cursor();
-      lcd.setCursor(0, 1);
-      lcd.print(String(velocidad_Y) + " mm/s");
+      lcd.setCursor(0, 2);
+      lcd.print("Nuevo valor *"+String(multiplicador));
+       lcd.setCursor(0, 3);
+      lcd.print(velocidad_Y);
+      lcd.setCursor(5,3);
+      lcd.print("mm/s");
     }
-    if (index == 7)
+    if (index == 5)
     {
       //Modificador distancia motorY
       distancia_Y = newPos * multiplicador;
-      lcd.setCursor(0, 1);
-      lcd.cursor();
-      lcd.setCursor(0, 1);
-      lcd.print(String(distancia_Y) + " mm");
+      lcd.setCursor(0, 2);
+      lcd.print("Nuevo valor *"+String(multiplicador));
+      lcd.setCursor(0, 3);
+      lcd.print(distancia_Y );
+      lcd.setCursor(5,3);
+      lcd.print("mm");
     }
-     if(index == 8){
+     if(index == 6){
       in_Menu2_in_multiplicador();
     }
     
-    if (index == 9)
+    if (index == 7)
     {
       in_menu_2();
     }
-    if (index == 10)
+    if (index == 8)
     {
       //reiniciar todos los datos.
       velocidad_X = 0;
       distancia_X = 0;
       velocidad_Y = 0;
       distancia_Y = 0;
-      lcd.setCursor(0, 1);
+      lcd.setCursor(4, 2);
       lcd.print("Valores en 0");
       delay(1000);
       check = 0;
@@ -361,7 +380,7 @@ void cambiarValores(bool ok, int index) {
       lcd.clear();
       menuDisplay(1);
     }
-    if (index == 11)
+    if (index == 9)
     {
       //Autohome de ambos ejes
       homi_X();
@@ -384,7 +403,7 @@ void submenu_display(int sub_mode) {
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Probar Rutina");
-      lcd.setCursor(0, 1);
+      lcd.setCursor(17, 0);
       lcd.print("1/5");
       break;
     case 2:
@@ -392,7 +411,7 @@ void submenu_display(int sub_mode) {
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Rutina Ciclo");
-      lcd.setCursor(0, 1);
+      lcd.setCursor(17, 0);
       lcd.print("2/5");
       break;
     case 3:
@@ -400,7 +419,7 @@ void submenu_display(int sub_mode) {
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Rutina en X");
-      lcd.setCursor(0, 1);
+      lcd.setCursor(17, 0);
       lcd.print("3/5");
       break;
     case 4:
@@ -408,7 +427,7 @@ void submenu_display(int sub_mode) {
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Rutina en Y");
-      lcd.setCursor(0, 1);
+      lcd.setCursor(17, 0);
       lcd.print("4/5");
       break;
     case 5:
@@ -416,7 +435,7 @@ void submenu_display(int sub_mode) {
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Volver");
-      lcd.setCursor(0, 1);
+      lcd.setCursor(17, 0);
       lcd.print("5/5");
       break;
   }
@@ -570,7 +589,7 @@ void out_Menu_2_modificar() {
   submenu_display(indexmenu2);
 }
 void in_Menu2_in_multiplicador(){
-  modificar=false;
+  modificar=true;
   submulti_count=true;
   submulti=true;
 }
@@ -580,17 +599,18 @@ void menu_multiplicar(){
   submulti_modificar=true;
 }
 void out_menu2_multiplicador(){
-  modificar=false;
-  check=0;
   submulti_count=false;
   submulti=false;
   submulti_modificar=false;
+  modificar=false;
+  check=0;
   delay(1000);
-  lcd.clear();
-  lcd.setCursor(0, 0);
+  lcd.setCursor(0, 2);
   lcd.print("Volviendo");
   delay(1000);
+  lcd.clear();
   menuDisplay(1);
+  
   }
 
   //Movimiento de prueba
@@ -599,8 +619,8 @@ void Test_rutina() {
   digitalWrite(MOTOR_Y_ENABLE, LOW);
   stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
   stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
-  lcd.setCursor(0, 1);
-  lcd.print("Movimiento test");
+  lcd.setCursor(0, 2);
+  lcd.print("Movimiento de prueba");
   Serial.println("Movimiento test");
   stepper_X.setTargetPositionInMillimeters(distancia_X);
   stepper_Y.setTargetPositionInMillimeters(distancia_Y);
@@ -609,8 +629,8 @@ void Test_rutina() {
     stepper_Y.processMovement();
   }
   lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.println("   Completado   ");
+  lcd.setCursor(0, 2);
+  lcd.print("Movimiento terminado");
   delay(1000);
   check = 0;
   lcd.clear();
@@ -622,10 +642,10 @@ void Test_rutina() {
 //movimiento en loop
 void Rutina_move() {
   if (rutina_Task == true) {
-    lcd.setCursor(0, 1);
-    lcd.print("Rutina Loop");
-    lcd.setCursor(0, 0);
-    lcd.print("Click Salir");
+    lcd.setCursor(1, 1);
+    lcd.print("Rutina Loop  X & Y");
+    lcd.setCursor(2, 2);
+    lcd.print("Click para salir");
     Serial.println("Rutina Click");
     stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
     stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
@@ -657,10 +677,10 @@ void Rutina_move() {
 }
 void Rutina_move_X() {
   if (rutina_Task == true) {
-    lcd.setCursor(0, 1);
-    lcd.print("Rutina en  X");
-    lcd.setCursor(0, 0);
-    lcd.print("Click Salir");
+    lcd.setCursor(2, 1);
+    lcd.print("Rutina loop    X");
+    lcd.setCursor(2, 2);
+    lcd.print("Click para salir");
     Serial.println("Rutina Click");
     stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
 
@@ -686,10 +706,10 @@ void Rutina_move_X() {
 }
 void Rutina_move_Y() {
   if (rutina_Task == true) {
-    lcd.setCursor(0, 1);
-    lcd.print("Rutina en  Y");
-    lcd.setCursor(0, 0);
-    lcd.print("Click Salir");
+    lcd.setCursor(2, 1);
+    lcd.print("Rutina loop    Y");
+    lcd.setCursor(2, 2);
+    lcd.print("Click para salir");
     Serial.println("Rutina Click");
     stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
     stepper_Y.setDecelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
@@ -716,7 +736,7 @@ void homi_X() {
   digitalWrite(MOTOR_X_ENABLE, LOW);
   lcd.clear();
   Serial.println("AutoHomeX");
-  lcd.setCursor(0, 0);
+  lcd.setCursor(5, 0);
   lcd.print("AutoHome X");
 
   if (stepper_X.moveToHomeInMillimeters(-1, 100, 380, LIMIT_X_SWITCH_PIN) == true)
@@ -751,7 +771,7 @@ void homi_Y() {
 
   lcd.clear();
   Serial.println("AutoHomeY");
-  lcd.setCursor(0, 0);
+ lcd.setCursor(5, 0);
   lcd.print("AutoHome Y");
 
   if (stepper_Y.moveToHomeInMillimeters(-1, 100, 380, LIMIT_Y_SWITCH_PIN) == true)
