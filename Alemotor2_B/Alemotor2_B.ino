@@ -195,7 +195,6 @@ void menuDisplay(int mode) {
   switch (mode) {
     case 25:
       lcd.clear();
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Vel_X");
       lcd.setCursor(6, 0);
@@ -207,7 +206,6 @@ void menuDisplay(int mode) {
       break;
     case 30:
       lcd.clear();
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Vel_Y");
       lcd.setCursor(6, 0);
@@ -223,7 +221,6 @@ void menuDisplay(int mode) {
       lcd.print("1/9");
       lcd.setCursor(0, 0);
       lcd.print("Posiciones");
-      lcd.noCursor();
       lcd.setCursor(0, 1);
       lcd.print("PosM1 | ");
       lcd.setCursor(8, 1);
@@ -237,7 +234,6 @@ void menuDisplay(int mode) {
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("2/9");
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Velocidad X");
       lcd.setCursor(0, 1);
@@ -247,7 +243,6 @@ void menuDisplay(int mode) {
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("3/9");
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Distancia X");
       lcd.setCursor(0,1);
@@ -257,7 +252,6 @@ void menuDisplay(int mode) {
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("4/9");
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Velocidad Y");
       lcd.setCursor(0, 1);
@@ -267,7 +261,6 @@ void menuDisplay(int mode) {
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("5/9");
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Distancia Y");
       lcd.setCursor(0,1);
@@ -277,7 +270,6 @@ void menuDisplay(int mode) {
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("6/9");
-      lcd.noCursor();
       lcd.setCursor(0,0);
       lcd.print("Multiplicador");
       lcd.setCursor(0,1);
@@ -287,7 +279,6 @@ void menuDisplay(int mode) {
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("7/9");
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Encender");
       break;
@@ -295,7 +286,6 @@ void menuDisplay(int mode) {
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("8/9");
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Reset valores");
       break;
@@ -303,7 +293,6 @@ void menuDisplay(int mode) {
       lcd.clear();
       lcd.setCursor(17, 0);
       lcd.print("9/9");
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Home");
       break;
@@ -318,7 +307,7 @@ void cambiarValores(bool ok, int index) {
     if (index == 2)
     {
       //Modificador Velocidad motorX
-      velocidad_X = indexmenu * multiplicador;
+      velocidad_X = newPos * multiplicador;
       lcd.setCursor(0, 2);
       lcd.print("Nuevo valor *"+String(multiplicador));
       lcd.setCursor(0, 3);
@@ -402,7 +391,6 @@ void submenu_display(int sub_mode) {
   switch (sub_mode) {
     case 1:
       lcd.clear();
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Probar Rutina");
       lcd.setCursor(17, 0);
@@ -410,7 +398,6 @@ void submenu_display(int sub_mode) {
       break;
     case 2:
       lcd.clear();
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Rutina Ciclo");
       lcd.setCursor(17, 0);
@@ -418,7 +405,6 @@ void submenu_display(int sub_mode) {
       break;
     case 3:
       lcd.clear();
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Rutina en X");
       lcd.setCursor(17, 0);
@@ -426,7 +412,6 @@ void submenu_display(int sub_mode) {
       break;
     case 4:
       lcd.clear();
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Rutina en Y");
       lcd.setCursor(17, 0);
@@ -434,7 +419,6 @@ void submenu_display(int sub_mode) {
       break;
     case 5:
       lcd.clear();
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Volver");
       lcd.setCursor(17, 0);
@@ -477,7 +461,6 @@ void sub_menu_multiplicador(int display){
   switch (display) {
     case 1:
       lcd.clear();
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("X5");
       lcd.setCursor(0, 1);
@@ -485,7 +468,6 @@ void sub_menu_multiplicador(int display){
       break;
     case 2:
       lcd.clear();
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("X50");
       lcd.setCursor(0, 1);
@@ -493,7 +475,6 @@ void sub_menu_multiplicador(int display){
       break;
   case 3:
       lcd.clear();
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("X100");
       lcd.setCursor(0, 1);
@@ -501,7 +482,6 @@ void sub_menu_multiplicador(int display){
       break;
   case 4:
       lcd.clear();
-      lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("X200");
       lcd.setCursor(0, 1);
