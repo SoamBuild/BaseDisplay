@@ -170,6 +170,8 @@ void rotary(int ROTARYMIN, int ROTARYMAX) {
     newPos = ROTARYMAX;
   }
   if (lastPos != newPos) {
+    
+    lastPos = newPos;
     if (modificar == false && submenu == false) {
       indexmenu = newPos;
       menuDisplay(indexmenu);
@@ -182,7 +184,7 @@ void rotary(int ROTARYMIN, int ROTARYMAX) {
       indexmenu3 = newPos;
       sub_menu_multiplicador(indexmenu3);
     }
-    lastPos = newPos;
+   
   }
 
 }
@@ -316,7 +318,7 @@ void cambiarValores(bool ok, int index) {
     if (index == 2)
     {
       //Modificador Velocidad motorX
-      velocidad_X = newPos * multiplicador;
+      velocidad_X = indexmenu * multiplicador;
       lcd.setCursor(0, 2);
       lcd.print("Nuevo valor *"+String(multiplicador));
       lcd.setCursor(0, 3);
