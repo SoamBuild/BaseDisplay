@@ -229,30 +229,42 @@ void menuDisplay(int mode) {
       break;
     case 4:
       lcd.clear();
+      lcd.setCursor(17, 0);
+      lcd.print("2/9");
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Velocidad X");
+      lcd.setCursor(0, 1);
+      lcd.print("Vel_X "+ String(velocidad_X) + " mm/s");
       break;
     case 5:
       lcd.clear();
+      lcd.setCursor(17, 0);
+      lcd.print("3/9");
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Distancia X");
       break;
     case 6:
       lcd.clear();
+      lcd.setCursor(17, 0);
+      lcd.print("4/9");
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Velocidad Y");
       break;
     case 7:
       lcd.clear();
+      lcd.setCursor(17, 0);
+      lcd.print("5/9");
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Distancia Y");
       break;
     case 8:
       lcd.clear();
+      lcd.setCursor(17, 0);
+      lcd.print("6/9");
       lcd.noCursor();
       lcd.setCursor(0,0);
       lcd.print("Multiplicador");
@@ -260,18 +272,24 @@ void menuDisplay(int mode) {
     
     case 9:
       lcd.clear();
+      lcd.setCursor(17, 0);
+      lcd.print("7/9");
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Encender");
       break;
     case 10:
       lcd.clear();
+      lcd.setCursor(17, 0);
+      lcd.print("8/9");
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Reset valores");
       break;
     case 11:
       lcd.clear();
+      lcd.setCursor(17, 0);
+      lcd.print("9/9");
       lcd.noCursor();
       lcd.setCursor(0, 0);
       lcd.print("Home");
