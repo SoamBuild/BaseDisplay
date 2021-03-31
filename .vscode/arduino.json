@@ -1,5 +1,5 @@
 {
-    "sketch": "Alemotor2.ino",
+    "sketch": "Alemotor2_B.ino",
     "board": "esp32:esp32:esp32doit-devkit-v1",
     "programmer": "AVR ISP",
     "port": "COM3",
