@@ -17,8 +17,6 @@ const int MOTOR_X_DIRECTION_PIN = 17;
 const int MOTOR_X_ENABLE = 18;
 const int LIMIT_X_SWITCH_PIN = 4;
 
-
-
 const int MOTOR_Y_STEP_PIN = 33;
 const int MOTOR_Y_DIRECTION_PIN = 25;
 const int MOTOR_Y_ENABLE = 26;
