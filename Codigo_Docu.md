@@ -264,7 +264,7 @@ con este se llama a rotary con valor 1,100 minimo y maximo y se llama a la funci
 
 con esto le pasamos un valor verdadero para modificar y la pantalla que tiene modificar, ya que cada pantalla tienes valores distintos para modificar.
 
-- 2.2
+- 2.2 entrar y salir del submenu encender 
 ```C++
  if (submenu_encender_count == true)rotary(1, 5);
 
@@ -279,7 +279,7 @@ con esto le pasamos un valor verdadero para modificar y la pantalla que tiene mo
 
  por ultimo si presionas una rutina en loop bloqueamos la lectura del boton del encoder y esta lectura la hacemos directamente en el ciclo while de la rutina. Esto nos facilita la detencion inmediata de los motores.
 
- - 2.3
+ - 2.3 entrar y salir del submenu multiplicador
 ```C++
   if(submenu_multiplicador_count==true)rotary(1,4);
 
@@ -292,6 +292,150 @@ cuando haces click en la pantalla multiplicador, llamamos a rotary con 1,4 minim
 
 cuando seleccionas una opcion del submenu ej: x200, llamamos a submenu_multiplicador_modificar con un valor booleano y su indice para modificar. Se actualiza la variable multiplicador y se te devuelve al menu principal y ya puedes cambiar los valores de 100 en 100 o de 200 en 200.
 
+### void rotary(int ROTARYMIN, int ROTARYMAX)
+
+- 3.1 rotary min max 
+```C++
+  encoder.tick();
+  newPos = encoder.getPosition() * ROTARYSTEPS;
+  if (newPos < ROTARYMIN) {
+    encoder.setPosition(ROTARYMIN / ROTARYSTEPS);
+    newPos = ROTARYMIN;
+  } else if (newPos > ROTARYMAX) {
+    encoder.setPosition(ROTARYMAX / ROTARYSTEPS);
+    newPos = ROTARYMAX;
+  }
+ ```
+ para navegar por las distintas instacias del menu necesito limites del valor del encoder es por esto que la primera parte de la funcion rotary se encarga de evaluar los valores maximos y minimos que puede tener. Con esto nos aseguramos que se muestre la cantidad de pantallas exactas y necesarias para la navegacion. 
+
+ - 3.2 cambiar indices y controlar nuevos valores
+ ```C++
+   if (lastPos != newPos) {
+    if (menu_modificar == false && submenu_encender == false) {
+      menu_indexmenu = newPos;
+      menuDisplay(menu_indexmenu);
+    }
+    if (submenu_encender_count == true) {
+      submenu_encender_indexmenu2 = newPos;
+      submenu_display(submenu_encender_indexmenu2);
+    }
+    if(submenu_multiplicador_count==true){
+      submenu_multiplicador_indexmenu3 = newPos;
+      sub_menu_multiplicador(submenu_multiplicador_indexmenu3);
+    }
+    lastPos = newPos;
+  }
+}
+ ```
+ para tener distintas pantallas y distintos valore se ocupan indeces (indexmenu1,indexmenu2,indexmenu3), cada submenu se opera y se programa como si se tratase de un menu nuevo lo unico que se les agrega es una entrada y salida. 
+
+En esta parte actualizamos el valor nuevo del encoder considerando el min y el max, este valor nuevo se almacena en newPos y se va entregando a este indice segun sea necesario.
+
+adicionalmente aca llamamos a menudisplay() una funcion dedicada a mostrarte todos los datos en pantalla.
+
+como puedes ver el codigo se va repitiendo y solamente cambian los indices segun se necesite por ejemplo estas en el menu principa llamamos a la funcion menudisplay le pasamos el indice y te muestra la pantalla segun este valor. y asi se repite con cada submenu. 
+
+### menuDisplay(int mode)
+
+- 4.1 como Funciona menu display
+
+menu display espera un valor entero, este valor se lo entragamos en rotary y es el indice segun cada submenu, pero como manejamos distintos menus, existe distintos menudisplay
+
+en este caso es el menu display del menu principal, y este espera el valor y luego lo evalua en el switch case, en este caso solo encontraremos informacion de cada pantalla no operaciones de las pantallas. 
+
+```C++
+ switch (mode) {
+    case 1:
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Vel_X");
+      lcd.setCursor(6, 0);
+      lcd.print(String(velocidad_X) + " mm/s");
+      lcd.setCursor(0, 1);
+      lcd.print("Dis_X");
+      lcd.setCursor(6, 1);
+      lcd.print(String(distancia_X) + " mm");
+      break;
+    case 3:
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("PosM1 | ");
+      lcd.setCursor(8, 0);
+      lcd.print(String(stepper_X.getCurrentPositionInMillimeters()) + " mm");
+      lcd.setCursor(0, 1);
+      lcd.print("PosM2 | ");
+      lcd.setCursor(8, 1);
+      lcd.print(String(stepper_Y.getCurrentPositionInMillimeters()) + " mm");
+      break;
+ ```
+como puedes ver aca esta toda la informacion que puedes ver en cada pantalla, estas van del 1 al 11 en caso del display de 16x2 y del 1 al 9 en caso del display de 20x4
+
+Cada numero muestra informacion distinta, cabe decir que este numero luego lo entramos al modificador para cambiar o entrar en la rutina.
+
+
+### void cambiarValores(bool ok, int index) 
+
+- 5.1 como se cambian los valores.
+
+```C++
+ switch (mode) {
+   void cambiarValores(bool ok, int index) {
+
+  if (ok == true) {
+    if (index == 4)
+    {
+      //Modificador Velocidad motorX
+      velocidad_X = newPos * submenu_multiplicador_valuemultiplicador;
+      lcd.setCursor(0, 1);
+      lcd.cursor();
+      lcd.setCursor(0, 1);
+      lcd.print(String(velocidad_X) + " mm/s");
+    }
+    if (index == 5)
+    {
+      //Modificador distancia motorX
+      distancia_X = newPos * submenu_multiplicador_valuemultiplicador;
+      lcd.setCursor(0, 1);
+      lcd.cursor();
+      lcd.setCursor(0, 1);
+      lcd.print(String(distancia_X) + " mm");
+    }
+ ```
+aca es donde cambiamos los valores cada vez que haces click en alguna pantalla del menu principal como puedes ver esperamos un valor booleano para saber que si debemos cambiar algo y luego esperamos el indice para evaluar donde haras el cambio, es decir esperamos un valor de 4 a 11 y segun sea ese valor modificamos las variables o disparamos alguna otra funcion.
+
+aca tambien estan las entradas a los submenus.
+```C++
+   if(index == 8){
+      in_Menu2_in_multiplicador();
+    }
+    
+    if (index == 9)
+    {
+      in_menu_2();
+    }
+ ```
+ por ejemplo si presionas en la pantalla 8 llamamos al  in_Menu2_in_multiplicador() y entras al submenu de multiplicador, cuando presionas una serie de variables cambian para detener el menu principal y activar otros limites en el encoder. como esto lo teniamos que hacer frecuentemente lo mejor fue meter todo dentro de una funcion y asi nos ahorramos mucho codigo y nos asegurabamos de que los valores que cambiemos siempre sean los mismos(Lo mismo aplica para el submenu 2 o el indice 9 de encender).
+
+Con esto entras a los submenus, pero en esta funcion tambien puedes hacer un autohome.
+
+```C++
+    if (index == 11)
+    {
+      //Autohome de ambos ejes
+      homi_X();
+      delay(1000);
+      homi_Y();
+      check = 0;
+      menu_modificar = false;
+      lcd.clear();
+      menuDisplay(1);
+    }
+``` 
+respecto del autohome al inicio no lo dejamos activo, pero puedes descomentarlo y ya funcionaria.
+
+cuando presionas en la pantalla numero 11 autohome, llamamos a homi_X y luego a homi_Y, cada rutina de estas contiene la informacion para hacer un autohome del eje y tambien recuerda que si este sale mal debes reiniciar el sistema.
+
+luego si sale todo bien te devolvemos automaticamente al menu principal simulando el click del boton por eso dejamos check en 0 y modificar en falso, limpiamos la pantalla y te devolvemos a la primer pantalla con menudisplay(1).
 
 ## Pantallas_Funciones
 ## Rutinas_Menu
