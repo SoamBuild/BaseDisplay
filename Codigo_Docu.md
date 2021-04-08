@@ -239,7 +239,7 @@ la funcionalidad de multiplicador es nueva y sirve para cambiar los valores de v
 ```
 cuando se presiona llama a menu_multiplicar() que bloquea y entra al menu de multiplicacion. 
 
-- 2 void loop ()
+### void loop ()
 
 en el loop se manejan los limites y las etapas de cada menu o submenu
 
