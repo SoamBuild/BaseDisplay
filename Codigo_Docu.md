@@ -16,7 +16,7 @@ En esta seccion se explican que hace cada pantalla y cual de estas son realmente
 1. [Pantallas(16x2)](#Display_16x2)
 2. [Pantallas(20x4)](#Display_20x4)
 
-### Display16x2
+### **Display16x2**
 
 
 El display de 16x2 I2C tiene 11 pantallas de las cuales 3 son de informacion de la posicion y los valores actuales de los ejes.
@@ -71,7 +71,66 @@ reset valores es un atajo para poner todos los valores en 0 es decir dejas la ve
 
 como lo dice su nombre en este punto puedes hacer un autohome, esta rutina se hace automaticamente en ambos ejes primero se realiza en X y luego en Y, La pantalla te mostrara el estado actual de la rutina y **en caso de error tendras que reiniciar todo el sistema.**
 
-### Display_20x4
+### **Display_20x4**
+
+el display de 20x4 al ser mucho mas grande nos sirve para mostrar mucha mas informacion en cada pantalla, de esta forma todas las pantallas son operativas y se reducen solo a 1 las pantallas de informacion. 
+
+Con este el codigo B tiene un numero de 9 pantallas, solo 1 de informacion y el resto todas operativas.
+
+- 1  Posicion actual de ejes X | Y
+
+Como la libreria trabaja con movimientos absolutos es decir considera la posicion actual de los ejes, en esta pantallas puedes conocer dicho valor para ambos ejes.
+
+- 2 Velocidad de eje X
+
+en esta pantallas puedes conocer el valor actual de la velocidad en X, y si haces click puedes modificarla.
+
+cuando haces el click te dira nuevo valor * multiplicador y en la siguiente linea te dira el valor nuevo.
+
+para guardar el valor debes hacer otro click y los valores ya se guardaran.
+
+- 3 distancia de eje X
+
+en esta pantallas puedes conocer el valor actual de la distancia en X, y si haces click puedes modificarla.
+
+cuando haces el click te dira nuevo valor * multiplicador y en la siguiente linea te dira el valor nuevo.
+
+para guardar el valor debes hacer otro click y los valores ya se guardaran.
+
+- 4 Velocidad de eje Y
+
+en esta pantallas puedes conocer el valor actual de la velocidad en Y, y si haces click puedes modificarla.
+
+cuando haces el click te dira nuevo valor * multiplicador y en la siguiente linea te dira el valor nuevo.
+
+para guardar el valor debes hacer otro click y los valores ya se guardaran.
+- 4 distancia de eje Y
+
+en esta pantallas puedes conocer el valor actual de la distancia en Y, y si haces click puedes modificarla.
+
+cuando haces el click te dira nuevo valor * multiplicador y en la siguiente linea te dira el valor nuevo.
+
+para guardar el valor debes hacer otro click y los valores ya se guardaran.
+- 6 Multiplicador
+
+una nueva funcion que hace mas facil modificar los valores, ya que con esto puedes modificar los valores x5 / x25 / x100 / x200. Por defecto multiplicador es x1.
+
+cuando haces click en multiplicador puedes navegar con el encoder y seleccionar la opcion que quieres haciendo click, con esto ya vuelves al menu principal de inmediato y ya puedes modificar mas rapido los valores.
+
+- 7 Encender 
+
+encender se trata de un submenu, donde al hacer click entras a este submenu y puedes navegar con el enconder y para seleccionar una opcion vuelves hacer click en la opcion y entras en un loop y para salir tienes que hacer otro click.
+
+cuando sales del loop haciendo click vuelves al submenu encender y para salir de este, tienes que ir a la pantalla volver hacer click y volveras al menu principal.
+
+- 8 Reset valores
+
+reset valores es un atajo para poner todos los valores en 0 es decir dejas la velocidad y distancia de ambos ejes en 0 y el multiplicador en 1.
+
+- 9 AutoHome
+
+como lo dice su nombre en este punto puedes hacer un autohome, esta rutina se hace automaticamente en ambos ejes primero se realiza en X y luego en Y, La pantalla te mostrara el estado actual de la rutina y **en caso de error tendras que reiniciar todo el sistema.**
+
 
 
 ## Funciones_Utilizadas
