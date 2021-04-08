@@ -49,20 +49,20 @@ int lastPos = -1;
 int check = 0;
 
 //Navegacion de menu
-bool modificar = false;
-int indexmenu = 1;
+bool menu_modificar = false;
+int menu_indexmenu = 1;
 //Navegacion de submenu_Encender
-bool submenu = false;
-bool submenu_count = false;
-int indexmenu2;
-bool submenu_modificar = false;
-bool rutina_Task = false;
+bool submenu_encender = false;
+bool submenu_encender_count = false;
+int submenu_encender_indexmenu2;
+bool submenu_encender_modificar = false;
+bool submenu_encender_rutinatask = false;
 //Navegacion de submenu_multiplicador
-bool submulti=false;
-bool submulti_count = false;
-int indexmenu3;
-bool submulti_modificar=false;
-int multiplicador= 1;
+bool submenu_multiplicador=false;
+bool submenu_multiplicador_count = false;
+int submenu_multiplicador_indexmenu3;
+bool submenu_multiplicador_modificar=false;
+int submenu_multiplicador_valuemultiplicador= 1;
 //Variables de velocidad y distancia de eje (X,Y)
 int velocidad_X = 100;
 int distancia_X = 100;
@@ -72,7 +72,7 @@ int distancia_Y = 100;
 
 void onPressed()
 {
-  if (indexmenu > 3 && submenu == false)
+  if (menu_indexmenu > 3 && submenu_encender == false)
   {
     check++;
     switch (check) {
@@ -84,20 +84,20 @@ void onPressed()
         break;
     }
   }
-  if (submenu == true)
+  if (submenu_encender == true)
   {
     in_Menu_2_Modificar();
   }
-  if (rutina_Task == true){
+  if (submenu_encender_rutinatask == true){
     Serial.println("Salir Rutina");
-    rutina_Task = false;
+    submenu_encender_rutinatask = false;
     out_Menu_2_modificar();
     stepper_X.emergencyStop();
     stepper_Y.emergencyStop();
     digitalWrite(MOTOR_X_ENABLE, HIGH);
     digitalWrite(MOTOR_Y_ENABLE, HIGH);
   }
-   if (submulti == true)
+   if (submenu_multiplicador == true)
   {
     menu_multiplicar();
   }
@@ -135,26 +135,26 @@ void setup()
 void loop()
 {
 
-  if (modificar == false && submenu == false) rotary(1, 11);
+  if (menu_modificar == false && submenu_encender == false) rotary(1, 11);
 
-  if (modificar == true) {
+  if (menu_modificar == true) {
     rotary(1, 100);
-    cambiarValores(modificar, indexmenu);
+    cambiarValores(menu_modificar, menu_indexmenu);
   }
 
-  if (submenu_count == true)rotary(1, 5);
+  if (submenu_encender_count == true)rotary(1, 5);
 
-  if (submenu_modificar == true) {
+  if (submenu_encender_modificar == true) {
     //rotary(1, 100);
-    sub_cambiarValores(submenu_modificar, indexmenu2);
+    sub_cambiarValores(submenu_encender_modificar, submenu_encender_indexmenu2);
   }
 
-  if (rutina_Task == false) button.read();
+  if (submenu_encender_rutinatask == false) button.read();
 
-  if(submulti_count==true)rotary(1,4);
+  if(submenu_multiplicador_count==true)rotary(1,4);
 
-  if(submulti_modificar==true){
-    menu_multiplicador_modificar(submulti_modificar,indexmenu3);
+  if(submenu_multiplicador_modificar==true){
+    menu_multiplicador_modificar(submenu_multiplicador_modificar,submenu_multiplicador_indexmenu3);
   }
 }
 void rotary(int ROTARYMIN, int ROTARYMAX) {
@@ -168,17 +168,17 @@ void rotary(int ROTARYMIN, int ROTARYMAX) {
     newPos = ROTARYMAX;
   }
   if (lastPos != newPos) {
-    if (modificar == false && submenu == false) {
-      indexmenu = newPos;
-      menuDisplay(indexmenu);
+    if (menu_modificar == false && submenu_encender == false) {
+      menu_indexmenu = newPos;
+      menuDisplay(menu_indexmenu);
     }
-    if (submenu_count == true) {
-      indexmenu2 = newPos;
-      submenu_display(indexmenu2);
+    if (submenu_encender_count == true) {
+      submenu_encender_indexmenu2 = newPos;
+      submenu_display(submenu_encender_indexmenu2);
     }
-    if(submulti_count==true){
-      indexmenu3 = newPos;
-      sub_menu_multiplicador(indexmenu3);
+    if(submenu_multiplicador_count==true){
+      submenu_multiplicador_indexmenu3 = newPos;
+      sub_menu_multiplicador(submenu_multiplicador_indexmenu3);
     }
     lastPos = newPos;
   }
@@ -245,7 +245,7 @@ void menuDisplay(int mode) {
     case 8:
       lcd.clear();
       lcd.setCursor(0,0);
-      lcd.print("Multiplicador");
+      lcd.print("submenu_multiplicador_valuemultiplicador");
       break;
     
     case 9:
@@ -274,7 +274,7 @@ void cambiarValores(bool ok, int index) {
     if (index == 4)
     {
       //Modificador Velocidad motorX
-      velocidad_X = newPos * multiplicador;
+      velocidad_X = newPos * submenu_multiplicador_valuemultiplicador;
       lcd.setCursor(0, 1);
       lcd.cursor();
       lcd.setCursor(0, 1);
@@ -283,7 +283,7 @@ void cambiarValores(bool ok, int index) {
     if (index == 5)
     {
       //Modificador distancia motorX
-      distancia_X = newPos * multiplicador;
+      distancia_X = newPos * submenu_multiplicador_valuemultiplicador;
       lcd.setCursor(0, 1);
       lcd.cursor();
       lcd.setCursor(0, 1);
@@ -292,7 +292,7 @@ void cambiarValores(bool ok, int index) {
     if (index == 6)
     {
       //Modificador Velocidad motorY
-      velocidad_Y = newPos * multiplicador;
+      velocidad_Y = newPos * submenu_multiplicador_valuemultiplicador;
       lcd.setCursor(0, 1);
       lcd.cursor();
       lcd.setCursor(0, 1);
@@ -301,7 +301,7 @@ void cambiarValores(bool ok, int index) {
     if (index == 7)
     {
       //Modificador distancia motorY
-      distancia_Y = newPos * multiplicador;
+      distancia_Y = newPos * submenu_multiplicador_valuemultiplicador;
       lcd.setCursor(0, 1);
       lcd.cursor();
       lcd.setCursor(0, 1);
@@ -326,7 +326,7 @@ void cambiarValores(bool ok, int index) {
       lcd.print("Valores en 0");
       delay(1000);
       check = 0;
-      modificar = false;
+      menu_modificar = false;
       lcd.clear();
       menuDisplay(1);
     }
@@ -337,14 +337,14 @@ void cambiarValores(bool ok, int index) {
       delay(1000);
       homi_Y();
       check = 0;
-      modificar = false;
+      menu_modificar = false;
       lcd.clear();
       menuDisplay(1);
     }
    
   }
 
-//pantallas para submenu encender
+//pantallas para submenu_encender encender
 }
 void submenu_display(int sub_mode) {
   switch (sub_mode) {
@@ -395,18 +395,18 @@ void sub_cambiarValores(bool sub_ok, int sub_index) {
       Test_rutina();
     }
     if (sub_index == 2) {
-      rutina_Task = true;
+      submenu_encender_rutinatask = true;
       digitalWrite(MOTOR_X_ENABLE, LOW);
       digitalWrite(MOTOR_Y_ENABLE, LOW);
       Rutina_move();
     }
     if (sub_index == 3) {
-      rutina_Task = true;
+      submenu_encender_rutinatask = true;
       digitalWrite(MOTOR_X_ENABLE, LOW);
       Rutina_move_X();
     }
       if (sub_index == 4) {
-      rutina_Task = true;
+      submenu_encender_rutinatask = true;
       digitalWrite(MOTOR_Y_ENABLE, LOW);
       Rutina_move_Y();
     }
@@ -415,7 +415,7 @@ void sub_cambiarValores(bool sub_ok, int sub_index) {
     }
   }
 }
-//pantallas de submenu para multiplicador
+//pantallas de submenu_encender para submenu_multiplicador_valuemultiplicador
 void sub_menu_multiplicador(int display){
   switch (display) {
     case 1:
@@ -448,29 +448,29 @@ void sub_menu_multiplicador(int display){
       break;
 }
 }
-//acciones para multiplicador
+//acciones para submenu_multiplicador_valuemultiplicador
 void menu_multiplicador_modificar(bool state,int estado){
   if(state ==true){
     if(estado == 1){
-      multiplicador = 5;
+      submenu_multiplicador_valuemultiplicador = 5;
       lcd.setCursor(0, 1);
       lcd.print("Multi X5");
       out_menu2_multiplicador();      
     }
     if(estado == 2){
-      multiplicador = 50;
+      submenu_multiplicador_valuemultiplicador = 50;
       lcd.setCursor(0, 1);
       lcd.print("Multi X50");
       out_menu2_multiplicador();      
     }
      if(estado == 3){
-      multiplicador = 100;
+      submenu_multiplicador_valuemultiplicador = 100;
       lcd.setCursor(0, 1);
       lcd.print("Multi X100");
       out_menu2_multiplicador();      
     }
     if(estado == 4){
-      multiplicador = 200;
+      submenu_multiplicador_valuemultiplicador = 200;
       lcd.setCursor(0, 1);
       lcd.print("Multi X200");
       out_menu2_multiplicador();      
@@ -479,34 +479,34 @@ void menu_multiplicador_modificar(bool state,int estado){
 }
 //IN && OUT Menu(Value,Home,Reset)
 void in_menu_1() {
-  modificar = true;
+  menu_modificar = true;
   Serial.println("Modificando valores Menu 1");
 }
 void out_menu_1() {
   lcd.clear();
-  menuDisplay(indexmenu);
-  modificar = false;
+  menuDisplay(menu_indexmenu);
+  menu_modificar = false;
   Serial.println("Guardando los valores");
   check = 0;
 }
 
-//IN && OUT submenu (PROBAR,ENCENDER,VOLVER)
+//IN && OUT submenu_encender (PROBAR,ENCENDER,VOLVER)
 void in_menu_2() {
   Serial.println("IN_SUBMENU");
   //bloqueo contador menu principal;
-  modificar = false;
-  submenu = true;
+  menu_modificar = false;
+  submenu_encender = true;
   //activo el contador de menu 2
-  submenu_count = true;
+  submenu_encender_count = true;
 }
 
 void out_Menu_2() {
   Serial.println("OUT_SUBMENU");
-  modificar = false;
+  menu_modificar = false;
   check = 0;
-  submenu = false;
-  submenu_count = false;
-  submenu_modificar = false;
+  submenu_encender = false;
+  submenu_encender_count = false;
+  submenu_encender_modificar = false;
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Volviendo");
@@ -514,37 +514,37 @@ void out_Menu_2() {
   menuDisplay(1);
 }
 void in_Menu_2_Modificar() {
-  Serial.println("Entrando en rutina submenu");
+  Serial.println("Entrando en rutina submenu_encender");
   //desactivo el contador de menu2
-  submenu_count = false;
+  submenu_encender_count = false;
   //Activo Modificador de menu2
-  submenu_modificar = true;
+  submenu_encender_modificar = true;
 }
 void out_Menu_2_modificar() {
   Serial.println("Rutina finalizada");
   //desactivo Modificador de menu2
-  submenu_modificar = false;
+  submenu_encender_modificar = false;
   //Activo el contador de menu2
-  submenu_count = true;
+  submenu_encender_count = true;
   lcd.clear();
-  submenu_display(indexmenu2);
+  submenu_display(submenu_encender_indexmenu2);
 }
 void in_Menu2_in_multiplicador(){
-  modificar=true;
-  submulti_count=true;
-  submulti=true;
+  menu_modificar=true;
+  submenu_multiplicador_count=true;
+  submenu_multiplicador=true;
 }
 void menu_multiplicar(){
-  //submulti=false;
-  submulti_count = false;
-  submulti_modificar=true;
+  //submenu_multiplicador=false;
+  submenu_multiplicador_count = false;
+  submenu_multiplicador_modificar=true;
 }
 void out_menu2_multiplicador(){
-  modificar=false;
+  menu_modificar=false;
   check=0;
-  submulti_count=false;
-  submulti=false;
-  submulti_modificar=false;
+  submenu_multiplicador_count=false;
+  submenu_multiplicador=false;
+  submenu_multiplicador_modificar=false;
   delay(1000);
   lcd.clear();
   lcd.setCursor(0, 0);
@@ -581,7 +581,7 @@ void Test_rutina() {
 
 //movimiento en loop
 void Rutina_move() {
-  if (rutina_Task == true) {
+  if (submenu_encender_rutinatask == true) {
     lcd.setCursor(0, 1);
     lcd.print("Rutina Loop");
     lcd.setCursor(0, 0);
@@ -616,7 +616,7 @@ void Rutina_move() {
   }
 }
 void Rutina_move_X() {
-  if (rutina_Task == true) {
+  if (submenu_encender_rutinatask == true) {
     lcd.setCursor(0, 1);
     lcd.print("Rutina en  X");
     lcd.setCursor(0, 0);
@@ -645,7 +645,7 @@ void Rutina_move_X() {
   }
 }
 void Rutina_move_Y() {
-  if (rutina_Task == true) {
+  if (submenu_encender_rutinatask == true) {
     lcd.setCursor(0, 1);
     lcd.print("Rutina en  Y");
     lcd.setCursor(0, 0);
