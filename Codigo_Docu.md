@@ -437,6 +437,253 @@ cuando presionas en la pantalla numero 11 autohome, llamamos a homi_X y luego a 
 
 luego si sale todo bien te devolvemos automaticamente al menu principal simulando el click del boton por eso dejamos check en 0 y modificar en falso, limpiamos la pantalla y te devolvemos a la primer pantalla con menudisplay(1).
 
+### void submenu_display(int sub_mode) 
+
+- 6.1 mostrando las pantallas de los submenu.
+
+el funcionamiento de esta rutina es exactamente igual que el de menudisplay.
+
+esperamos un indice de 1 a 5 y segun ese valor que se manda cada vez que giras la perilla en encender puedes ver informacion distinta.
+
+en este punto no tenemos que cambiar valores solamente llamar rutinas pero eso lo hacemos en otra funcion.
+
+```C++
+   switch (sub_mode) {
+    case 1:
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Probar Rutina");
+      lcd.setCursor(0, 1);
+      lcd.print("1/5");
+      break;
+    case 2:
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Rutina Ciclo");
+      lcd.setCursor(0, 1);
+      lcd.print("2/5");
+      break;
+    case 3:
+``` 
+el encargado de evaluar es el switch case y evalua el valor de indice que le pasamos en este caso es submenu_encender_indexmenu2, como nos sobro espacio en estas pantallas agregamos en un extremo del display un indice para que te sea mas facil navegar.
+
+### void sub_cambiarValores(bool sub_ok, int sub_index) 
+
+- 7.1 como llamamos a las rutinas.
+
+como no tenemos que modificar valores no llamamos a rotary aca solamente trabajamos con el boton del enconder. 
+
+```C++
+  void sub_cambiarValores(bool sub_ok, int sub_index) {
+
+  if (sub_ok == true) {
+
+    if (sub_index == 1) {
+      Test_rutina();
+    }
+    if (sub_index == 2) {
+      submenu_encender_rutinatask = true;
+      digitalWrite(MOTOR_X_ENABLE, LOW);
+      digitalWrite(MOTOR_Y_ENABLE, LOW);
+      Rutina_move();
+    }
+    if (sub_index == 3) {
+      submenu_encender_rutinatask = true;
+      digitalWrite(MOTOR_X_ENABLE, LOW);
+      Rutina_move_X();
+    }
+      if (sub_index == 4) {
+      submenu_encender_rutinatask = true;
+      digitalWrite(MOTOR_Y_ENABLE, LOW);
+      Rutina_move_Y();
+    }
+    if (sub_index == 5) {
+      out_Menu_2();
+    }
+  }
+}
+```
+
+para valor del 1 al 5 hay una operacion y como puedes ver antes de llamar a la operacion rutina encendemos los motores y llamamos a la rutina, para apagarlos lo hacemos dejando en falso rutina task al principio del codigo en el callback button_press(). 
+
+por ejemplo haces click en rutina en loop, llamamos a rutina_move que bloquea el codigo principal y solo funciona un while que se encarga de mover de forma sincronica los dos ejes y lee el boton. para salir de esa rutina haces click y rutina_task es falsa y vuelves al submenu.
+
+esto es importante no te devolvemos al menu principal, te mandamos directo al submenu encender y si quieres volver giras hasta llegar al 5 "volver" y ahi llamamos a  la funcion out_Menu2() encargada de cambiar unos valores y devolverte al menu principal.
+
+### sub_menu_multiplicador(int display)
+
+- 8.1 mostrando los pantallas del submenu multiplicador
+
+ya explicamos para que era multiplicador, y como se usaba, ahora toca explicar como se muestra la informacion del submenu multiplicador aca algunas cosas cambian pero la base se mantiene
+```C++
+  void sub_menu_multiplicador(int display){
+  switch (display) {
+    case 1:
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("X5");
+      lcd.setCursor(0, 1);
+      lcd.print("1/4");
+      break;
+    case 2:
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("X50");
+      lcd.setCursor(0, 1);
+      lcd.print("2/4");
+      break;
+```
+
+aca esperamos un valor tipo entero que es el submenu_multiplicador_indexmenu3, pero que dentro del contexto local de la funcion lo llamaremos display, y el encargado de evaluar display es un switch case que va mostrando cada valor x5,x50 y asi.
+
+En estas pantalla solo tenemos la informacion para seleccionar y el indice que se muestra en un extremo no hay nada mas, lo nuevo viene en como seleccionamos cada opcion del submenu modificar.
+
+### void menu_multiplicador_modificar(bool state,int estado){
+
+- 9.1 como funciona el click en el multiplicador.
+
+Esta funcion espera dos valores un booleando y un entero, que llamaremos state y estado, pero que realmente son submenu_multiplicador_modificar y submenu_multiplicador_indexmenu3 
+
+```C++
+   if(state ==true){
+    if(estado == 1){
+      submenu_multiplicador_valuemultiplicador = 5;
+      lcd.setCursor(0, 1);
+      lcd.print("Multi X5");
+      out_menu2_multiplicador();      
+    }
+    if(estado == 2){
+      submenu_multiplicador_valuemultiplicador = 50;
+      lcd.setCursor(0, 1);
+      lcd.print("Multi X50");
+      out_menu2_multiplicador();      
+    }
+     if(estado == 3){
+      submenu_multiplicador_valuemultiplicador = 100;
+      lcd.setCursor(0, 1);
+      lcd.print("Multi X100");
+      out_menu2_multiplicador();      
+    }
+    if(estado == 4){
+      submenu_multiplicador_valuemultiplicador = 200;
+      lcd.setCursor(0, 1);
+      lcd.print("Multi X200");
+      out_menu2_multiplicador();      
+    }
+  }
+}
+```
+
+primero evualuamos el primer valor el booleano state, y si es verdadero revisamos el numero de la pantalla o el indexmenu3. Esta funcion de control es igual a la anteriores salvo que cuando haces click en alguna pantalla, te cambiamos el valor del multiplicador por tu seleccion y te mandamos de vuelta de inmediato al menu principal llamando out_menu2_multiplicador().
+
+### entrar y salir del menu principal.
+
+en el menu principal decimos que entramos y salimos cuando haces un click para cambiar un valor y el segundo click para guardar y salir.
+
+de todo esto se encarga el callback del boton del encoder y en parte el loop que va bloqueando y activando ciertos menus y modificadores.
+
+- 9.1 entrar a modificar un valor
+
+```C++
+   void in_menu_1() {
+  menu_modificar = true;
+  Serial.println("Modificando valores Menu 1");
+}
+```
+
+al entrar a modificar hacemos verdadero el valor menu_modificar = true y con esto en el loop se bloquea el rotary 1 a 9, rotary pasa a ser 1 a 100 en este caso si debemos usar la perilla asi que la activamos, adicionalmente llamamos al modificador de menu principal con su indece para que puedes cambiar el valor que quieras.
+
+- 9.2 guardar y salir del modificador.
+
+```C++
+  void out_menu_1() {
+  lcd.clear();
+  menuDisplay(menu_indexmenu);
+  menu_modificar = false;
+  Serial.println("Guardando los valores");
+  check = 0;
+}
+```
+
+para salir es algo mas complejo hay mas cosas, lo primero es que recuerda que para salir es un click mas.
+
+lo primero limpiamos la pantalla, luego te mandamos al menu principal con el ultimo indece conocido, luego negamos el modificador con esto vuelves al rotary 1 a 9 y sales del modificador, y por ultimo reiniciamos el valor de check para decir que ya hiciste los dos click.
+
+### entrar y salir del submenu encender.
+
+aca hay 4 tareas que hacer, primero cuando haces click en la pantalla encender tenemos que bloquear el menudisplay principal y activar un segundo menudisplay para que veas la informacion del submenu encender, luego cuando hagas click en alguna pantalla del submenu encender quiere decir que ejecutas una rutina, y luego cuando haces otro click sales de la rutina, y por ultimo vuelves al menu principal.
+
+para todas esas tareas hay valores cambiando gracias al boton tanto en el callback como en el loop
+
+- 10.1 entrar al submenu encender
+
+```C++
+void in_menu_2() {
+  Serial.println("IN_SUBMENU");
+  //bloqueo contador menu principal;
+  menu_modificar = false;
+  submenu_encender = true;
+  //activo el contador de menu 2
+  submenu_encender_count = true;
+}
+```
+cuando haces click en encender, lo primero es bloquear el rotary 1 a 11 y eso lo hacemos negando el menu_modificar, luego debemos decirle a rotary que queremos mostrar 5 pantallas entonces su rango es 1 a 5 eso lo hacemos con submenu_encender siendo verdadero y por ultimo queremos guardar los nuevos valores de rotary en indice nuevo indexmenu2, y eso lo hacemos con submenu_encender_count siendo verdadero.
+
+este ultimo cambio o negacion permite que puedas ver la informacion del submenu encender.
+
+- 10.2 Accionar una rutina 
+
+
+```C++
+ void in_Menu_2_Modificar() {
+  Serial.println("Entrando en rutina submenu_encender");
+  //desactivo el contador de menu2
+  submenu_encender_count = false;
+  //Activo Modificador de menu2
+  submenu_encender_modificar = true;
+}
+}
+```
+al hacer click en una rutina, llamamos a esta funcion, lo primero es desactivar el indexmenu2 y con esto cerramos la informacion en pantalla y hacer verdadero a encender_modificar que se evalua en loop y si es verdadero llama al modificador y el entrega el indice que seleccionaste.
+
+
+- 10.3 cerrar una rutina
+
+lo primero que debes saber que para cerrar una rutina debes hacer click y se detiene toda la ejecucion del codigo 
+```C++
+ void out_Menu_2_modificar() {
+  Serial.println("Rutina finalizada");
+  //desactivo Modificador de menu2
+  submenu_encender_modificar = false;
+  //Activo el contador de menu2
+  submenu_encender_count = true;
+  lcd.clear();
+  submenu_display(submenu_encender_indexmenu2);
+}
+}
+```
+cuando cierras la rutina, no te devuelves al menu principal si no que al submenu encender, es por esto que lo primero es negar modificar para salir del modificador y luego volver a encender el contador para que veas las pantallas de navegacion, limpiamos y te llevamos a la ultima pantalla que viste o al ultimo indice registrado.
+
+- 10.3 salir del submenu 
+
+para salir del submenu encender, debes ir a la pantalla 5 donde dice volver, y asi vuelves al menu principal. 
+```C++
+ void out_Menu_2() {
+  Serial.println("OUT_SUBMENU");
+  menu_modificar = false;
+  check = 0;
+  submenu_encender = false;
+  submenu_encender_count = false;
+  submenu_encender_modificar = false;
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Volviendo");
+  delay(1000);
+  menuDisplay(1);
+}
+```
+Lo primero es negar menu_modificar para que vuelva el rotary 1 a 9 del menu principal. luego reiniciamos check 0 para limpiar el numero click,  y negamos todos los estados del submenu encender, limpiamos la pantalla, imprimos que volveremos al menu principal, esperamos un segundo y te mandamos a la pantalla numero 1 informativa del menu principal.
+
 ## Pantallas_Funciones
 ## Rutinas_Menu
 ## [Fourth Example](http://www.fourthexample.com) 
