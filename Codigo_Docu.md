@@ -239,6 +239,60 @@ la funcionalidad de multiplicador es nueva y sirve para cambiar los valores de v
 ```
 cuando se presiona llama a menu_multiplicar() que bloquea y entra al menu de multiplicacion. 
 
+- 2 void loop ()
+
+en el loop se manejan los limites y las etapas de cada menu o submenu
+
+- 2.1 control de menu principal
+```C++
+  void loop()
+{
+
+  if (menu_modificar == false && submenu_encender == false) rotary(1, 11);
+
+  if (menu_modificar == true) {
+    rotary(1, 100);
+    cambiarValores(menu_modificar, menu_indexmenu);
+  }
+ ```
+en la primer condicion se evalua si modificar es verdadero es decir si aun no haces click en alguna pantalla y si submenu encender se encuentra falso o no activado
+
+cuando esto se cumple se llama rotary con los valores 1,11 que son el minimo y el maximo valor que puede tener el encoder.
+
+cuando haces click en alguna pantalla operativa, se activa la segunda condicional es decir quieres modificar, y modificar es true.
+con este se llama a rotary con valor 1,100 minimo y maximo y se llama a la funcion cambiar valores con un valor primeramente booleano y un segundo valor entero.
+
+con esto le pasamos un valor verdadero para modificar y la pantalla que tiene modificar, ya que cada pantalla tienes valores distintos para modificar.
+
+- 2.2
+```C++
+ if (submenu_encender_count == true)rotary(1, 5);
+
+  if (submenu_encender_modificar == true) {
+    sub_cambiarValores(submenu_encender_modificar, submenu_encender_indexmenu2);
+  }
+  if (submenu_encender_rutinatask == false) button.read();
+ ```
+ cuando haces click en la pantalla encender entras al submenu y llamamos a la funcion rotary con 1,5 minimo y maximo, con esto puedes navegar por las 5 pantallas del submenu encender.
+
+ y cuando haces click en una pantalla del submenu encender no llamamos a rotary ya que no es necesario modificar valores solo operamos el boton, y llamamos a la funcion sub_cambiarvalores con un valor booleano y su indice para accionar una rutina.
+
+ por ultimo si presionas una rutina en loop bloqueamos la lectura del boton del encoder y esta lectura la hacemos directamente en el ciclo while de la rutina. Esto nos facilita la detencion inmediata de los motores.
+
+ - 2.3
+```C++
+  if(submenu_multiplicador_count==true)rotary(1,4);
+
+  if(submenu_multiplicador_modificar==true){
+    menu_multiplicador_modificar(submenu_multiplicador_modificar,submenu_multiplicador_indexmenu3);
+  }
+  
+ ```
+cuando haces click en la pantalla multiplicador, llamamos a rotary con 1,4 minimo y maximo para que navegues por sus 4 opciones en este caso cuando haces click no te devolvemos al submenu si no que directamente al menu principal es por esto que en este submenu no esta la pantalla volver.
+
+cuando seleccionas una opcion del submenu ej: x200, llamamos a submenu_multiplicador_modificar con un valor booleano y su indice para modificar. Se actualiza la variable multiplicador y se te devuelve al menu principal y ya puedes cambiar los valores de 100 en 100 o de 200 en 200.
+
+
 ## Pantallas_Funciones
 ## Rutinas_Menu
 ## [Fourth Example](http://www.fourthexample.com) 
