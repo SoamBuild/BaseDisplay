@@ -3,7 +3,7 @@
 Para entender el funcionamiento de cada funcion y de las pantallas del menu, se recomienda leer el siguiente contenido, donde se detallan las funciones utilizadas y que valores esperan, las pantallas que se muestran y cual funcion dentro del codigo, las rutinas que se realizan en cada pantalla operativa.
 
 # Contenido
-1. [Pantalla](#Pantallas_Funciones)
+1. [Pantalla](#Pantalla_Funciones)
 2. [Funciones](#Funciones_Utilizadas)
 3. [Rutinas](#Rutinas_Menu)
 4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
@@ -13,10 +13,10 @@ Para entender el funcionamiento de cada funcion y de las pantallas del menu, se 
 En esta seccion se explican que hace cada pantalla y cual de estas son realmente operativas.
 
 ### Pantallas
-1. [Pantallas(16x2)](Display_16x2)
-2. [Pantallas(20x4)](Display_20x4)
+1. [Pantallas(16x2)](#Display_16x2)
+2. [Pantallas(20x4)](#Display_20x4)
 
-### Display_16x2
+### Display16x2
 
 
 El display de 16x2 I2C tiene 11 pantallas de las cuales 3 son de informacion de la posicion y los valores actuales de los ejes.
