@@ -98,7 +98,6 @@ void onPressed()
 }
 void setup()
 {
-
   Serial.begin(115200);
   stepper_X.connectToPins(MOTOR_X_STEP_PIN, MOTOR_X_DIRECTION_PIN);
   pinMode(MOTOR_X_ENABLE, OUTPUT);
