@@ -684,6 +684,54 @@ para salir del submenu encender, debes ir a la pantalla 5 donde dice volver, y a
 ```
 Lo primero es negar menu_modificar para que vuelva el rotary 1 a 9 del menu principal. luego reiniciamos check 0 para limpiar el numero click,  y negamos todos los estados del submenu encender, limpiamos la pantalla, imprimos que volveremos al menu principal, esperamos un segundo y te mandamos a la pantalla numero 1 informativa del menu principal.
 
+
+### entrar y salir del submenu multiplicador.
+
+En este menu necesitamos 3 etapas, primero entrar a este menu lo que implica bloquear los otros menus, Luego seleccionar una opcion es decir modificar y por ultimo guardar y retornar al menu principal.
+
+- 11.1 entrar al submenu multiplicador
+```C++
+void in_Menu2_in_multiplicador(){
+  menu_modificar=true;
+  submenu_multiplicador_count=true;
+  submenu_multiplicador=true;
+}
+```
+
+para iniciar el submenu multiplicador lo primero es dejar menu_modificar en verdadero con esto se bloquea el menu principal, lo segundo es activar submenu_multiplicador_count para dar limites al rotary y pasar los valores a index 3 , con submenu_multiplicador mostramos las pantallas.
+
+- 11.2 cambiar el valor de multiplicador.
+
+
+```C++
+ void menu_multiplicar(){
+  //submenu_multiplicador=false;
+  submenu_multiplicador_count = false;
+  submenu_multiplicador_modificar=true;
+}
+```
+
+negamos a submenu_multiplicador_count ya que no necesitamos mas los limite y la lectura del enconder y activamos el submenu_multiplicador_modificar para llamar a la funcion que cambia los valores del submenu multiplicador.
+
+- 11.3 salir del submenu multiplicar
+
+lo primero cuando modificas un valor del submenu, te devolvemos de inmediato al menu principal esto es una diferencia con el submenu encender, es por esto que tiene menos salidas y entras a menus. 
+```C++
+ void out_menu2_multiplicador(){
+  menu_modificar=false;
+  check=0;
+  submenu_multiplicador_count=false;
+  submenu_multiplicador=false;
+  submenu_multiplicador_modificar=false;
+  delay(1000);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Volviendo");
+  delay(1000);
+  menuDisplay(1);
+  }
+```
+Negamos el menu_modificar, reseteamos los click del boton para volver al menu principal, negamos todas las variables del submenu, esperamos un segundo limpiamos la pantalla y volvemos al ultimo indice guardado. 
 ## Pantallas_Funciones
 ## Rutinas_Menu
 ## [Fourth Example](http://www.fourthexample.com) 
