@@ -3,10 +3,10 @@
 Para entender el funcionamiento de cada funcion y de las pantallas del menu, se recomienda leer el siguiente contenido, donde se detallan las funciones utilizadas y que valores esperan, las pantallas que se muestran y cual funcion dentro del codigo, las rutinas que se realizan en cada pantalla operativa.
 
 # Contenido
-1. [Pantalla](#Pantalla_Funciones)
-2. [Funciones](#Funciones_Utilizadas)
-3. [Rutinas](#Rutinas_Menu)
-4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
+1. [Pantalla del menu](#Pantalla_Funciones)
+2. [Funciones del codigo](#Funciones_Utilizadas)
+3. [Rutinas de motor](#Rutinas_Motor)
+
 
 ## Pantalla_Funciones
 
@@ -731,7 +731,280 @@ lo primero cuando modificas un valor del submenu, te devolvemos de inmediato al 
   menuDisplay(1);
   }
 ```
-Negamos el menu_modificar, reseteamos los click del boton para volver al menu principal, negamos todas las variables del submenu, esperamos un segundo limpiamos la pantalla y volvemos al ultimo indice guardado. 
-## Pantallas_Funciones
-## Rutinas_Menu
-## [Fourth Example](http://www.fourthexample.com) 
+Negamos el menu_modificar, reseteamos los click del boton para volver al menu principal, negamos todas las variables del submenu, esperamos un segundo limpiamos la pantalla y volvemos al ultimo indice guardado.
+
+
+## Rutinas_Motor
+
+En este punto, se explican cuales son las rutinas disponibles para los motores dentro del menu.
+
+todas estas rutinas las puedes encontrar en el submenu de encender, aca puedes probar la rutina, encender ambos ejes o cada eje por separado X / Y.
+
+Tambien existen otras rutinas como las de autohome. 
+
+### probar rutina
+
+al activar esta rutina, lograras mover los motores solo una vez y no en ciclo, cuando termine el movimiento de prueba te devolveremos al submenu encender donde podras activarlas en ciclos, o volver al menu principal y modificar los valores.
+
+```C++
+ void Test_rutina() {
+  digitalWrite(MOTOR_X_ENABLE, LOW);
+  digitalWrite(MOTOR_Y_ENABLE, LOW);
+  stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
+  stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
+  lcd.setCursor(0, 1);
+  lcd.print("Movimiento test");
+  Serial.println("Movimiento test");
+  stepper_X.setTargetPositionInMillimeters(distancia_X);
+  stepper_Y.setTargetPositionInMillimeters(distancia_Y);
+  while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete())) {
+    stepper_X.processMovement();
+    stepper_Y.processMovement();
+  }
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.println("   Completado   ");
+  delay(1000);
+  check = 0;
+  lcd.clear();
+  digitalWrite(MOTOR_X_ENABLE, HIGH);
+  digitalWrite(MOTOR_Y_ENABLE, HIGH);
+  out_Menu_2_modificar();
+}
+```
+lo primero que pasa es que se activan los motores de ambos ejes, luego se establecen las velocidad para ambos ejes con sus respectivas variables, se muestran algunos mensajes de estado en la pantalla, se establece la posicion y luego entra en un ciclo while.
+
+este ciclo while detiene el codigo, pero logra mover los ambos ejes en paralelo hasta que alcancen la posicion esperada.
+
+Finalmente limpiamos la pantalla, mostramos un mensaje y apagamos los motores para evitar sobrecalentamiento de estos, luego te devolvemos al submenu enceder.
+
+### Rutina en ambos ejes 
+
+esta rutina tiene un funcionamiento similar, aca pasan varias cosas, lo principal es que al activar esta rutina se detiene la lectura del boton y esta pasa a estar dentro del ciclo while.
+
+Luego te encontraras dos ciclos while uno para avanzar y otro para retroceder. te recordamos que el sistema se movera desde su punto actual hasta la posicion esperada y luego volvera al anterior punto actual, todo esto en ciclo.
+
+para detener el ciclos debes hacer click y se detendra el ciclo al instante.
+
+```C++
+void Rutina_move() {
+  if (submenu_encender_rutinatask == true) {
+    lcd.setCursor(0, 1);
+    lcd.print("Rutina Loop");
+    lcd.setCursor(0, 0);
+    lcd.print("Click Salir");
+    Serial.println("Rutina Click");
+    stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
+    stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
+
+    stepper_X.setDecelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
+    stepper_Y.setDecelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
+
+    stepper_X.setAccelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
+    stepper_Y.setAccelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
+
+    stepper_Y.setTargetPositionInMillimeters(distancia_Y);
+    stepper_X.setTargetPositionInMillimeters(distancia_X);
+    while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete()))
+    {
+      button.read();
+      stepper_X.processMovement();
+      stepper_Y.processMovement();
+    }
+    stepper_Y.setTargetPositionInMillimeters(0);
+    stepper_X.setTargetPositionInMillimeters(0);
+
+    while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete()))
+    {
+      button.read();
+      stepper_X.processMovement();
+      stepper_Y.processMovement();
+    }
+  }
+}
+```
+
+lo primero es establecer la velocidad para ambos ejes, luego la desaceleracion y la aceleracion, luego le entregamos una posicion esperada pasa al ciclo while logrando que el sistema se desplaze hacia adelante.
+
+Dentro del ciclo while que logra mover las motores de forma sincrona, y aparte se encarga de leer el boton para que puedas detener la rutina al instante.
+
+luego establecemos segunda posicion para ambos ejes para lograr que el sistema vuelva a la posicion anterior.
+
+se ocupa otro ciclo while para mover los motores y leer el boton.
+
+cuando presionas el boton la rutina se detendra al instante.
+
+### Mover cada eje por separado
+
+para mover cada eje por separado puedes ocupar las pantallas del submenu 3 y 4, que son las encargadas de desplazar un solo eje. para detener este ciclo funciona de la misma forma que el ciclo de ambos ejes, solamente haciendo un click.
+
+
+```C++
+void Rutina_move_X() {
+  if (submenu_encender_rutinatask == true) {
+    lcd.setCursor(0, 1);
+    lcd.print("Rutina en  X");
+    lcd.setCursor(0, 0);
+    lcd.print("Click Salir");
+    Serial.println("Rutina Click");
+    stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
+
+    stepper_X.setDecelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
+
+    stepper_X.setAccelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
+
+    stepper_X.setTargetPositionInMillimeters(distancia_X);
+    while (!stepper_X.motionComplete()) 
+    {
+      button.read();
+      stepper_X.processMovement();
+     
+    }
+    stepper_X.setTargetPositionInMillimeters(0);
+
+    while (!stepper_X.motionComplete()) 
+    {
+      button.read();
+      stepper_X.processMovement();
+    }
+  }
+}
+```
+
+lo primero comprobar rutina task, que es la encargada de activar y detener la rutina, se muestran algunos mensajes, se establece la velocidad, desaceleracion y aceleracion para el respecto eje, luego esteblece una posicion esperada y da paso al ciclo while.
+
+al igual que las otras rutinas el while mueve los motores de forma sincrona y se encarga de revisar el estado del boton.
+
+luego establece una segunda posicion y vuelve a pasar por un ciclo while.
+
+esta rutina se repite para ambos ejes, es el mismo codigo o rutina solamente cambian el eje y las variables.
+
+```C++
+void Rutina_move_Y() {
+  if (submenu_encender_rutinatask == true) {
+    lcd.setCursor(0, 1);
+    lcd.print("Rutina en  Y");
+    lcd.setCursor(0, 0);
+    lcd.print("Click Salir");
+    Serial.println("Rutina Click");
+    stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
+    stepper_Y.setDecelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
+    stepper_Y.setAccelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
+    stepper_Y.setTargetPositionInMillimeters(distancia_Y);
+    while (!stepper_Y.motionComplete()) 
+    {
+      button.read();
+      stepper_Y.processMovement();
+     
+    }
+    stepper_Y.setTargetPositionInMillimeters(0);
+    while (!stepper_Y.motionComplete()) 
+    {
+      button.read();
+      stepper_Y.processMovement();
+    }
+  }
+}
+```
+
+### AutoHome 
+
+
+El autoHome al inicio esta desactivo pero puedes activarlo descomentando unas lineas, ahora bien si no los activas el sistema asume que el punto 0 es la posicion actual.
+
+al realizar un autohome se hace de forma automatica para los dos ejes, en caso de no encontrar el inicio se detendra el codigo y tendras que reiniciar el sistema. todo esto se ira mostrando en la pantalla que estes ocupando.
+
+
+```C++
+void homi_X() {
+  digitalWrite(MOTOR_X_ENABLE, LOW);
+  lcd.clear();
+  Serial.println("AutoHomeX");
+  lcd.setCursor(0, 0);
+  lcd.print("AutoHome X");
+
+  if (stepper_X.moveToHomeInMillimeters(-1, 100, 380, LIMIT_X_SWITCH_PIN) == true)
+  {
+    Serial.println("HOMING X OK");
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("AutoHome X OK");
+    delay(1000);
+    digitalWrite(MOTOR_X_ENABLE, HIGH);
+
+  }
+  else {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("AutoHome X Error");
+    Serial.println("Error");
+    while (true) {
+      digitalWrite(DEBUG_LED, HIGH);
+      delay(50);
+      digitalWrite(DEBUG_LED, LOW);
+      delay(50);
+    }
+    Serial.println("Error eje X");
+  }
+
+}
+
+```
+lo primeor es activar el motor del eje, y se llama a una funcion interna de la libreria a la que se le entregan unos valores y devuelve un valor.
+
+
+```C++
+  if (stepper_X.moveToHomeInMillimeters(-1, 100, 380, LIMIT_X_SWITCH_PIN) == true)
+ ```
+ esta linea recoge un eje y le dice que se mueva al inicio.
+
+ El primer valor "-1" es la direccion en la que se movera el motor. 
+ 
+ el segundo valor es la velocidad con la que se movera al inicio.
+
+ el tercer valor es la distancia maxima que se puede desplazar antes de disparar un error.
+
+ el cuarto valor es entregarle el final de carrera del eje.
+
+ Si el final de carrera se activa devuelve un valor verdadero y guarda esta posicion como 0 y avanza al siguiente eje.
+
+ si no se alcanza al final de carrera se muestra un mensaje de error en el display y se activa un led que es opcional agregarlo. si el error se llega a disparar debes reiniciar el sistema.
+
+ el codigo para el otro eje funciona de la misma forma que este eje.
+
+```C++
+  void homi_Y() {
+  digitalWrite(MOTOR_Y_ENABLE, LOW);
+
+  lcd.clear();
+  Serial.println("AutoHomeY");
+  lcd.setCursor(0, 0);
+  lcd.print("AutoHome Y");
+
+  if (stepper_Y.moveToHomeInMillimeters(-1, 100, 380, LIMIT_Y_SWITCH_PIN) == true)
+  {
+    Serial.println("HOMING Y OK");
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("AutoHome Y OK");
+    delay(1000);
+    digitalWrite(MOTOR_Y_ENABLE, HIGH);
+
+  }
+  else {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("AutoHome Y Error");
+    Serial.println("Error");
+    while (true) {
+      digitalWrite(DEBUG_LED, HIGH);
+      delay(50);
+      digitalWrite(DEBUG_LED, LOW);
+      delay(50);
+    }
+    Serial.println("Error eje Y");
+  }
+}
+ ```
+
+
