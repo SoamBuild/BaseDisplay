@@ -245,7 +245,7 @@ void menuDisplay(int mode) {
     case 8:
       lcd.clear();
       lcd.setCursor(0,0);
-      lcd.print("submenu_multiplicador_valuemultiplicador");
+      lcd.print("Multiplicador");
       break;
     
     case 9:

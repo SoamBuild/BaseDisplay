@@ -240,7 +240,7 @@ void menuDisplay(int mode) {
       lcd.setCursor(17, 0);
       lcd.print("6/9");
       lcd.setCursor(0,0);
-      lcd.print("submenu_multiplicador_valuemultiplicador");
+      lcd.print("Multiplicador");
       lcd.setCursor(0,1);
       lcd.print("Valor_ X"+String(submenu_multiplicador_valuemultiplicador));
       break;
