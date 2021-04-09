@@ -128,7 +128,7 @@ void setup()
   //homi_Y();
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("MotorControl 1.3");
+  lcd.print("MotorControl 1.2");
   delay(2000);
   lcd.clear();
 }
