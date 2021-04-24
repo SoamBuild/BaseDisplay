@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>WebMotorControl</title>
+    <header>
+    <h1 class="thead">Motor Control Web</h1>
+    <p class="info">Mesa vibratoria controlable en 2 ejes con el objetivo de utilizarla <br/>
+       como sistema de estandarización de sistemas de movimiento <br/>para la calibración 
+       de los sensores de desplazamiento</p>
+    </header>
+</head>
+
+<body>
+    <div class=tableback>
+        <h2>Value motor</h2>
+        <div class="value">
+
+            <div class="Motorx">
+                <h2>Motor eje X</h2>
+                <label for="Velocidad">Velocidad Motor X</label>
+                <input class="sss" type="number" id="Velocidad">
+
+                <label for="Distancia">Distancia Motor Y</label>
+                <input class="sss" type="number" id="Distancia">
+            </div>
+            <div class="Motory">
+                <h2>Motor eje Y</h2>
+                <label for="Velocidad">Velocidad Motor Y</label>
+                <input class="sss" type="number" id="Velocidad">
+
+                <label for="Distancia">Distancia Motor Y</label>
+                <input class="sss" type="number" id="Distancia">
+            </div>
+        </div>
+    </div>
+    <div class="Control">
+        <h2>Control Motors</h2>
+        <button>Move</button>
+        <button>Move X</button>
+        <button>Move Y</button>
+        <button>Stop</button>
+    </div>
+</body>
+
+</html>
