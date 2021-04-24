@@ -1,13 +1,12 @@
 .thead {
     font-family: 'Trebuchet MS';
-    color:#141414;
+    color: #141414;
     text-align: center;
     font-size: 40px;
     font-weight: bold;
 }
 
 html {
-   
     background-color: #f5eef3;
 }
 
@@ -19,11 +18,10 @@ header {
 }
 
 .info {
-   
     font-size: 15px;
     font-family: 'Trebuchet MS';
     margin: auto;
-    color:#141414;
+    color: #141414;
     text-align: center;
     padding: 5px 5px 15px 5px;
 }
@@ -135,7 +133,7 @@ header {
     display: inline-block;
     font-size: 16px;
 }
+
 .Control button:active {
-    
     background-color: #f3eb80;
-    }
+}
