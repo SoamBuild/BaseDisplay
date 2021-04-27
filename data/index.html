@@ -22,16 +22,16 @@
         <div class="value">
             <div class="Motorx">
                 <h2>Eje X</h2>
-                <label for="Velocidad">Velocidad</label>
+                <label for="Velocidad">Velocidad mm</label>
                 <input id="VelX" type="number" id="Velocidad">
-                <label for="Distancia">Distancia</label>
+                <label for="Distancia">Distancia mm/s</label>
                 <input id="DisX" type="number" id="Distancia">
             </div>
             <div class="Motory">
                 <h2>Eje Y</h2>
-                <label for="Velocidad">Velocidad</label>
+                <label for="Velocidad">Velocidad mm</label>
                 <input id="VelY" type="number" id="Velocidad">
-                <label for="Distancia">Distancia</label>
+                <label for="Distancia">Distancia mm/s</label>
                 <input id="DisY" type="number" id="Distancia">
             </div>
         </div>
@@ -44,7 +44,7 @@
                 var DistanciaX = document.getElementById("DisX").value;
                 var VelocidadY = document.getElementById("VelY").value;
                 var DistanciaY = document.getElementById("DisY").value;
-                data = `Velx=${VelocidadX},Disx=${DistanciaX},Vely=${VelocidadY},Disy=${DistanciaY}`
+                data = `${VelocidadX},${DistanciaX},${VelocidadY},${DistanciaY}`
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", "/Move?value=" + data, true);
                 xhr.send();
@@ -52,7 +52,7 @@
             function MoveX() {
                 var VelocidadX = document.getElementById("VelX").value;
                 var DistanciaX = document.getElementById("DisX").value;
-                data = `Velx=${VelocidadX},Disx=${DistanciaX}`
+                data = `${VelocidadX},${DistanciaX}`
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", "/MoveX?value=" + data, true);
                 xhr.send();
@@ -60,7 +60,7 @@
             function MoveY() {
                 var VelocidadY = document.getElementById("VelY").value;
                 var DistanciaY = document.getElementById("DisY").value;
-                data = `Vely=${VelocidadY},Disy=${DistanciaY}`
+                data = `${VelocidadY},${DistanciaY}`
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", "/MoveY?value=" + data, true);
                 xhr.send();
