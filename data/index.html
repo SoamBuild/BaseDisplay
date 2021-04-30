@@ -14,8 +14,6 @@
             de los sensores de desplazamiento</p>
     </header>
 </head>
-
-
 <body>
     <div class=tableback>
         <h2>Value motor</h2>
@@ -36,44 +34,7 @@
             </div>
         </div>
     </div>
-    <div class="code">
-        <script>
-            var data = ""
-            function Move() {
-                var VelocidadX = document.getElementById("VelX").value;
-                var DistanciaX = document.getElementById("DisX").value;
-                var VelocidadY = document.getElementById("VelY").value;
-                var DistanciaY = document.getElementById("DisY").value;
-                data = `${VelocidadX},${DistanciaX},${VelocidadY},${DistanciaY}`
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "/Move?value=" + data, true);
-                xhr.send();
-            }
-            function MoveX() {
-                var VelocidadX = document.getElementById("VelX").value;
-                var DistanciaX = document.getElementById("DisX").value;
-                data = `${VelocidadX},${DistanciaX}`
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "/MoveX?value=" + data, true);
-                xhr.send();
-            }
-            function MoveY() {
-                var VelocidadY = document.getElementById("VelY").value;
-                var DistanciaY = document.getElementById("DisY").value;
-                data = `${VelocidadY},${DistanciaY}`
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "/MoveY?value=" + data, true);
-                xhr.send();
-            }
-            function Stop() {
-                data = "Stop"
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "/MoveY?value=" + data, true);
-                xhr.send();
-            }
-        </script>
-    </div>
-
+    <script src="test.js"></script>
     <div class="Control">
         <h2>Control Motors</h2>
         <button onclick="Move()">Move</button>
