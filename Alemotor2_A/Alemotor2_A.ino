@@ -226,11 +226,23 @@ void fixdata(int tag, String values, int ndatos) {
     distancia_X= data[1];
     velocidad_Y=data[2];
     distancia_Y=data[3];
-    lcd.clear();
     in_menu_2();
     submenu_encender_modificar=true;
     submenu_encender_indexmenu2=2;
-   // submenu_encender_rutinatask == true
+  }
+    if(tag==2){
+    velocidad_X = data[0];
+    distancia_X= data[1];
+    in_menu_2();
+    submenu_encender_modificar=true;
+    submenu_encender_indexmenu2=3;
+  }
+    if(tag==3){
+    velocidad_Y = data[0];
+    distancia_Y= data[1];
+    in_menu_2();
+    submenu_encender_modificar=true;
+    submenu_encender_indexmenu2=4;
   }
 }
 void loop()
