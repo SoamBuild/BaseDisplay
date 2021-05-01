@@ -77,6 +77,7 @@ const char *ssid = "MotorControl";
 const char *password = "MotorControlV1";
 AsyncWebServer server(80);
 const char separator = ',';
+bool handleweb=false;
 
 void onPressed()
 {
@@ -154,6 +155,7 @@ void setup()
     {
       inputMessage = request->getParam(PARAM_INPUT)->value();
     }
+    handleweb=true;
     Serial.println(inputMessage);
     fixdata(1, inputMessage, 4);
     request->send(200, "text/plain", "OK");
@@ -186,7 +188,14 @@ void setup()
       inputMessage = request->getParam(PARAM_INPUT)->value();
     }
     Serial.println(inputMessage);
+    submenu_encender_rutinatask = false;
+    out_Menu_2_modificar();
+    stepper_X.emergencyStop();
+    stepper_Y.emergencyStop();
+    digitalWrite(MOTOR_X_ENABLE, HIGH);
+    digitalWrite(MOTOR_Y_ENABLE, HIGH);
     request->send(200, "text/plain", "OK");
+   
   });
 
   lcd.init();
@@ -211,6 +220,17 @@ void fixdata(int tag, String values, int ndatos) {
     data[i] = values.substring(0, index).toInt();
     values = values.substring(index + 1);
     Serial.println(data[i]);
+  }
+  if(tag==1){
+    velocidad_X = data[0];
+    distancia_X= data[1];
+    velocidad_Y=data[2];
+    distancia_Y=data[3];
+    lcd.clear();
+    in_menu_2();
+    submenu_encender_modificar=true;
+    submenu_encender_indexmenu2=2;
+   // submenu_encender_rutinatask == true
   }
 }
 void loop()

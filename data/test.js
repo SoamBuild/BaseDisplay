@@ -29,6 +29,6 @@ function MoveY() {
 function Stop() {
     data = "Stop"
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/MoveY?value=" + data, true);
+    xhr.open("GET", "/Stop?value=" + data, true);
     xhr.send();
 }
