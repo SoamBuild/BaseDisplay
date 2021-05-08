@@ -77,7 +77,7 @@ const char *ssid = "MotorControl";
 const char *password = "MotorControlV1";
 AsyncWebServer server(80);
 const char separator = ',';
-bool handleweb=false;
+bool handleweb = false;
 
 void onPressed()
 {
@@ -100,13 +100,7 @@ void onPressed()
   }
   if (submenu_encender_rutinatask == true)
   {
-    Serial.println("Salir Rutina");
-    submenu_encender_rutinatask = false;
-    out_Menu_2_modificar();
-    stepper_X.emergencyStop();
-    stepper_Y.emergencyStop();
-    digitalWrite(MOTOR_X_ENABLE, HIGH);
-    digitalWrite(MOTOR_Y_ENABLE, HIGH);
+    rutina_out();
   }
   if (submenu_multiplicador == true)
   {
@@ -155,7 +149,7 @@ void setup()
     {
       inputMessage = request->getParam(PARAM_INPUT)->value();
     }
-    handleweb=true;
+    handleweb = true;
     Serial.println(inputMessage);
     fixdata(1, inputMessage, 4);
     request->send(200, "text/plain", "OK");
@@ -188,61 +182,63 @@ void setup()
       inputMessage = request->getParam(PARAM_INPUT)->value();
     }
     Serial.println(inputMessage);
-    submenu_encender_rutinatask = false;
-    out_Menu_2_modificar();
-    stepper_X.emergencyStop();
-    stepper_Y.emergencyStop();
-    digitalWrite(MOTOR_X_ENABLE, HIGH);
-    digitalWrite(MOTOR_Y_ENABLE, HIGH);
+    rutina_out();
     request->send(200, "text/plain", "OK");
-   
   });
 
   lcd.init();
   lcd.clear();
   lcd.backlight();
-  //homi_X();
-  delay(1000);
-  //homi_Y();
-  lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("MotorControl 1.3");
+  lcd.setCursor(0, 1);
+  lcd.print("Server On");
+  delay(2000);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Red " + String(ssid));
+  lcd.setCursor(0, 1);
+  lcd.print(WiFi.softAPIP());
   delay(2000);
   lcd.clear();
   server.begin();
 }
-void fixdata(int tag, String values, int ndatos) {
+void fixdata(int tag, String values, int ndatos)
+{
   int data[ndatos];
 
-  for (int i = 0; i < ndatos ; i++)
+  for (int i = 0; i < ndatos; i++)
   {
     int index = values.indexOf(separator);
     data[i] = values.substring(0, index).toInt();
     values = values.substring(index + 1);
     Serial.println(data[i]);
   }
-  if(tag==1){
+  if (tag == 1)
+  {
     velocidad_X = data[0];
-    distancia_X= data[1];
-    velocidad_Y=data[2];
-    distancia_Y=data[3];
+    distancia_X = data[1];
+    velocidad_Y = data[2];
+    distancia_Y = data[3];
     in_menu_2();
-    submenu_encender_modificar=true;
-    submenu_encender_indexmenu2=2;
+    submenu_encender_modificar = true;
+    submenu_encender_indexmenu2 = 2;
   }
-    if(tag==2){
+  if (tag == 2)
+  {
     velocidad_X = data[0];
-    distancia_X= data[1];
+    distancia_X = data[1];
     in_menu_2();
-    submenu_encender_modificar=true;
-    submenu_encender_indexmenu2=3;
+    submenu_encender_modificar = true;
+    submenu_encender_indexmenu2 = 3;
   }
-    if(tag==3){
+  if (tag == 3)
+  {
     velocidad_Y = data[0];
-    distancia_Y= data[1];
+    distancia_Y = data[1];
     in_menu_2();
-    submenu_encender_modificar=true;
-    submenu_encender_indexmenu2=4;
+    submenu_encender_modificar = true;
+    submenu_encender_indexmenu2 = 4;
   }
 }
 void loop()
@@ -707,6 +703,16 @@ void out_menu2_multiplicador()
   lcd.print("Volviendo");
   delay(1000);
   menuDisplay(1);
+}
+void rutina_out()
+{
+  Serial.println("Salir Rutina");
+  submenu_encender_rutinatask = false;
+  out_Menu_2_modificar();
+  stepper_X.emergencyStop();
+  stepper_Y.emergencyStop();
+  digitalWrite(MOTOR_X_ENABLE, HIGH);
+  digitalWrite(MOTOR_Y_ENABLE, HIGH);
 }
 
 //Movimiento de prueba
