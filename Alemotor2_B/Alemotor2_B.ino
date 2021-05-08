@@ -98,13 +98,7 @@ void onPressed()
   }
   if (submenu_encender_rutinatask == true)
   {
-    Serial.println("Salir Rutina");
-    submenu_encender_rutinatask = false;
-    out_Menu_2_modificar();
-    stepper_X.emergencyStop();
-    stepper_Y.emergencyStop();
-    digitalWrite(MOTOR_X_ENABLE, HIGH);
-    digitalWrite(MOTOR_Y_ENABLE, HIGH);
+    rutina_out();
   }
   if (submenu_multiplicador == true && menu_indexmenu == 6)
   {
@@ -193,13 +187,16 @@ void setup()
   lcd.init();
   lcd.clear();
   lcd.backlight();
-  //homi_X();
   delay(1000);
-  //homi_Y();
-  lcd.clear();
-  lcd.setCursor(2, 0);
+  lcd.setCursor(0, 0);
   lcd.print("MotorControl 1.3");
-  delay(2000);
+  lcd.setCursor(0, 1);
+  lcd.print("Server On");
+  lcd.setCursor(0, 2);
+  lcd.print("Red " + String(ssid));
+  lcd.setCursor(0, 3);
+  lcd.print(WiFi.softAPIP());
+  delay(4000);
   lcd.clear();
   server.begin();
 }
