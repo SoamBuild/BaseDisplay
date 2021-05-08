@@ -45,7 +45,6 @@ EasyButton button(ENCODER_SW);
 #define ROTARYSTEPS 1
 int newPos;
 int lastPos = -1;
-//const int pulsador = 32;
 
 //Debounce encodervariable
 int check = 0;
