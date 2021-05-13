@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>WebMotorControl</title>
+    <header>
+        <h1 class="thead">Motor Control Web</h1>
+        <p class="info">Mesa vibratoria controlable en 2 ejes con el objetivo de utilizarla <br />
+            como sistema de estandarización de sistemas de movimiento <br />para la calibración
+            de los sensores de desplazamiento</p>
+    </header>
+</head>
+
+<body>
+    <div class=tableback>
+        <h2>Value motor</h2>
+        <div class="value">
+            <div class="motorBox">
+                <h2>Eje X</h2>
+                <label for="VelX">Velocidad mm</label>
+                <input id="VelX" type="number">
+                <label for="DisX">Distancia mm/s</label>
+                <input id="DisX" type="number">
+            </div>
+            <div class="motorBox">
+                <h2>Eje Y</h2>
+                <label for="VelY">Velocidad mm</label>
+                <input id="VelY" type="number">
+                <label for="DisY">Distancia mm/s</label>
+                <input id="DisY" type="number">
+            </div>
+            <div class="tiempoBox">
+                <h2>Timer</h2>
+                <label for="Tiempo">Tiempo en segundo</label>
+                <input id="Tiempo" type="number" placeholder="Vacio para desactivar">
+            </div>
+        </div>
+
+    </div>
+
+    <script src="test.js"></script>
+    <div class="Control">
+        <h2>Control Motors</h2>
+        <button onclick="Move()">Move</button>
+        <button onclick="MoveX()">Move X</button>
+        <button onclick="MoveY()">Move Y</button>
+        <button onclick="Stop()">Stop</button>
+    </div>
+</body>
+
+</html>
