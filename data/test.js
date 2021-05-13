@@ -5,6 +5,8 @@ function Move() {
     var DistanciaX = document.getElementById("DisX").value;
     var VelocidadY = document.getElementById("VelY").value;
     var DistanciaY = document.getElementById("DisY").value;
+    var timer= document.getElementById("Tiempo").value;
+    Offtime(timer);
     data = `${VelocidadX},${DistanciaX},${VelocidadY},${DistanciaY}`
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/Move?value=" + data, true);
@@ -31,4 +33,16 @@ function Stop() {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/Stop?value=" + data, true);
     xhr.send();
+}
+
+function Offtime(timedata){
+    if(timedata >= 1){
+    setTimeout(function(){
+        Stop();
+        
+     }, timedata*1000);    
+   
+    }
+
+
 }

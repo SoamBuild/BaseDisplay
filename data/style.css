@@ -46,7 +46,7 @@ header {
     margin: auto;
 }
 
-.Motorx {
+.motorBox {
     float: left;
     font-weight: normal;
     background-color: #878686;
@@ -62,7 +62,7 @@ header {
     color: #141414;
 }
 
-.Motorx input {
+.motorBox input {
     display: block;
     margin: auto;
     width: auto;
@@ -77,23 +77,24 @@ header {
     margin-left: 5px;
 }
 
-.Motory {
+.tiempoBox {
     float: left;
     font-weight: normal;
     background-color: #878686;
     border-radius: 5px;
     margin-top: 10px;
     margin-bottom: 10px;
-    margin-left: 10px;
+    margin-right: 5px;
     padding: 6px 6px 6px 6px;
     font-size: 20px;
     font-family: 'Trebuchet MS';
     display: block;
     text-align: center;
-    color: #141414;
+    color:#141414;
+    
 }
 
-.Motory input {
+.tiempoBox input {
     display: block;
     margin: 0 auto;
     width: auto;
@@ -102,7 +103,7 @@ header {
     border-radius: 5px;
     background-color: white;
     width: 200px;
-    margin-bottom: 10px;
+    margin-bottom: 82px;
     margin-top: 10px;
     margin-right: 5px;
     margin-left: 5px;
@@ -120,6 +121,7 @@ header {
     padding-top: 2px;
     padding-bottom: 5px;
 }
+
 
 .Control button {
     margin: 1em;
