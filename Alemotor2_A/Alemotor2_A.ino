@@ -49,6 +49,10 @@ int lastPos = -1;
 //Debounce encodervariable
 int check = 0;
 
+//Timer
+unsigned long tiempoactual;
+int tiempoLimite;
+
 //Navegacion de menu
 bool menu_modificar = false;
 int menu_indexmenu = 1;
@@ -244,7 +248,7 @@ void loop()
 {
 
   if (menu_modificar == false && submenu_encender == false)
-    rotary(1, 11);
+    rotary(1, 12);
 
   if (menu_modificar == true)
   {
@@ -371,7 +375,6 @@ void menuDisplay(int mode)
     lcd.setCursor(0, 0);
     lcd.print("submenu_multiplicador_valuemultiplicador");
     break;
-
   case 9:
     lcd.clear();
     lcd.setCursor(0, 0);
@@ -380,9 +383,14 @@ void menuDisplay(int mode)
   case 10:
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("Reset valores");
+    lcd.print("Timer");
     break;
   case 11:
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Reset valores");
+    break;
+  case 12:
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Home");
@@ -443,6 +451,15 @@ void cambiarValores(bool ok, int index)
     }
     if (index == 10)
     {
+      tiempoLimite = newPos * submenu_multiplicador_valuemultiplicador;
+      lcd.setCursor(0, 1);
+      lcd.cursor();
+      lcd.setCursor(0, 1);
+      lcd.print(String(tiempoLimite) + " s");
+      //tiempoLimite;
+    }
+    if (index == 11)
+    {
       //reiniciar todos los datos.
       velocidad_X = 0;
       distancia_X = 0;
@@ -456,8 +473,9 @@ void cambiarValores(bool ok, int index)
       lcd.clear();
       menuDisplay(1);
     }
-    if (index == 11)
+    if (index == 12)
     {
+
       //Autohome de ambos ejes
       homi_X();
       delay(1000);
@@ -644,7 +662,6 @@ void in_menu_2()
   //activo el contador de menu 2
   submenu_encender_count = true;
 }
-
 void out_Menu_2()
 {
   Serial.println("OUT_SUBMENU");
@@ -745,8 +762,10 @@ void Test_rutina()
 //movimiento en loop
 void Rutina_move()
 {
+
   if (submenu_encender_rutinatask == true)
   {
+    if()
     lcd.setCursor(0, 1);
     lcd.print("Rutina Loop");
     lcd.setCursor(0, 0);
