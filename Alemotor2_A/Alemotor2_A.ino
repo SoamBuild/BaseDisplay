@@ -383,7 +383,7 @@ void menuDisplay(int mode)
   case 10:
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("Timer");
+    lcd.print("Activar SSID");
     break;
   case 11:
     lcd.clear();
@@ -547,19 +547,22 @@ void sub_cambiarValores(bool sub_ok, int sub_index)
       submenu_encender_rutinatask = true;
       digitalWrite(MOTOR_X_ENABLE, LOW);
       digitalWrite(MOTOR_Y_ENABLE, LOW);
-      Rutina_move();
+      //Rutina_move();
+      turbomove(1);
     }
     if (sub_index == 3)
     {
       submenu_encender_rutinatask = true;
       digitalWrite(MOTOR_X_ENABLE, LOW);
-      Rutina_move_X();
+      //Rutina_move_X();
+      turbomove(3);
     }
     if (sub_index == 4)
     {
       submenu_encender_rutinatask = true;
       digitalWrite(MOTOR_Y_ENABLE, LOW);
-      Rutina_move_Y();
+      //Rutina_move_Y();
+      turbomove(2);
     }
     if (sub_index == 5)
     {
@@ -722,6 +725,8 @@ void out_menu2_multiplicador()
 }
 void rutina_out()
 {
+
+  lcd.clear();
   Serial.println("Salir Rutina");
   submenu_encender_rutinatask = false;
   out_Menu_2_modificar();
@@ -729,6 +734,7 @@ void rutina_out()
   stepper_Y.emergencyStop();
   digitalWrite(MOTOR_X_ENABLE, HIGH);
   digitalWrite(MOTOR_Y_ENABLE, HIGH);
+  
 }
 
 //Movimiento de prueba
@@ -765,7 +771,7 @@ void Rutina_move()
 
   if (submenu_encender_rutinatask == true)
   {
-    if()
+
     lcd.setCursor(0, 1);
     lcd.print("Rutina Loop");
     lcd.setCursor(0, 0);
@@ -799,6 +805,80 @@ void Rutina_move()
     }
   }
 }
+void turbomove(int axis)
+{
+  if (submenu_encender_rutinatask == true)
+  {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Click Salir");
+    Serial.println("Rutina Click");
+
+    stepper_X.setSpeedInMillimetersPerSecond(velocidad_X);
+    stepper_Y.setSpeedInMillimetersPerSecond(velocidad_Y);
+
+    stepper_X.setDecelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
+    stepper_Y.setDecelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
+
+    stepper_X.setAccelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
+    stepper_Y.setAccelerationInMillimetersPerSecondPerSecond(velocidad_Y * 3);
+
+    stepper_Y.setTargetPositionInMillimeters(distancia_Y);
+    stepper_X.setTargetPositionInMillimeters(distancia_X);
+    if (axis == 1)
+    {
+      lcd.setCursor(0, 1);
+      lcd.print("Rutina en  XY");
+      while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete()))
+    {
+      button.read();
+      stepper_X.processMovement();
+      stepper_Y.processMovement();
+    }
+    stepper_Y.setTargetPositionInMillimeters(0);
+    stepper_X.setTargetPositionInMillimeters(0);
+
+    while ((!stepper_X.motionComplete()) || (!stepper_Y.motionComplete()))
+    {
+      button.read();
+      stepper_X.processMovement();
+      stepper_Y.processMovement();
+    }
+    }
+    if (axis == 2)
+    {
+      lcd.setCursor(0, 1);
+      lcd.print("Rutina en  Y");
+      while (!stepper_Y.motionComplete())
+      {
+        button.read();
+        stepper_Y.processMovement();
+      }
+      stepper_Y.setTargetPositionInMillimeters(0);
+      while (!stepper_Y.motionComplete())
+      {
+        button.read();
+        stepper_Y.processMovement();
+      }
+    }
+    if (axis == 3)
+    {
+      lcd.setCursor(0, 1);
+      lcd.print("Rutina en  X");
+      while (!stepper_X.motionComplete())
+      {
+        button.read();
+        stepper_X.processMovement();
+      }
+      stepper_X.setTargetPositionInMillimeters(0);
+      while (!stepper_X.motionComplete())
+      {
+        button.read();
+        stepper_X.processMovement();
+      }
+    }
+  }
+}
 void Rutina_move_X()
 {
   if (submenu_encender_rutinatask == true)
@@ -815,6 +895,7 @@ void Rutina_move_X()
     stepper_X.setAccelerationInMillimetersPerSecondPerSecond(velocidad_X * 3);
 
     stepper_X.setTargetPositionInMillimeters(distancia_X);
+
     while (!stepper_X.motionComplete())
     {
       button.read();
@@ -829,6 +910,7 @@ void Rutina_move_X()
     }
   }
 }
+
 void Rutina_move_Y()
 {
   if (submenu_encender_rutinatask == true)
