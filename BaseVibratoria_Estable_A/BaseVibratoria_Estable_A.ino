@@ -745,6 +745,7 @@ void Test_rutina()
 //movimiento en loop
 void Rutina_move()
 {
+  lcd.clear();
   if (submenu_encender_rutinatask == true)
   {
     lcd.setCursor(0, 1);
@@ -782,6 +783,7 @@ void Rutina_move()
 }
 void Rutina_move_X()
 {
+   lcd.clear();
   if (submenu_encender_rutinatask == true)
   {
     lcd.setCursor(0, 1);
@@ -812,6 +814,7 @@ void Rutina_move_X()
 }
 void Rutina_move_Y()
 {
+  lcd.clear();
   if (submenu_encender_rutinatask == true)
   {
     lcd.setCursor(0, 1);
@@ -847,7 +850,7 @@ void homi_X()
   lcd.setCursor(0, 0);
   lcd.print("AutoHome X");
 
-  if (stepper_X.moveToHomeInMillimeters(-1, 100, 380, LIMIT_X_SWITCH_PIN) == true)
+  if (stepper_X.moveToHomeInMillimeters(-1, 100, 500, LIMIT_X_SWITCH_PIN) == true)
   {
     Serial.println("HOMING X OK");
     lcd.clear();
@@ -883,7 +886,7 @@ void homi_Y()
   lcd.setCursor(0, 0);
   lcd.print("AutoHome Y");
 
-  if (stepper_Y.moveToHomeInMillimeters(-1, 100, 380, LIMIT_Y_SWITCH_PIN) == true)
+  if (stepper_Y.moveToHomeInMillimeters(-1, 100, 500, LIMIT_Y_SWITCH_PIN) == true)
   {
     Serial.println("HOMING Y OK");
     lcd.clear();
