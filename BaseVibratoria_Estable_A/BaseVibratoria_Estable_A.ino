@@ -705,6 +705,7 @@ void out_menu2_multiplicador()
 }
 void rutina_out()
 {
+  lcd.clear();
   Serial.println("Salir Rutina");
   submenu_encender_rutinatask = false;
   out_Menu_2_modificar();
