@@ -8,14 +8,15 @@
     font-size: 50px;
     font-weight: bold;
     padding-top: 0px;
-    padding-bottom: 30px;
+    padding-bottom: 80px;
 }
 
-.advancebutton {
+.advancebutton  {
+   
     cursor: pointer;
     font-size: 20px;
     font-family: 'Trebuchet MS';
-    /* padding: 10px 20px; */
+   /* padding: 10px 20px; */
     width: 220px;
     height: 40px;
     display: inline-block;
@@ -26,12 +27,13 @@
     border-radius: 3px;
     margin-top: 5px;
     margin-bottom: 15px;
+   
+    
 }
-
 .advancebutton:hover {
-    color: #ef8354;
+    color:#ef8354;
     transition-duration: 0.4s;
-    background-color: #878686;
+   background-color:#878686;
 }
 
 html {
@@ -156,7 +158,8 @@ header {
     border: none;
     border-radius: 2px;
     color: white;
-    padding: 10px 20px;
+    width: 100px;
+    height: 40px;
     text-align: center;
     text-decoration: none;
     display: inline-block;

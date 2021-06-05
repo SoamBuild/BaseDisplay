@@ -1,7 +1,14 @@
 html {
     background-color: #4f5d75;
 }
-
+.Phead{
+    
+    font-family: 'Trebuchet MS';
+    color: #ef8354;
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+}
 .InfoBanner {
     margin: auto;
     display: block;
@@ -35,7 +42,6 @@ html {
 
 .MotorBox {
     text-align: center;
-   
     width: auto;
     height: auto;
     background-color: #d9d9d9;
@@ -43,21 +49,20 @@ html {
 }
 
 .PosicionHead {
+    
+    margin-bottom: 20px;
+    padding-bottom: 57px;
     font-family: 'Trebuchet MS';
+    font-size: 30px;
     text-align: center;
 }
 
 .Posicionvalor {
+    padding-bottom: 50px;
     font-family: 'Trebuchet MS';
     text-align: center;
 }
 
-.Posicionbox {
-    display: inline-block;
-    width: 220px;
-    height: 260px;
-    background-color: red;
-}
 
 .Valuetomove {
     font-weight: normal;
@@ -86,4 +91,33 @@ html {
     margin-top: 10px;
     margin-right: 5px;
     margin-left: 5px;
+}
+.Control {
+    font-size: 20px;
+    font-family: 'Trebuchet MS';
+    /* display: block;*/
+    text-align: center;
+    color: #141414;
+    background-color: #d9d9d9;
+    border-radius: 5px;
+    margin-top: 10px;
+    padding-top: 2px;
+    padding-bottom: 5px;
+}
+.Control button {
+    margin: 1em;
+    background-color: #878686;
+    border: none;
+    border-radius: 2px;
+    color: white;
+   width: 100px;
+   height: 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.Control button:hover {
+    background-color: #f3eb80;
 }

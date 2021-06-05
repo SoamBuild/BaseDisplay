@@ -9,35 +9,36 @@
     <style></style>
     <title>MotorAvanzado</title>
     <div class="InfoBanner">
-        <h1>MotorControl avanzado</h1>
+        <h1 class="Phead">MotorControl avanzado</h1>
 
-        <button class="Infobox">Home</button>
-        <button class="Infobox">Motor</button>
-        <button class="Infobox">X</button>
-        <button class="Infobox">Y</button>
+        <button class="Infobox"role="link" onclick="window.location='index.html'" >Home</button>
+        <button class="Infobox" onclick="Mode1()">Mode1</button>
+        <button class="Infobox"onclick="Mode2()">Mode2</button>
+        <button class="Infobox"onclick="Mode3()">Mode3</button>
 
     </div>
 
 </head>
 
 <body>
+    <script src="avanzado.js"></script>
     <div class="MotorBox">
-        <div class="Posicionbox">
-
-            <h2 class="PosicionHead">Posiciones</h2>
-            <h2 class="Posicionvalor">X:00 mm</h2>
-            <h2 class="Posicionvalor">Y:00 mm</h2>
-        </div>
+        
             <div class="Valuetomove">
-                <h2>Eje X</h2>
-                <label for="VelX">Velocidad mm</label>
+                <h2>Motor</h2>
+                <label for="VelX" id="Lvalue1">M1 Value1</label>
                 <input id="VelX" type="number">
-                <label for="DisX">Distancia mm/s</label>
+                <label for="DisX" id="Lvalue2">M1 Value2</label>
                 <input id="DisX" type="number">
             </div>
-       
-
-    </div>
+   </div>
+   <div class="Control">
+    <h2>Control Motors</h2>
+    <button onclick="Move()">Move</button>
+    <button onclick="MoveX()">Move X</button>
+    <button onclick="MoveY()">Move Y</button>
+    <button onclick="Stop()">Stop</button>
+</div>
 </body>
 
 </html>
