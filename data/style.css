@@ -42,7 +42,7 @@ header {
 .value {
     border: 5px;
     background-size: contain;
-    display: inline-block;
+    display: block;
     justify-content: center;
   align-items: center;
 }
@@ -97,6 +97,19 @@ header {
 
 .tiempoBox input {
     display: block;
+    margin: 0 auto;
+    width: auto;
+    height: 26px;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    width: 200px;
+    margin-bottom: 82px;
+    margin-top: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
+    /*
+    display: block;
     margin:  auto;
     width: auto;
     height: 26px;
@@ -107,7 +120,7 @@ header {
     margin-bottom: 10px;
     margin-top: 82px;
     margin-right: 5px;
-    margin-left: 5px;
+    margin-left: 5px;*/
 }
 
 .Control {
