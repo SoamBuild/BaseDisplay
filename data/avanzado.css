@@ -1,0 +1,89 @@
+html {
+    background-color: #4f5d75;
+}
+
+.InfoBanner {
+    margin: auto;
+    display: block;
+    font-family: 'Trebuchet MS';
+    text-align: center;
+    font-size: 20px;
+    color: #ef8354;
+}
+
+.Infobox {
+    cursor: pointer;
+    font-size: 20px;
+    font-family: 'Trebuchet MS';
+    /* padding: 10px 20px; */
+    width: 150px;
+    height: 40px;
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+    background-color: #d9d9d9;
+    border: none;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.Infobox:hover {
+    color: black;
+    transition-duration: 0.4s;
+    background-color: #ef8354;
+}
+
+.MotorBox {
+    text-align: center;
+   
+    width: auto;
+    height: auto;
+    background-color: #d9d9d9;
+    border-radius: 5px;
+}
+
+.PosicionHead {
+    font-family: 'Trebuchet MS';
+    text-align: center;
+}
+
+.Posicionvalor {
+    font-family: 'Trebuchet MS';
+    text-align: center;
+}
+
+.Posicionbox {
+    display: inline-block;
+    width: 220px;
+    height: 260px;
+    background-color: red;
+}
+
+.Valuetomove {
+    font-weight: normal;
+    background-color: #878686;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    padding: 6px 6px 6px 6px;
+    font-size: 20px;
+    font-family: 'Trebuchet MS';
+    display: inline-block;
+    text-align: center;
+}
+
+.Valuetomove input {
+    display: block;
+    margin: auto;
+    width: auto;
+    height: 26px;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    width: 200px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
+}
