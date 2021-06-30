@@ -14,7 +14,7 @@
         <button class="Infobox" role="link" onclick="window.location='/'">Home</button>
         <button class="Infobox" onclick="Mode1()">Mode1</button>
         <button class="Infobox" onclick="Mode2()">Mode2</button>
-        <button class="Infobox" onclick="Mode3()">Mode3</button>
+        <button class="Infobox" onclick="Mode3()">Frecuencia</button>
 
     </div>
 
@@ -24,14 +24,14 @@
     <script src="avanzado.js"></script>
     <div class="MotorBox">
 
-        <div class="Valuetomove">
+        <div class="Valuetomove" id="moveit">
             <h2>Motor</h2>
             <label for="VelX" id="Lvalue1">M1 Value1</label>
             <input id="VelX" type="number">
             <label for="DisX" id="Lvalue2">M1 Value2</label>
             <input id="DisX" type="number">
         </div>
-        <div class="Select">
+        <div id="hola" class="Select">
             <h2>Frecuencia</h2>
 
             <select name="MoveFrecuencia" id="Frecuencias">
