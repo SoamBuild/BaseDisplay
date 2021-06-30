@@ -1,14 +1,15 @@
 html {
     background-color: #4f5d75;
 }
-.Phead{
-    
+
+.Phead {
     font-family: 'Trebuchet MS';
     color: #ef8354;
     text-align: center;
     font-size: 50px;
     font-weight: bold;
 }
+
 .InfoBanner {
     margin: auto;
     display: block;
@@ -49,7 +50,6 @@ html {
 }
 
 .PosicionHead {
-    
     margin-bottom: 20px;
     padding-bottom: 57px;
     font-family: 'Trebuchet MS';
@@ -63,9 +63,8 @@ html {
     text-align: center;
 }
 
-
 .Valuetomove {
-    display:none;
+    display: none;
     font-weight: normal;
     background-color: #878686;
     border-radius: 5px;
@@ -75,7 +74,7 @@ html {
     padding: 6px 6px 6px 6px;
     font-size: 20px;
     font-family: 'Trebuchet MS';
-   /* display: inline-block;*/
+    /* display: inline-block;*/
     text-align: center;
 }
 
@@ -93,15 +92,14 @@ html {
     margin-right: 5px;
     margin-left: 5px;
 }
-.Select{
+
+.Select {
     padding-top: 5px;
     font-size: 20px;
     font-family: 'Trebuchet MS';
 }
 
-
-
-#Frecuencias{
+#Frecuencias {
     position: relative;
     background-color: #878686;
     width: 150px;
@@ -111,9 +109,11 @@ html {
     font-family: 'Trebuchet MS';
     font-size: 20px;
     margin-bottom: 15px;
-    
 }
-#cars:focus{ outline: none;}
+
+#cars:focus {
+    outline: none;
+}
 
 .Control {
     font-size: 20px;
@@ -127,14 +127,15 @@ html {
     padding-top: 2px;
     padding-bottom: 5px;
 }
+
 .Control button {
     margin: 1em;
     background-color: #878686;
     border: none;
     border-radius: 2px;
     color: white;
-   width: 100px;
-   height: 40px;
+    width: 100px;
+    height: 40px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
