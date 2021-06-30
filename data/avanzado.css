@@ -65,6 +65,7 @@ html {
 
 
 .Valuetomove {
+    display:none;
     font-weight: normal;
     background-color: #878686;
     border-radius: 5px;
@@ -74,7 +75,7 @@ html {
     padding: 6px 6px 6px 6px;
     font-size: 20px;
     font-family: 'Trebuchet MS';
-    display: inline-block;
+   /* display: inline-block;*/
     text-align: center;
 }
 
@@ -92,6 +93,31 @@ html {
     margin-right: 5px;
     margin-left: 5px;
 }
+.Select{
+    padding-top: 5px;
+    font-size: 20px;
+
+    font-family: 'Trebuchet MS';
+}
+.hola {
+    
+}
+
+
+#Frecuencias{
+    position: relative;
+    background-color: #878686;
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Trebuchet MS';
+    font-size: 20px;
+    margin-bottom: 15px;
+    
+}
+#cars:focus{ outline: none;}
+
 .Control {
     font-size: 20px;
     font-family: 'Trebuchet MS';
