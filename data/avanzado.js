@@ -1,6 +1,7 @@
 function Mode1() {
-    document.getElementsByClassName("Valuetomove")[0].style.display="display: inline-block";
-   
+
+
+    showinputdata();
     document.getElementById('Lvalue1').innerHTML = '';
     document.getElementById('Lvalue2').innerHTML = 'M1 Value2';
 }
@@ -10,13 +11,17 @@ function Mode2() {
     document.getElementById('Lvalue2').innerHTML = 'Tiempo Seg';
 }
 function Mode3() {
-    document.getElementsByClassName("Valuetomove")[0].style.display="none";
-    document.getElementById("Frecuencias").style.display="inline";
+    showselectdata();
+    //  document.getElementsByClassName("Valuetomove")[0].style.visibility = "hidden";
+    //document.getElementsByClassName("Valuetomove")[0].style.display="visibility: hidden"; 
+    // document.getElementsByClassName("Valuetomove")[0].style.display = "none";
+    // alert("text")
+    //document.getElementsByClassName("Select")[0].style.display = "inline";
+    //document.getElementById("Frecuencias").style.display = "inline";
     // var e = document.getElementById("ddlViewBy");   
     // var strUser = e.value;  
     // console.log(strUser);
-    document.getElementById('Lvalue1').innerHTML = 'M3 Value1';
-    document.getElementById('Lvalue2').innerHTML = 'M3 Value2';
+
 }
 
 function Move() {
@@ -24,4 +29,14 @@ function Move() {
     var strUser = e.value;
     console.log(strUser);
 
+}
+function showinputdata() {
+    document.getElementsByClassName("Valuetomove")[0].style.display = "inline-block";
+    document.getElementById("Frecuencias").style.display = "none";
+    document.getElementsByClassName("Select")[0].style.display = "none";
+}
+function showselectdata() {
+    document.getElementsByClassName("Valuetomove")[0].style.display = "none";
+    document.getElementsByClassName("Select")[0].style.display = "inline";
+    document.getElementById("Frecuencias").style.display = "inline";
 }

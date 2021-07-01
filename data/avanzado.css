@@ -64,6 +64,7 @@ html {
 }
 
 .Valuetomove {
+    visibility: visible;
    /* display: none;*/
     font-weight: normal;
     background-color: #878686;
@@ -94,6 +95,7 @@ html {
 }
 
 .Select {
+    display: none;
     padding-top: 5px;
     font-size: 20px;
     font-family: 'Trebuchet MS';
