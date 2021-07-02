@@ -35,8 +35,7 @@ function Move() {
     }
     seleccion_hz = document.getElementById("Frecuencias");
     seleccion_usr = seleccion_hz.value;
-   // console.log(seleccion_usr);
-
+     console.log(seleccion_usr);
 }
 function showinputdata() {
     document.getElementsByClassName("Valuetomove")[0].style.display = "inline-block";
@@ -48,16 +47,11 @@ function showselectdata() {
     document.getElementsByClassName("Select")[0].style.display = "inline";
     document.getElementById("Frecuencias").style.display = "inline";
 }
-
 function setDis(input_vel_dis, input_tim_dis) {
-
     dis_mat = input_vel_dis * input_tim_dis;
     alert(`Distancia esperada ${dis_mat}mm`);
-
 }
 function setVel(input_dis_vel,input_tim_vel){
-    
     vel_mat= input_dis_vel / input_tim_vel;
     alert(`Velocidad esperada ${vel_mat}mm/s`);
-
 }
