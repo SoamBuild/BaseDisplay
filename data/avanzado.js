@@ -35,7 +35,7 @@ function Move() {
     }
     seleccion_hz = document.getElementById("Frecuencias");
     seleccion_usr = seleccion_hz.value;
-     console.log(seleccion_usr);
+    console.log(seleccion_usr);
 }
 function showinputdata() {
     document.getElementsByClassName("Valuetomove")[0].style.display = "inline-block";

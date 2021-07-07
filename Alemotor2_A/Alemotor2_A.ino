@@ -136,7 +136,7 @@ void setup()
   Serial.println();
   Serial.print("IP address: ");
   Serial.println(WiFi.softAPIP());
-
+  /*
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/index.html", String(), false);
   });
@@ -146,6 +146,32 @@ void setup()
   server.on("/test.js", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/test.js", "text/javascript");
   });
+  */
+  // Route for root / web page
+
+  //web page advance mode 
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/index.html", String(), false);
+  });
+  server.on("/avanzado.html", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/avanzado.html", String(), false);
+  });
+
+  // Route to load style.css file
+  server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/style.css", "text/css");
+  });
+  server.on("/avanzado.css", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/avanzado.css", "text/css");
+  });
+  server.on("/test.js", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/test.js", "text/javascript");
+  });
+  server.on("/avanzado.js", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/avanzado.js", "text/javascript");
+  });
+
+
   server.on("/Move", HTTP_GET, [](AsyncWebServerRequest *request) {
     String inputMessage;
     if (request->hasParam(PARAM_INPUT))
