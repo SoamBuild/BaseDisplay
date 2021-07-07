@@ -25,19 +25,7 @@ function Mode3() {
 }
 
 function Move() {
-    let data1_usr = document.getElementById("value1").value;
-    let data2_usr = document.getElementById("value2").value;
-    if (mode == 1) {
-        setDis(data1_usr, data2_usr);
-    }
-    if (mode == 2) {
-
-        setVel(data1_usr,data2_usr);
-
-    }
-    seleccion_hz = document.getElementById("Frecuencias");
-    seleccion_usr = seleccion_hz.value;
-    console.log(seleccion_usr);
+    getdata(mode);
 }
 function showinputdata() {
     document.getElementsByClassName("Valuetomove")[0].style.display = "inline-block";
@@ -48,6 +36,23 @@ function showselectdata() {
     document.getElementsByClassName("Valuetomove")[0].style.display = "none";
     document.getElementsByClassName("Select")[0].style.display = "inline";
     document.getElementById("Frecuencias").style.display = "inline";
+}
+function getdata(modedata){
+    data1_usr = document.getElementById("value1").value;
+    data2_usr = document.getElementById("value2").value;
+
+    seleccion_hz = document.getElementById("Frecuencias");
+    seleccion_usr = seleccion_hz.value;
+    console.log(seleccion_usr);
+
+    if (modedata == 1) {
+        setDis(data1_usr, data2_usr);
+    }
+    if (modedata == 2) {
+
+        setVel(data1_usr,data2_usr);
+
+    }
 }
 function setDis(input_vel_dis, input_tim_dis) {
     dis_mat = input_vel_dis * input_tim_dis;
