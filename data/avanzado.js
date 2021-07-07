@@ -29,24 +29,30 @@ function Mode3() {
     showselectdata();
 
 }
-
 function Move() {
     getdata(mode);
-    /*
-    if (mode == 1) {
-        data = `${VelocidadX},${DistanciaX},${VelocidadY},${DistanciaY}`
-    }
-    if (mode == 2) {
-        data = `${VelocidadX},${DistanciaX},${VelocidadY},${DistanciaY}`
-    }
-*/
     data = `${final_vel},${final_dis},${final_vel},${final_dis}`;
-    console.log(data);
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/Move?value=" + data, true);
     xhr.send();
-
-    getdata(mode);
+}
+function MoveX() {
+    data = `${final_vel},${final_dis}`
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/MoveX?value=" + data, true);
+    xhr.send();
+}
+function MoveY() {
+    data = `${final_vel},${final_dis}`
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/MoveY?value=" + data, true);
+    xhr.send();
+}
+function Stop() {
+    data = "Stop"
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/Stop?value=" + data, true);
+    xhr.send();
 }
 function showinputdata() {
     document.getElementsByClassName("Valuetomove")[0].style.display = "inline-block";
@@ -84,7 +90,7 @@ function setDis(input_vel_dis, input_tim_dis) {
     alert(`Distancia esperada ${dis_mat}mm`);
 }
 function setVel(input_dis_vel, input_tim_vel) {
-    final_dis=input_dis_vel;
+    final_dis = input_dis_vel;
 
     vel_mat = input_dis_vel / input_tim_vel;
     final_vel = vel_mat;
