@@ -37,12 +37,14 @@ function Move() {
     xhr.send();
 }
 function MoveX() {
+    getdata(mode);
     data = `${final_vel},${final_dis}`
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/MoveX?value=" + data, true);
     xhr.send();
 }
 function MoveY() {
+    getdata(mode);
     data = `${final_vel},${final_dis}`
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/MoveY?value=" + data, true);
