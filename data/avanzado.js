@@ -9,6 +9,8 @@ let mode;
 function Mode1() {
     mode = 1;
     showinputdata();
+    document.getElementById('Lvalue1').innerHTML = 'Velocidad mm/s';
+    document.getElementById('Lvalue2').innerHTML = 'Tiempo Seg';
    }
 function Mode2() {
     mode = 2;
